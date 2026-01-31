@@ -343,6 +343,21 @@ font-weight: 700;
 </table>
 </div>
 </div>
+  <div class="glass-card">
+  <h3 style="margin-top:0; color: var(--primary);">Student Exams</h3>
+
+  <label style="font-weight:700; font-size:0.9rem;">
+    Select Student
+  </label>
+  <select id="student-select" onchange="loadStudentExams()">
+    <option value="">-- Choose Student --</option>
+  </select>
+
+ 
+
+  <div id="student-exam-list" style="margin-top:20px;"></div>
+</div>
+
 </div>
 
 <div id="tab4" class="tab">
@@ -371,7 +386,7 @@ font-weight: 700;
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz_dxmqCSfQ970Kw-UTvEyOu-0tcbzunuvi1V2YO9_9DqGWRGwlhjZiymWKfd293cJt/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyr8OExTSRuO4Xk0LscPxtAf2W5JyE_dG2prk7Gc7dVC_8TTy2fGYvvp4ORRTkSvqJe/exec";
   
 const students = [
 {id:"USS001", pass:"AF1", name:"AAISHA FIDHA", class:"7", div:"D", role:"student"},
@@ -918,6 +933,7 @@ s.l1 += row[5]; s.m2 += row[6]; s.math += row[7]; s.eng += row[8];
 s.bs += row[9]; s.ss += row[10]; s.ma += row[11]; s.ca += row[12];
 s.total += row[13]; s.exams++;
 });
+populateStudentDropdown(data);
 let h = "";
 Object.values(studentsMap).forEach(s => {
 const perc = (s.total / (s.exams * 24)) * 100;
@@ -925,6 +941,8 @@ h += `<tr><td style="font-weight:700;">${s.name}</td><td>${s.class}</td><td>${s.
 });
 body.innerHTML = h; closeMsg();
 } catch(e) { showStatus("Error", "Load Error", "error"); }
+
+  
 }
 
 function getGrade(p) {
@@ -993,6 +1011,101 @@ function makeQ() {
         showStatus("Copy Error", "Failed to auto-copy code.", "error");
     });
 }
+  
+ function populateStudentDropdown(data) {
+  const select = document.getElementById("student-select");
+  select.innerHTML = `<option value="">-- Choose Student --</option>`;
+
+  const seen = new Set();
+
+  data.forEach(row => {
+    const name = row[1];
+    if (!seen.has(name)) {
+      seen.add(name);
+      const opt = document.createElement("option");
+      opt.value = name;
+      opt.textContent = name;
+      select.appendChild(opt);
+    }
+  });
+}
+  
+  let studentChart = null;
+
+async function loadStudentExams() {
+  const studentName = document.getElementById("student-select").value;
+  if (!studentName) return;
+
+  showLoading("Loading Student Exams...");
+
+  try {
+    const res = await fetch(`${SCRIPT_URL}?name=${studentName}`);
+    const data = await res.json();
+
+    const labels = [];
+    const totals = [];
+    let html = "";
+
+    data.forEach((r, i) => {
+      const date = r[0];
+      const scores = {
+        L1: r[5], M2: r[6], Math: r[7], Eng: r[8],
+        BS: r[9], SS: r[10], MA: r[11], CA: r[12]
+      };
+      const total = r[13];
+      const grade = getGrade((total / 24) * 100);
+
+      labels.push(date);
+      totals.push(total);
+
+      html += `
+        <div class="glass-card">
+          <b>Exam ${i + 1}</b> – ${date}<br>
+          <b>Total:</b> ${total}/24 |
+          <b>Grade:</b> <span style="font-weight:800;color:var(--primary)">${grade}</span>
+
+          <div class="summary-grid" style="margin-top:10px;">
+            ${Object.entries(scores).map(([k,v]) => `
+              <div style="background:#fff;padding:8px;border-radius:10px;text-align:center;">
+                <div style="font-size:0.6rem;color:#888">${k}</div>
+                <b>${v}</b>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `;
+    });
+
+    document.getElementById("student-exam-list").innerHTML = html;
+
+    if (studentChart) studentChart.destroy();
+    studentChart = new Chart(
+      document.getElementById("studentExamChart"), {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [{
+            label: "Total Score",
+            data: totals,
+            backgroundColor: "rgba(67,97,238,0.6)"
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true, max: 24 } }
+        }
+      }
+    );
+
+    closeMsg();
+  } catch (e) {
+    showStatus("Error", "Unable to load student exams", "error");
+  }
+}
+
+ 
+  
 </script>
 </body>
 </html>
