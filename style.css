@@ -1,0 +1,186 @@
+<style>
+:root {
+--primary: #4361ee; --secondary: #3f37c9; --accent: #4cc9f0;
+--success: #4caf50; --error: #f44336; --bg: #f0f2f5;
+--glass: rgba(255, 255, 255, 0.9); --shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+* { box-sizing: border-box; font-family: 'Noto Sans Malayalam', 'Noto Sans Arabic', 'Inter', sans-serif;
+-webkit-tap-highlight-color: transparent;}
+
+  
+
+body {
+margin: 0; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+background-attachment: fixed; min-height: 100vh; color: #333; display: flex; flex-direction: column;
+}
+
+.app-container { width:100%; max-width: 1200px; margin: 0 auto; padding: 15px; flex: 1; }
+
+/* Requirement 1: Sticky Navigation */
+.sticky-nav-wrapper {
+position: sticky; top: 0; z-index: 9999;
+background: rgba(245, 247, 250, 0.85); backdrop-filter: blur(12px);
+margin: -15px -15px 15px -15px; padding: 15px 15px 5px 15px;
+border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.glass-card { background: var(--glass); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(255,255,255,0.3); box-shadow: var(--shadow); padding: clamp(15px, 5vw, 30px); margin-bottom: 20px; }
+
+.school-logo { width: 200px; height: 200px; margin: 0 auto 15px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); overflow: hidden; }
+.school-logo img { width: 90%; height: 90%; object-fit: contain; }
+
+nav { display: none; gap: 10px; margin-bottom: 15px; justify-content: center; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; align-items: center;}
+nav::-webkit-scrollbar { display: none; }
+
+nav button { padding: 10px 20px; border: none; border-radius: 12px; cursor: pointer; background: white; color: var(--primary); font-weight: 600; transition: 0.3s; white-space: nowrap; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: clamp(0.8rem, 2.5vw, 1rem); }
+nav button:hover, nav button.active-nav { background: var(--primary); color: white; }
+
+/* Requirement 4: Timer in Nav */
+#nav-timer {
+display: none; background: green; color: #fff; padding: 8px 15px;
+border-radius: 10px; font-weight: 800; font-family: monospace; font-size: 1.1rem;
+border: 2px solid var(--accent);
+}
+.timer-warn { background: var(--error) !important; animation: blinker 1s linear infinite; }
+@keyframes blinker { 50% { opacity: 0.5; } }
+
+#user-profile { display: none; align-items: center; justify-content: space-between; background: var(--primary); color: white; padding: 10px 20px; border-radius: 15px; margin-bottom: 10px; }
+
+.summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin: 20px 0; }
+@media (max-width: 480px) { .summary-grid { grid-template-columns: repeat(2, 1fr); } }
+  /* Mobile First (phones) */
+@media (max-width: 600px) {
+
+  .app-container {
+    padding: 10px;
+  }
+
+  .school-logo {
+    width: 140px;
+    height: 140px;
+  }
+
+  h1 {
+    font-size: 1.3rem !important;
+  }
+
+  h3 {
+    font-size: 1rem !important;
+  }
+
+  nav {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+  }
+
+  nav button {
+    padding: 8px 14px;
+    font-size: 0.75rem;
+  }
+
+  #nav-timer {
+    font-size: 0.9rem;
+    padding: 6px 10px;
+  }
+
+  .glass-card {
+    border-radius: 16px;
+    padding: 14px;
+  }
+
+  .summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  table {
+    font-size: 0.75rem;
+  }
+
+  canvas {
+    width: 100% !important;
+  }
+}
+
+/* Tablets */
+@media (min-width: 601px) and (max-width: 1024px) {
+
+  .app-container {
+    max-width: 95%;
+  }
+
+  nav button {
+    font-size: 0.85rem;
+  }
+
+  .school-logo {
+    width: 170px;
+    height: 170px;
+  }
+}
+
+/* Large Screens / Desktop */
+@media (min-width: 1025px) {
+
+  .app-container {
+    max-width: 1200px;
+  }
+
+  nav {
+    justify-content: center;
+  }
+
+}
+
+canvas { width: 100% !important; height: auto !important; }
+
+#msg-overlay { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.8); backdrop-filter: blur(8px); z-index: 100000; justify-content: center; align-items: center; flex-direction: column; padding: 20px; }
+.spinner { width: 60px; height: 60px; border: 6px solid #f3f3f3; border-top: 6px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+input, select, textarea { width: 100%; padding: 14px; margin: 10px 0; border: 2px solid #eee; border-radius: 12px; font-size: 1rem; background: #fafafa; outline: none; }
+.btn-main { width: 100%; padding: 16px; border: none; border-radius: 12px; background: var(--primary); color: white; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.3s; }
+.q-card { background: white; padding: 18px; border-radius: 15px; margin-bottom: 15px; border-left: 5px solid var(--primary); box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+.table-container { overflow-x: auto; border-radius: 15px; border: 1px solid #eee; background: white; }
+table { width: 100%; border-collapse: collapse; min-width: 800px; }
+th, td { padding: 12px; border-bottom: 1px solid #eee; text-align: center; font-size: 0.9rem; }
+
+.tab { display: none; animation: fadeIn 0.4s ease; }
+.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Stylish grade badge */
+.grade-badge { background: var(--accent); color: white; padding: 5px 15px; border-radius: 50px; font-weight: 800; font-size: 1.5rem; box-shadow: 0 4px 10px rgba(76, 201, 240, 0.4); }
+.q-card input[type="radio"] {
+display: none;
+}
+
+/* Make option fully clickable */
+.option-label {
+display: block;
+padding: 14px;
+margin: 6px 0;
+background: #f9f9f9;
+border-radius: 12px;
+cursor: pointer;
+font-size: 0.9rem;
+border: 2px solid transparent;
+transition: all 0.2s ease;
+}
+
+/* Hover / touch feedback */
+.option-label:hover {
+background: #eef2ff;
+}
+
+/* Selected option style */
+.q-card input[type="radio"]:checked + .option-label {
+background: #e0e7ff;
+border-color: var(--primary);
+font-weight: 700;
+}
+  .rtl-arabic {
+  direction: rtl;
+  text-align: right;
+}
+  
+</style>
