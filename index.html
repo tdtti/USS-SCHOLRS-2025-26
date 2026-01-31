@@ -1,0 +1,176 @@
+<body onload="checkPersistentLogin()">
+
+<div id="msg-overlay">
+<div id="loader-content">
+<div class="spinner"></div>
+<h3 id="loader-text" style="color: var(--primary);">Connecting...</h3>
+</div>
+<div id="status-content" style="display: none; text-align: center;" class="glass-card">
+<div id="status-icon" style="font-size: 50px; margin-bottom: 10px;"></div>
+<h2 id="status-title"></h2>
+<p id="status-msg" style="margin-bottom: 20px;"></p>
+<button class="btn-main" onclick="closeMsg()" style="width: auto; padding: 10px 30px;">Continue</button>
+</div>
+</div>
+
+<div class="app-container">
+<div id="sticky-header-container" class="sticky-nav-wrapper" style="display:none;">
+<div id="user-profile">
+<div style="display: flex; align-items: center; gap: 12px;">
+<div style="width:40px; height:40px; background:white; color:var(--primary); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold;" id="user-initial">?</div>
+<div>
+<div style="font-size: 0.65rem; opacity: 0.8; font-weight:700;">TDTTI THURAVOOR</div>
+<div id="display-name" style="font-weight: 700; font-size: 1rem;">User</div>
+</div>
+</div>
+<button onclick="logout()" style="background:transparent; border:1px solid white; color:white; border-radius:8px; padding:5px 12px; cursor:pointer; font-size:0.8rem;">LOGOUT</button>
+</div>
+
+<nav id="navbar">
+<button id="nav-tab2" onclick="showTab('tab2')">Daily Exam</button>
+<div id="nav-timer">15:00</div>
+<button id="nav-tab3" onclick="showTab('tab3')">My Progress</button>
+<button id="ins-nav" style="display:none;" onclick="showTab('tab5')">Inspirations</button>
+<button id="admin-nav" style="display:none;" onclick="showTab('tab4')">Admin</button>
+</nav>
+</div>
+
+<div id="tab1" class="tab active">
+<div class="glass-card" style="max-width: 450px; margin: 40px auto; text-align: center;">
+<div class="school-logo">
+<img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhkek9231Po5qKTRbN726okbctluF2YgOX_RcMke2yCBQBj2JcXw4Uu2UhrrlTGgM_bfWeZGKkiB0qwlpq8kAgJWHeWM5fN_6eqkkE2zTJHd163AVjiiA5kmDz0pUYxEE_XqpSYYkDrl-rv-iA0XO_mkny4x4BZb27QCRcpsIp6-uMSQLY/s1600/Logo2.png" alt="TDTTI Logo">
+</div>
+<h1 style="color: var(--primary); margin: 0 0 5px 0; font-size: 1.6rem;">TDTTI THURAVOOR</h1>
+<h3 style="color: var(--secondary); margin: 0 0 10px 0; font-weight: 600;">USS SCHOLARS 2025</h3>
+<p style="color: #666; font-size:0.85rem; margin-bottom: 25px; border-top: 1px solid #eee; padding-top: 10px;">Sign In - USS Daily Training Portal</p>
+
+<input type="text" id="uid" placeholder="User ID">
+<input type="password" id="ups" placeholder="Password">
+
+<label style="display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem; color: #666; cursor: pointer; margin-bottom: 15px;">
+<input type="checkbox" id="keep-signed" style="width: auto; margin: 0;"> Keep me signed in
+</label>
+
+<button class="btn-main" onclick="handleLogin()">Enter Portal</button>
+</div>
+</div>
+
+<div id="tab2" class="tab">
+<div id="exam-form" class="glass-card">
+<div style="background: #eef2ff; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+<label style="font-weight: 700; color: var(--primary); font-size:0.9rem;">Select Language 1 to Start:</label>
+<select id="lang-select" onchange="startExamWithTimer()">
+<option value="" disabled selected>-- Choose Language --</option>
+<option value="lang1_arb">Arabic</option>
+<option value="lang1_skt">Sanskrit</option>
+<option value="lang1_mal1">Malayalam I</option>
+</select>
+</div>
+<div id="quiz-load"></div>
+<button id="s-btn" class="btn-main" style="background: var(--success); display:none;" onclick="submitExam()">Submit Results</button>
+</div>
+
+<div id="exam-result-view" style="display:none;">
+<div class="glass-card">
+<h3 style="margin-top:0; color: var(--primary);">Performance Review</h3>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px; font-size: 0.9rem;">
+<div><b>Date:</b> <span id="res-date"></span></div>
+<div><b>Name:</b> <span id="res-name"></span></div>
+<div><b>Class:</b> <span id="res-cl"></span></div>
+<div><b>Division:</b> <span id="res-dv"></span></div>
+<div><b>Lang 1:</b> <span id="res-lang1"></span></div>
+<div><b>User ID:</b> <span id="res-uid"></span></div>
+</div>
+
+<div style="display: flex; align-items: center; justify-content: space-between; background: #f8f9ff; padding: 15px; border-radius: 15px;">
+<div>
+<div style="font-size: 0.8rem; color: #666;">TOTAL SCORE</div>
+<div style="font-size: 2.5rem; font-weight: 800; color: var(--primary);"><span id="res-total"></span>/24</div>
+</div>
+<div style="text-align: right;">
+<div style="font-size: 0.8rem; color: #666; margin-bottom: 5px;">GRADE</div>
+<div id="res-grade-badge" class="grade-badge"></div>
+</div>
+</div>
+<div id="res-summary" class="summary-grid"></div>
+</div>
+<div class="glass-card">
+<h4 style="margin-top:0;">Question Detail</h4>
+<div id="res-review-list"></div>
+</div>
+<div style="display: flex; gap: 10px; margin-bottom: 30px;">
+<button class="btn-main" onclick="tryQuizAgain()">Try Quiz Again</button>
+<button class="btn-main" style="background:#666;" onclick="showTab('tab3')">Progress Chart</button>
+</div>
+</div>
+</div>
+
+<div id="tab3" class="tab">
+<div class="glass-card" id="progress-summary-box" style="margin-bottom: 20px; border-left: 5px solid var(--accent);">
+<h3 style="margin-top:0; color: var(--secondary);">Student Summary</h3>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 1rem;">
+<p style="margin:0;"><b>Name:</b> <span id="summ-name"></span></p>
+<p style="margin:0;"><b>Class:</b> <span id="summ-class"></span></p>
+<p style="margin:0;"><b>Division:</b> <span id="summ-div"></span></p>
+<p style="margin:0;"><b>Exams Attended:</b> <span id="summ-count" style="color:var(--primary); font-weight:700;">0</span></p>
+<p style="margin:0; grid-column: span 2;"><b>Grand Total Score:</b> <span id="summ-grand" style="color:var(--success); font-weight:800; font-size:1.4rem;">0</span></p>
+</div>
+</div>
+<div class="glass-card">
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+<h3 style="margin:0;">Growth Analysis</h3>
+<div style="background:var(--error); color:white; padding:5px 15px; border-radius:15px; font-weight:700; font-size:0.9rem;">Grade: <span id="p-grade"></span></div>
+</div>
+<div style="position: relative; height:300px; width:100%;">
+<canvas id="chartArea"></canvas>
+</div>
+</div>
+  <div class="glass-card" id="my-review-box">
+  <h3 style="margin-top:0; color: var(--primary);">
+    My Performance Reviews
+  </h3>
+  <div id="my-review-list"></div>
+</div>
+</div>
+
+<div id="tab5" class="tab">
+<div class="glass-card">
+<h3 style="margin-top:0;">Global Performance</h3>
+<div class="table-container">
+<table id="ins-table">
+<thead>
+<tr>
+<th onclick="sortTable(0)">Name ↑↓</th><th>Cls</th><th>Div</th><th>L1</th><th>M2</th><th>Mat</th><th>Eng</th><th>BS</th><th>SS</th><th>MA</th><th>CA</th>
+<th onclick="sortTable(11)">Exams ↑↓</th><th onclick="sortTable(12)">Total ↑↓</th><th onclick="sortTable(13)">Grd ↑↓</th>
+</tr>
+</thead>
+<tbody id="ins-body"></tbody>
+</table>
+</div>
+</div>
+</div>
+
+<div id="tab4" class="tab">
+<div class="glass-card">
+<h3>Add New Question</h3>
+<div id="q-input-fields">
+  <select id="qs">
+<option value="lang1_arb">Arabic</option><option value="lang1_skt">Sanskrit</option><option value="lang1_mal1">Malayalam I</option>
+<option value="mal2">Malayalam II</option><option value="maths">Maths</option><option value="eng">English</option>
+<option value="bs">Basic Science</option><option value="ss">Social Science</option><option value="mental">Mental Ability</option><option value="current">Current Affairs</option>
+</select>
+<input type="text" id="qt" placeholder="Question Text">
+<div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+<input type="text" id="o1" placeholder="Option A">
+<input type="text" id="o2" placeholder="Option B">
+<input type="text" id="o3" placeholder="Option C">
+<input type="text" id="o4" placeholder="Option D">
+</div>
+<input type="text" id="qa" placeholder="Correct Answer">
+
+</div>
+<button class="btn-main" onclick="makeQ()">Generate Code</button>
+<textarea id="q-code" readonly style="margin-top:10px; height:80px;"></textarea>
+</div>
+</div>
+</div>
