@@ -230,6 +230,8 @@ font-weight: 700;
 </nav>
 </div>
 
+
+
 <div id="tab1" class="tab active">
 <div class="glass-card" style="max-width: 450px; margin: 40px auto; text-align: center;">
 <div class="school-logo">
@@ -248,6 +250,10 @@ font-weight: 700;
 
 <button class="btn-main" onclick="handleLogin()">Enter Portal</button>
 </div>
+  
+ 
+
+
 </div>
 
 <div id="tab2" class="tab">
@@ -261,6 +267,8 @@ font-weight: 700;
 <option value="lang1_mal1">Malayalam I</option>
 </select>
 </div>
+  
+  
 <div id="quiz-load"></div>
 <button id="s-btn" class="btn-main" style="background: var(--success); display:none;" onclick="submitExam()">Submit Results</button>
 </div>
@@ -301,6 +309,10 @@ font-weight: 700;
 </div>
 
 <div id="tab3" class="tab">
+  
+ 
+  
+  
 <div class="glass-card" id="progress-summary-box" style="margin-bottom: 20px; border-left: 5px solid var(--accent);">
 <h3 style="margin-top:0; color: var(--secondary);">Student Summary</h3>
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 1rem;">
@@ -311,8 +323,12 @@ font-weight: 700;
 <p style="margin:0; grid-column: span 2;"><b>Grand Total Score:</b> <span id="summ-grand" style="color:var(--success); font-weight:800; font-size:1.4rem;">0</span></p>
 </div>
 </div>
+  
+  
+  
 <div class="glass-card">
 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+  
 <h3 style="margin:0;">Growth Analysis</h3>
 <div style="background:var(--error); color:white; padding:5px 15px; border-radius:15px; font-weight:700; font-size:0.9rem;">Grade: <span id="p-grade"></span></div>
 </div>
@@ -330,6 +346,13 @@ font-weight: 700;
 
 <div id="tab5" class="tab">
 <div class="glass-card">
+  <h3 style="margin-top:0; color: var(--primary);">Student Exams</h3>
+  <label style="font-weight:700; font-size:0.9rem;">Select Student</label>
+  <select id="student-select" onchange="loadStudentExams()"><option value="">-- Choose Student --</option></select>
+  <div id="student-exam-list" style="margin-top:20px;"></div>
+</div>
+  
+ <div class="glass-card">  
 <h3 style="margin-top:0;">Global Performance</h3>
 <div class="table-container">
 <table id="ins-table">
@@ -343,20 +366,7 @@ font-weight: 700;
 </table>
 </div>
 </div>
-  <div class="glass-card">
-  <h3 style="margin-top:0; color: var(--primary);">Student Exams</h3>
-
-  <label style="font-weight:700; font-size:0.9rem;">
-    Select Student
-  </label>
-  <select id="student-select" onchange="loadStudentExams()">
-    <option value="">-- Choose Student --</option>
-  </select>
-
  
-
-  <div id="student-exam-list" style="margin-top:20px;"></div>
-</div>
 
 </div>
 
@@ -382,11 +392,48 @@ font-weight: 700;
 <button class="btn-main" onclick="makeQ()">Generate Code</button>
 <textarea id="q-code" readonly style="margin-top:10px; height:80px;"></textarea>
 </div>
+  <!-- Attendance Section -->
+<div class="glass-card" style="300px: auto; margin: 10px auto;">
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <h3 style="margin:0; color: var(--primary);">Attendance</h3>
+    <button onclick="copyAttendanceTable()"
+      style="padding:6px 14px; border-radius:8px; border:none;
+             background:var(--secondary); color:white; font-weight:600; cursor:pointer;">
+      Copy
+    </button>
+  </div>
+
+  <table id="attendance-table"
+    style="width:100%; margin-top:15px; border-collapse:collapse;">
+    <thead>
+      <tr style="background:#eef2ff;">
+        <th onclick="sortAttendance(0)"
+    style="padding:10px; border:1px solid #ddd; cursor:pointer;">
+  Student Name <span id="sort-name"></span>
+</th>
+
+<th onclick="sortAttendance(1)"
+    style="padding:10px; border:1px solid #ddd; cursor:pointer;">
+  No. of Exams Attended <span id="sort-exams"></span>
+</th>
+
+      </tr>
+    </thead>
+    <tbody id="attendance-body">
+      <tr>
+        <td colspan="2" style="padding:12px; text-align:center; color:#666;">
+          Loading attendance…
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
+</div>
+  
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyr8OExTSRuO4Xk0LscPxtAf2W5JyE_dG2prk7Gc7dVC_8TTy2fGYvvp4ORRTkSvqJe/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyvR2DNBQzwtDdt6KngGABQq1yC_73tEps4d0JvFIwGG6z8jt8y227Bf7SZg8TILVTI/exec";
   
 const students = [
 {id:"USS001", pass:"AF1", name:"AAISHA FIDHA", class:"7", div:"D", role:"student"},
@@ -447,7 +494,7 @@ const masterBank = [
 {"question":"‘ആധുനിക മലയാളത്തിന്റെ പിതാവ്’ എന്നറിയപ്പെടുന്നത് ആര്?","options":["തുഞ്ചത്ത് എഴുത്തച്ഛൻ","വള്ളത്തോൾ നാരായണമേനോൻ","എ.ആർ. രാജരാജവർമ്മ","കുമാരനാശാൻ"],"answer":"എ.ആർ. രാജരാജവർമ്മ","subject":"lang1_mal1"},
 {"question":"‘കിളിപ്പാട്ട്’ എന്ന സാഹിത്യരൂപം പ്രചാരം നേടിയത് ആരിലൂടെ?","options":["കുമാരനാശാൻ","ഉള്ളൂർ","വള്ളത്തോൾ","തുഞ്ചത്ത് എഴുത്തച്ഛൻ"],"answer":"തുഞ്ചത്ത് എഴുത്തച്ഛൻ","subject":"lang1_mal1"},
 {"question":"മലയാളത്തിലെ ആദ്യ നോവൽ ഏതാണ്?","options":["ഇന്ദുലേഖ","മാർത്താണ്ഡവർമ്മ","കുന്ദലത","രാമരാജബഹദൂർ"],"answer":"കുന്ദലത","subject":"lang1_mal1"},
-{"question":"ഇന്ദുലേഖ’യുടെ കർത്താവ് ആര്?","options":["ഒ.ചന്തുമേനോൻ","സി.വി. രാമൻ പിള്ള","തകഴി ശിവശങ്കരപിള്ള","എസ്.കെ. പൊറ്റക്കാട്"],"answer":"ഒ.ചന്തുമേനോൻ","subject":"lang1_mal1"},
+{"question":"ഇന്ദുലേഖ’യുടെ കർത്താവ് ആര്?","options":["ഒ.ചന്തുമേനോൻ","സി.വി. രാമൻ പിള്ള","തകഴി ശിവശങ്കരപിള്ള","എസ്.കെ.പൊറ്റക്കാട്"],"answer":"ഒ.ചന്തുമേനോൻ","subject":"lang1_mal1"},
 {"question":"‘വീരശൃംഖല’ എന്ന കാവ്യകൃതി രചിച്ചത് ആര്?","options":["കുമാരനാശാൻ","ഉള്ളൂർ","വള്ളത്തോൾ","ചങ്ങമ്പുഴ"],"answer":"വള്ളത്തോൾ","subject":"lang1_mal1"},
 {"question":"‘അസുരവിത്ത്’ എന്ന നോവലിന്റെ കർത്താവ് ആര്?","options":["തകഴി","ബഷീർ","പൊൻകുന്നം വർക്കി","ലളിതാംബിക അന്തർജനം"],"answer":"ലളിതാംബിക അന്തർജനം","subject":"lang1_mal1"},
 {"question":"വൈക്കം മുഹമ്മദ് ബഷീർ’ ഏത് സാഹിത്യശാഖയിൽ കൂടുതലായി അറിയപ്പെടുന്നു?","options":["കവിത","നാടകം","കഥ","നോവൽ"],"answer":"നോവൽ","subject":"lang1_mal1"},
@@ -624,7 +671,7 @@ function finalizeLogin() {
     document.getElementById('admin-nav').style.display = 'none';
     document.getElementById('ins-nav').style.display = 'none';
   }
-
+  loadAttendance();   // ✅ ADD THIS
   showTab('tab2');
   closeMsg();
 }
@@ -757,14 +804,25 @@ let total = 0; let reviewHTML = "";
 
 examQs.forEach((q, i) => {
 const sel = document.querySelector(`input[name="qz${i}"]:checked`);
-const uAns = sel ? sel.value.trim() : "None";
-const correctAns = q.answer.trim();
+const uAns = sel ? sel.value.trim().toLowerCase() : "none";
+const correctAns = q.answer.trim().toLowerCase();
 const isCorrect = uAns === correctAns;
 
-if(isCorrect) {
-total++;
-if(q.subject.startsWith('lang1_')) sc.lang1++; else sc[q.subject]++;
+
+if (isCorrect) {
+  total++;
+
+  // Normalize subject key
+  let key = q.subject.startsWith("lang1_") ? "lang1" : q.subject;
+
+  // Safety check before increment
+  if (sc.hasOwnProperty(key)) {
+    sc[key] += 1;
+  } else {
+    console.warn("Unknown subject:", q.subject);
+  }
 }
+
 const userColor = (uAns === q.answer) ? 'var(--success)' : 'var(--error)';
 const correctColor = 'var(--success)';
 
@@ -1012,6 +1070,40 @@ function makeQ() {
     });
 }
   
+  function lockExamDateTime(value) {
+
+  // Case 1: Google Sheets serial (number)
+  if (typeof value === "number") {
+    const date = new Date(Math.floor((value - 25569) * 86400 * 1000));
+    const time = (value % 1) * 24 * 60 * 60 * 1000;
+    return new Date(date.getTime() + time).toLocaleString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour12: true
+    });
+  }
+
+  // Case 2: ISO string with timezone (Z / +xx)
+  if (typeof value === "string" && value.includes("T")) {
+    const clean = value.replace("Z", "").split(".")[0];
+    const [date, time] = clean.split("T");
+    const [y, m, d] = date.split("-");
+    const [h, min] = time.split(":");
+
+    return new Date(y, m - 1, d, h, min).toLocaleString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour12: true
+    });
+  }
+
+  // Case 3: Plain string → display as-is
+  return value;
+}
+  
+  
  function populateStudentDropdown(data) {
   const select = document.getElementById("student-select");
   select.innerHTML = `<option value="">-- Choose Student --</option>`;
@@ -1046,36 +1138,39 @@ async function loadStudentExams() {
     const totals = [];
     let html = "";
 
-    data.forEach((r, i) => {
-      const date = r[0];
-      const scores = {
-        L1: r[5], M2: r[6], Math: r[7], Eng: r[8],
-        BS: r[9], SS: r[10], MA: r[11], CA: r[12]
-      };
-      const total = r[13];
-      const grade = getGrade((total / 24) * 100);
+    // Reverse order: latest exam first
+// Reverse order: last exam first
+const reversedData = [...data].reverse();
 
-      labels.push(date);
-      totals.push(total);
+reversedData.forEach((r, i) => {
+  const date = lockExamDateTime(r[4]);
+  const scores = {
+    L1: r[5], M2: r[6], Math: r[7], Eng: r[8],
+    BS: r[9], SS: r[10], MA: r[11], CA: r[12]
+  };
+  const total = r[13];
+  const grade = getGrade((total / 24) * 100);
 
-      html += `
-        <div class="glass-card">
-          <b>Exam ${i + 1}</b> – ${date}<br>
-          <b>Total:</b> ${total}/24 |
-          <b>Grade:</b> <span style="font-weight:800;color:var(--primary)">${grade}</span>
+  html += `
+    <div class="glass-card">
+      <b>Exam ${reversedData.length - i}</b> – ${date}<br>
+      <b>Total:</b> ${total}/24 |
+      <b>Grade:</b>
+      <span style="font-weight:800;color:var(--primary)">${grade}</span>
 
-          <div class="summary-grid" style="margin-top:10px;">
-            ${Object.entries(scores).map(([k,v]) => `
-              <div style="background:#fff;padding:8px;border-radius:10px;text-align:center;">
-                <div style="font-size:0.6rem;color:#888">${k}</div>
-                <b>${v}</b>
-              </div>
-            `).join("")}
+      <div class="summary-grid" style="margin-top:10px;">
+        ${Object.entries(scores).map(([k,v]) => `
+          <div style="background:#fff;padding:8px;border-radius:10px;text-align:center;">
+            <div style="font-size:0.6rem;color:#888">${k}</div>
+            <b>${v}</b>
           </div>
-        </div>
-      `;
-    });
+        `).join("")}
+      </div>
+    </div>
+  `;
+});
 
+	
     document.getElementById("student-exam-list").innerHTML = html;
 
     if (studentChart) studentChart.destroy();
@@ -1101,10 +1196,132 @@ async function loadStudentExams() {
     closeMsg();
   } catch (e) {
     showStatus("Error", "Unable to load student exams", "error");
+    console.log("RAW EXAM DATE:", r[0], typeof r[0]);
   }
 }
 
- 
+  
+  async function loadAttendance() {
+  const tbody = document.getElementById("attendance-body");
+  tbody.innerHTML = `
+    <tr>
+      <td colspan="2" style="padding:12px;text-align:center;">Loading…</td>
+    </tr>`;
+
+  try {
+    // Fetch all exam records
+    const res = await fetch(`${SCRIPT_URL}?type=allStudents`);
+    const data = await res.json();
+
+    // Count exams per student name
+    const examCount = {};
+    data.forEach(row => {
+      const name = row[1]; // student name
+      examCount[name] = (examCount[name] || 0) + 1;
+    });
+
+    // Build table using const students
+    let html = "";
+    students
+      .filter(s => s.role === "student")
+      .forEach(s => {
+        html += `
+          <tr>
+            <td style="padding:10px; border:1px solid #ddd; text-align:left;">
+              ${s.name}
+            </td>
+            <td style="padding:10px; border:1px solid #ddd; text-align:center; font-weight:700;">
+              ${examCount[s.name] || 0}
+            </td>
+          </tr>`;
+      });
+
+    tbody.innerHTML = html;
+
+  } catch (e) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="2" style="padding:12px;color:red;text-align:center;">
+          Failed to load attendance
+        </td>
+      </tr>`;
+  }
+}
+  
+  
+
+
+ function copyAttendanceTable() {
+  const rows = document.querySelectorAll("#attendance-table tr");
+  let text = "";
+
+  rows.forEach(row => {
+    const cols = row.querySelectorAll("th, td");
+    const line = Array.from(cols).map(c => c.innerText).join("\t");
+    text += line + "\n";
+  });
+
+  navigator.clipboard.writeText(text).then(() => {
+    alert("Attendance table copied!");
+  });
+}
+
+let attendanceSort = {
+  column: null,
+  asc: true
+};
+
+function sortAttendance(colIndex) {
+  const tbody = document.getElementById("attendance-body");
+  const rows = Array.from(tbody.querySelectorAll("tr"));
+
+  // Toggle sort direction
+  if (attendanceSort.column === colIndex) {
+    attendanceSort.asc = !attendanceSort.asc;
+  } else {
+    attendanceSort.column = colIndex;
+    attendanceSort.asc = true;
+  }
+
+  rows.sort((a, b) => {
+    let A = a.children[colIndex].innerText.trim();
+    let B = b.children[colIndex].innerText.trim();
+
+    // Number sort for exam count
+    if (colIndex === 1) {
+      A = Number(A);
+      B = Number(B);
+    } else {
+      A = A.toLowerCase();
+      B = B.toLowerCase();
+    }
+
+    if (A < B) return attendanceSort.asc ? -1 : 1;
+    if (A > B) return attendanceSort.asc ? 1 : -1;
+    return 0;
+  });
+
+  tbody.innerHTML = "";
+  rows.forEach(r => tbody.appendChild(r));
+
+  updateSortIcons();
+}
+
+  
+function updateSortIcons() {
+  document.getElementById("sort-name").innerText = "";
+  document.getElementById("sort-exams").innerText = "↕";
+
+  const icon = attendanceSort.asc ? "" : "";
+  if (attendanceSort.column === 0) {
+    document.getElementById("sort-name").innerText = icon;
+  }
+  if (attendanceSort.column === 1) {
+    document.getElementById("sort-exams").innerText = icon;
+  }
+}
+
+  
   
 </script>
 </body>
