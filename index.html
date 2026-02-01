@@ -1029,13 +1029,18 @@ else { if (switchcount == 0 && dir == "desc") { dir = "asc"; switching = true; }
 }
 
 function makeQ() {
+	const qSub = document.getElementById('qs').value;
     const qText = document.getElementById('qt').value;
     const opt1 = document.getElementById('o1').value;
     const opt2 = document.getElementById('o2').value;
     const opt3 = document.getElementById('o3').value;
     const opt4 = document.getElementById('o4').value;
     const qAns = document.getElementById('qa').value;
-    const qSub = document.getElementById('qs').value;
+    const qAnsIndex = parseInt(document.getElementById('qa').value, 10);
+	if (isNaN(qAnsIndex) || qAnsIndex < 0 || qAnsIndex > 3) {
+  		showStatus("Warning", "Correct answer must be 0, 1, 2, or 3", "error");
+  		return;
+	}
 
     if(!qText || !opt1 || !qAns) {
         showStatus("Warning", "Please fill essential fields", "error");
@@ -1043,12 +1048,11 @@ function makeQ() {
     }
 
     const q = {
-        question: qText,
-        options: [opt1, opt2, opt3, opt4],
-        answer: qAns,
-        subject: qSub
-    };
-
+  	question: qText,
+  	options: [opt1, opt2, opt3, opt4],
+  	answer: qAnsIndex,   // ✅ STORE INDEX
+  	subject: qSub
+	};
     const generatedCode = JSON.stringify(q) + ",";
     const textArea = document.getElementById('q-code');
     textArea.value += generatedCode;
