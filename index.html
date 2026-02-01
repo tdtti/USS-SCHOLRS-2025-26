@@ -804,9 +804,11 @@ let total = 0; let reviewHTML = "";
 
 examQs.forEach((q, i) => {
 const sel = document.querySelector(`input[name="qz${i}"]:checked`);
-const uAns = sel ? sel.value.trim().toLowerCase() : "none";
-const correctAns = q.answer.trim().toLowerCase();
-const isCorrect = uAns === correctAns;
+const sel = document.querySelector(`input[name="qz${i}"]:checked`);
+const userAnswerText = uAnsIndex >= 0 ? q.options[uAnsIndex] : "None";
+const correctAnswerText = q.options[correctIndex];
+const isCorrect = uAnsIndex === correctIndex;
+
 
 
 if (isCorrect) {
@@ -835,15 +837,17 @@ reviewHTML += `
   <p style="margin:2px 0; font-size:0.85rem;">
     Your Answer:
     <span style="color:${isCorrect ? 'var(--success)' : 'var(--error)'}; font-weight:700;">
-      ${uAns}
-    </span>
+  ${userAnswerText}
+</span>
+
   </p>
 
   <p style="margin:2px 0; font-size:0.85rem;">
     Correct Answer:
     <span style="color:var(--success); font-weight:700;">
-      ${correctAns}
-    </span>
+  ${correctAnswerText}
+</span>
+
   </p>
 </div>
 `;
