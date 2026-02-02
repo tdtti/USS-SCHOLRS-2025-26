@@ -101,8 +101,12 @@ border: 2px solid var(--accent);
   }
 
   table {
-    font-size: 0.75rem;
-  }
+  width: auto;        /* or keep width: 100% */
+  border-collapse: collapse;
+  min-width: unset;   /* remove min-width */
+  max-width: 100%;    /* prevent overflow */
+}
+
 
   canvas {
     width: 100% !important;
@@ -190,6 +194,39 @@ font-weight: 700;
   direction: rtl;
   text-align: right;
 }
+/* Responsive Table Container */
+
+
+#attendance-table {
+  width: auto;       /* or 100% if you want it full width */
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  table-layout: auto;
+}
+
+
+
+#attendance-table th, #attendance-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.table-container-attendance {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+
+
+/* Smaller font and padding on very small screens */
+@media (max-width: 480px) {
+  #attendance-table th, #attendance-table td {
+    padding: 8px 6px;
+    font-size: 0.8rem;
+  }
+}
+
   
 </style>
 </head>
@@ -392,8 +429,7 @@ font-weight: 700;
 <button class="btn-main" onclick="makeQ()">Generate Code</button>
 <textarea id="q-code" readonly style="margin-top:10px; height:80px;"></textarea>
 </div>
-  <!-- Attendance Section -->
-<div class="glass-card" style="300px: auto; margin: 10px auto;">
+  <div class="glass-card" style="300px: auto; margin: 10px auto;">
   <div style="display:flex; justify-content:space-between; align-items:center;">
     <h3 style="margin:0; color: var(--primary);">Attendance</h3>
     <button onclick="copyAttendanceTable()"
@@ -403,31 +439,34 @@ font-weight: 700;
     </button>
   </div>
 
-  <table id="attendance-table"
-    style="width:100%; margin-top:15px; border-collapse:collapse;">
-    <thead>
-      <tr style="background:#eef2ff;">
-        <th onclick="sortAttendance(0)"
-    style="padding:10px; border:1px solid #ddd; cursor:pointer;">
-  Student Name <span id="sort-name"></span>
-</th>
+  <div class="table-container-attendance">
+    <table id="attendance-table"
+      style="width:100%; border-collapse:collapse;">
+      <thead>
+        <tr style="background:#eef2ff;">
+          <th onclick="sortAttendance(0)"
+      style="cursor:pointer;">
+      Student Name <span id="sort-name"></span>
+    </th>
 
-<th onclick="sortAttendance(1)"
-    style="padding:10px; border:1px solid #ddd; cursor:pointer;">
-  No. of Exams Attended <span id="sort-exams"></span>
-</th>
+  <th onclick="sortAttendance(1)"
+      style="cursor:pointer;">
+    No. of Exams Attended <span id="sort-exams"></span>
+  </th>
 
-      </tr>
-    </thead>
-    <tbody id="attendance-body">
-      <tr>
-        <td colspan="2" style="padding:12px; text-align:center; color:#666;">
-          Loading attendance…
-        </td>
-      </tr>
-    </tbody>
-  </table>
+        </tr>
+      </thead>
+      <tbody id="attendance-body">
+        <tr>
+          <td colspan="2" style="padding:12px; text-align:center; color:#666;">
+            Loading attendance…
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
+
 </div>
   
 </div>
@@ -504,7 +543,7 @@ const masterBank = [
 {"question":"Which of the following changes is permanent?","options":["Melting ice","Boiling water","Rusting iron","Dissolving sugar in water"],"answer":2,"subject":"bs"},
 {"question":"Which part of the human eye controls the amount of light entering?","options":["Cornea","Retina","Iris","Lens"],"answer":2,"subject":"bs"},
 
-
+{"question":"1","options":["A","B","C","D"],"answer":0,"subject":"ss"},
 {"question":"Who is known as the Father of the Indian Constitution?","options":["Jawaharlal Nehru","B. R. Ambedkar","Mahatma Gandhi","Sardar Patel"],"answer":1,"subject":"ss"},
 {"question":"Which of the following rivers flows through Kerala?","options":["Ganga","Periyar","Yamuna","Godavari"],"answer":1,"subject":"ss"},
 {"question":"Which type of government is India?","options":["Monarchy","Oligarchy","Dictatorship","Democracy"],"answer":3,"subject":"ss"},
@@ -523,7 +562,7 @@ const masterBank = [
 {"question":"The Kudumbashree mission in Kerala primarily focuses on:","options":["Education","Women empowerment and poverty eradication","Health services","Tourism development"],"answer":1,"subject":"current"},
 {"question":"Who is the current President of India (2026)?","options":["Ram Nath Kovind","Narendra Modi","Amith Sha","Droupadi Murmu"],"answer":3,"subject":"current"},
 {"question":"Which initiative is related to clean energy promotion in India?","options":["Digital India","Swachh Bharat Mission","National Solar Mission","Make in India"],"answer":2,"subject":"current"},
-{"question":"Which Indian space mission successfully demonstrated human spaceflight capability?","options":["Chandrayaan-3","Gaganyaan","Mars Orbiter Mission","Astrosat"],"answer":1,"subject":"current"}
+{"question":"Which Indian space mission successfully demonstrated human spaceflight capability?","options":["Chandrayaan-3","Gaganyaan","Mars Orbiter Mission","Astrosat"],"answer":1,"subject":"current"},
 
 ];
 
