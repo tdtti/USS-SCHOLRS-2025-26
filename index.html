@@ -314,75 +314,7 @@ font-weight: 700;
   height: 28px;
 }
 
-  /* The Sticky Container */
-        .tt-sticky-footer {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 800px;
-            height: 60px;
-            background: var(--bg-glass);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            display: flex;
-            align-items: center;
-            overflow: hidden;
-            z-index: 9999;
-        }
-
-        /* Scrollable Area */
-        .tt-scroll-wrapper {
-            display: flex;
-            overflow-x: auto;
-            scroll-behavior: smooth;
-            width: 75%;
-            height: 100%;
-            scrollbar-width: none; /* Firefox */
-        }
-
-        .tt-scroll-wrapper::-webkit-scrollbar {
-            display: none; /* Chrome/Safari */
-        }
-
-        /* Individual Day Cards */
-        .tt-item {
-            flex: 0 0 100%; /* Shows one day at a time */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            color: var(--text-color);
-            font-size: 0.95rem;
-            font-weight: 500;
-            white-space: nowrap;
-            transition: all 0.3s ease;
-        }
-
-        .tt-date { color: var(--primary-accent); font-weight: bold; }
-        .tt-day { opacity: 0.8; text-transform: uppercase; }
-        .tt-tr { color: #ffcc33; border-left: 1px solid rgba(255,255,255,0.3); padding-left: 10px; }
-        .tt-sub { background: linear-gradient(to right, #00d2ff, #3a7bd5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
-
-        /* Highlight Current Day */
-        .is-today {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Navigation Arrows */
-        .tt-nav {
-            padding: 0 20px;
-            cursor: pointer;
-            color: white;
-            font-weight: bold;
-            user-select: none;
-            transition: 0.2s;
-        }
-        .tt-nav:hover { color: var(--primary-accent); }    
+      
 
 </style>
 
@@ -640,14 +572,7 @@ font-weight: 700;
 </div>
 
 </div>
-<div class="tt-sticky-footer">
-    <div class="tt-nav" onclick="scrollTT(-1)">&#10094;</div>
-    
-    <div class="tt-scroll-wrapper" id="ttWrapper">
-        </div>
 
-    <div class="tt-nav" onclick="scrollTT(1)">&#10095;</div>
-</div>
 
     
 <!-- WhatsApp Chat Button -->
@@ -1538,84 +1463,7 @@ function shareQCodeToWhatsApp() {
 }
 
 
-// Data extracted from your image
-    const timetableData = [
-        { date: "05.01.26", day: "MON", tr: "-", sub: "-" },
-        { date: "06.01.26", day: "TUE", tr: "VA", sub: "SS" },
-        { date: "07.01.26", day: "WED", tr: "ERJ", sub: "BS" },
-        { date: "08.01.26", day: "THU", tr: "-", sub: "GK" },
-        { date: "09.01.26", day: "FRI", tr: "KSPB", sub: "ENG" },
-        { date: "12.01.26", day: "MON", tr: "KK", sub: "MM" },
-        { date: "13.01.26", day: "TUE", tr: "SA | ANM", sub: "M | A | S" },
-        { date: "14.01.26", day: "WED", tr: "Parents", sub: "Meeting" },
-        { date: "15.01.26", day: "THU", tr: "NV|ANM|VRK", sub: "M | A | S" },
-        { date: "16.01.26", day: "FRI", tr: "TAK", sub: "MM" },
-        { date: "19.01.26", day: "MON", tr: "SA", sub: "M II" },
-        { date: "21.01.26", day: "WED", tr: "SJS", sub: "ENG" },
-        { date: "22.01.26", day: "THU", tr: "SS", sub: "BS" },
-        { date: "23.01.26", day: "FRI", tr: "GMK", sub: "SS" },
-        { date: "26.01.26", day: "MON", tr: "JESNA", sub: "GK" },
-        { date: "27.01.26", day: "TUE", tr: "VA", sub: "MODEL TEST" },
-        { date: "28.01.26", day: "WED", tr: "SA|ANM|VRK", sub: "M | A | S" },
-        { date: "29.01.26", day: "THU", tr: "KK", sub: "MM" },
-        { date: "30.01.26", day: "FRI", tr: "NV | SK", sub: "M II" },
-        { date: "02.02.26", day: "MON", tr: "BA", sub: "ENG" },
-        { date: "03.02.26", day: "TUE", tr: "ERJ", sub: "BS" },
-        { date: "04.02.26", day: "WED", tr: "SA", sub: "SS" },
-        { date: "05.02.26", day: "THU", tr: "JESNA", sub: "GK" },
-        { date: "06.02.26", day: "FRI", tr: "NV|ANM|VRK", sub: "M | A | S" },
-        { date: "09.02.26", day: "MON", tr: "KSPB", sub: "MM" },
-        { date: "10.02.26", day: "TUE", tr: "SK", sub: "M II" },
-        { date: "11.02.26", day: "WED", tr: "SJS", sub: "ENG" },
-        { date: "12.02.26", day: "THU", tr: "SS", sub: "BS" },
-        { date: "13.02.26", day: "FRI", tr: "VA", sub: "SS" },
-        { date: "16.02.26", day: "MON", tr: "JESNA", sub: "GK" },
-        { date: "17.02.26", day: "TUE", tr: "VA", sub: "MODEL TEST" },
-        { date: "18.02.26", day: "WED", tr: "NV|SA|SK", sub: "M II" },
-        { date: "19.02.26", day: "THU", tr: "KSPB", sub: "ENG" },
-        { date: "20.02.26", day: "FRI", tr: "SS", sub: "BS" },
-        { date: "23.02.26", day: "MON", tr: "VA", sub: "SS" },
-        { date: "24.02.26", day: "TUE", tr: "JESNA", sub: "GK" },
-        { date: "25.02.26", day: "WED", tr: "VA", sub: "ALL SUB" }
-    ];
 
-    const wrapper = document.getElementById('ttWrapper');
-
-    // Get Today's Date in DD.MM.YY format
-    const today = new Date();
-    const formattedToday = String(today.getDate()).padStart(2, '0') + '.' + 
-                           String(today.getMonth() + 1).padStart(2, '0') + '.' + 
-                           String(today.getFullYear()).substring(2);
-
-    let todayIndex = 0;
-
-    // Render Items
-    timetableData.forEach((item, index) => {
-        const div = document.createElement('div');
-        div.className = 'tt-item';
-        if(item.date === formattedToday) {
-            div.classList.add('is-today');
-            todayIndex = index;
-        }
-        div.innerHTML = `
-            <span class="tt-date">${item.date}</span>
-            <span class="tt-day">${item.day}</span>
-            <span class="tt-tr">TR: ${item.tr}</span>
-            <span class="tt-sub">${item.sub}</span>
-        `;
-        wrapper.appendChild(div);
-    });
-
-    // Auto-scroll to today
-    window.onload = () => {
-        const scrollAmount = wrapper.offsetWidth * todayIndex;
-        wrapper.scrollLeft = scrollAmount;
-    };
-
-    // Manual Nav Function
-    function scrollTT(direction) {
-        wrapper.scrollBy({ left: wrapper.offsetWidth * direction, behavior: 'smooth' });
-    }
   
 </script>
 </body>
