@@ -152,9 +152,7 @@ canvas { width: 100% !important; height: auto !important; }
 input, select, textarea { width: 100%; padding: 14px; margin: 10px 0; border: 2px solid #eee; border-radius: 12px; font-size: 1rem; background: #fafafa; outline: none; }
 .btn-main { width: 100%; padding: 16px; border: none; border-radius: 12px; background: var(--primary); color: white; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.3s; }
 .q-card { background: white; padding: 18px; border-radius: 15px; margin-bottom: 15px; border-left: 5px solid var(--primary); box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-.table-container { overflow-x: auto; border-radius: 15px; border: 1px solid #eee; background: white; }
-table { width: 100%; border-collapse: collapse; min-width: 800px; }
-th, td { padding: 12px; border-bottom: 1px solid #eee; text-align: center; font-size: 0.9rem; }
+
 
 .tab { display: none; animation: fadeIn 0.4s ease; }
 .active { display: block; }
@@ -198,11 +196,13 @@ font-weight: 700;
 
 
 #attendance-table {
-  width: auto;       /* or 100% if you want it full width */
+  width: 50%;
   border-collapse: collapse;
   font-size: 0.9rem;
-  table-layout: auto;
+  table-layout: fixed;
+   
 }
+
 
 
 
@@ -210,6 +210,8 @@ font-weight: 700;
   padding: 10px;
   border: 1px solid #ddd;
   text-align: left;
+  white-space: nowrap; /* Prevent text wrap for better fitting */
+  max-width: 1%; /* Helps columns shrink to fit content */
 }
 
 .table-container-attendance {
@@ -577,7 +579,7 @@ const masterBank = [
 {"question":"Which of the following changes is permanent?","options":["Melting ice","Boiling water","Rusting iron","Dissolving sugar in water"],"answer":2,"subject":"bs"},
 {"question":"Which part of the human eye controls the amount of light entering?","options":["Cornea","Retina","Iris","Lens"],"answer":2,"subject":"bs"},
 
-
+{"question":"1","options":["A","B","C","D"],"answer":0,"subject":"ss"},
 {"question":"Who is known as the Father of the Indian Constitution?","options":["Jawaharlal Nehru","B. R. Ambedkar","Mahatma Gandhi","Sardar Patel"],"answer":1,"subject":"ss"},
 {"question":"Which of the following rivers flows through Kerala?","options":["Ganga","Periyar","Yamuna","Godavari"],"answer":1,"subject":"ss"},
 {"question":"Which type of government is India?","options":["Monarchy","Oligarchy","Dictatorship","Democracy"],"answer":3,"subject":"ss"},
