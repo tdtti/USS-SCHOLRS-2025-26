@@ -274,7 +274,6 @@ font-weight: 700;
   background: white;
   padding: 8px 5px;
   border-radius: 10px;
-  border-bottom: 3px solid var(--accent);
   text-align: center;
   font-size: 0.9rem;
 }
@@ -490,6 +489,9 @@ font-weight: 700;
 
 </div>
 <button class="btn-main" onclick="makeQ()">Generate Code</button>
+<button class="btn-main" style="background:#25d366; margin-top: 8px;" onclick="shareQCodeToWhatsApp()">
+  Share to WhatsApp
+</button>
 <textarea id="q-code" readonly style="margin-top:10px; height:80px;"></textarea>
 </div>
   <div class="glass-card" style="300px: auto; margin: 10px auto;">
@@ -500,9 +502,16 @@ font-weight: 700;
              background:var(--secondary); color:white; font-weight:600; cursor:pointer;">
       Copy
     </button>
+    <button onclick="shareAttendanceToWhatsApp()"
+  style="padding:6px 14px; border-radius:8px; border:none; margin-left:10px;
+         background:#25d366; color:white; font-weight:600; cursor:pointer;">
+  Share to WhatsApp
+</button>
+
+    
   </div>
 
-  <div class="table-container-attendance">
+  <div class="table-container-attendance"><br>
     <table id="attendance-table"
       style="width:100%; border-collapse:collapse;">
       <thead>
@@ -1378,7 +1387,42 @@ function updateSortIcons() {
   }
 }
 
-  
+function shareAttendanceToWhatsApp() {
+  // Extract attendance data from table
+  const rows = document.querySelectorAll("#attendance-table tr");
+  let lines = [];
+  rows.forEach(row => {
+    const cols = row.querySelectorAll("th, td");
+    let line = Array.from(cols).map(c => c.innerText.trim()).join("\t");
+    lines.push(line);
+  });
+  const text = lines.join("\n");
+
+  // Encode for URL sharing (replace tabs with spaces for WhatsApp readability)
+  const message = encodeURIComponent(text.replace(/\t/g,"    "));
+
+  // Open Whatsapp share
+  window.open("https://wa.me/?text=" + message, "_blank");
+}
+
+function shareQCodeToWhatsApp() {
+  const code = document.getElementById('q-code').value.trim();
+  if (!code) {
+    alert("No generated code to share!");
+    return;
+  }
+
+  // Your WhatsApp number with country code
+  const waNumber = "919497731772";
+
+  // URL encode the message
+  const message = encodeURIComponent("Generated Question Code:\n" + code);
+
+  // Open chat to your WhatsApp number
+  const url = `https://wa.me/${waNumber}?text=${message}`;
+  window.open(url, "_blank");
+}
+
   
 </script>
 </body>
