@@ -265,6 +265,7 @@ font-weight: 700;
 
 </style>
 </head>
+</head>
 <body onload="checkPersistentLogin()">
 
 <div id="msg-overlay">
@@ -382,9 +383,6 @@ font-weight: 700;
 
 <div id="tab3" class="tab">
   
- 
-  
-  
 <div class="glass-card" id="progress-summary-box" style="margin-bottom: 20px; border-left: 5px solid var(--accent);">
 <h3 style="margin-top:0; color: var(--secondary);">Student Summary</h3>
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 1rem;">
@@ -395,25 +393,26 @@ font-weight: 700;
 <p style="margin:0; grid-column: span 2;"><b>Grand Total Score:</b> <span id="summ-grand" style="color:var(--success); font-weight:800; font-size:1.4rem;">0</span></p>
 </div>
 </div>
-  
-  
-  
+ 
 <div class="glass-card">
-<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-  
-<h3 style="margin:0;">Growth Analysis</h3>
-<div style="background:var(--error); color:white; padding:5px 15px; border-radius:15px; font-weight:700; font-size:0.9rem;">Grade: <span id="p-grade"></span></div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <h3 style="margin:0;">Growth Analysis</h3>
+      <div style="background:var(--error); color:white; padding:5px 15px; border-radius:15px; font-weight:700; font-size:0.9rem;">
+        Grade: <span id="p-grade"></span>
+      </div>
+    </div>
+    <div style="position: relative; height:300px; width:100%;">
+      <canvas id="chartArea"></canvas>
+    </div>
+  </div>
+
+  <!-- New section for My Performance and Reviews -->
+  <div class="glass-card" id="my-performance-reviews-box">
+    <h3 style="margin-top:0; color: var(--primary);">My Performance and Reviews</h3>
+    <div id="my-performance-reviews-list" style="max-height: 400px; overflow-y: auto;"></div>
+  </div>
 </div>
-<div style="position: relative; height:300px; width:100%;">
-<canvas id="chartArea"></canvas>
-</div>
-</div>
-  <div class="glass-card" id="my-review-box">
-  <h3 style="margin-top:0; color: var(--primary);">
-    My Performance Reviews
-  </h3>
-  <div id="my-review-list"></div>
-</div>
+
 </div>
 
 <div id="tab5" class="tab">
@@ -882,51 +881,85 @@ closeMsg();
 }
 
 async function loadProgress() {
-if(SCRIPT_URL === "YOUR_WEB_APP_URL") return;
-showLoading("Syncing...");
-try {
-const res = await fetch(`${SCRIPT_URL}?name=${user.name}`);
-const data = await res.json();
+  if(SCRIPT_URL === "YOUR_WEB_APP_URL") return;
+  showLoading("Syncing...");
+  try {
+    const res = await fetch(`${SCRIPT_URL}?name=${user.name}`);
+    const data = await res.json();
 
-document.getElementById('summ-name').innerText = user.name;
-document.getElementById('summ-class').innerText = user.class;
-document.getElementById('summ-div').innerText = user.div;
+    document.getElementById('summ-name').innerText = user.name;
+    document.getElementById('summ-class').innerText = user.class;
+    document.getElementById('summ-div').innerText = user.div;
 
-if(data.length > 0) {
-const values = data.map(r => r[13]);
-const grandTotal = values.reduce((a, b) => a + b, 0);
-const avg = (grandTotal / (data.length * 24)) * 100;
+    if(data.length > 0) {
+      const values = data.map(r => r[13]);
+      const grandTotal = values.reduce((a, b) => a + b, 0);
+      const avg = (grandTotal / (data.length * 24)) * 100;
 
-document.getElementById('summ-count').innerText = data.length;
-document.getElementById('summ-grand').innerText = grandTotal;
-document.getElementById('p-grade').innerText = getGrade(avg);
+      document.getElementById('summ-count').innerText = data.length;
+      document.getElementById('summ-grand').innerText = grandTotal;
+      document.getElementById('p-grade').innerText = getGrade(avg);
 
-if(myChart) myChart.destroy();
-myChart = new Chart(document.getElementById('chartArea'), {
-type: 'line',
-data: { labels: data.map(r => r[0]), datasets: [{ label: 'Score', data: values, borderColor: '#4361ee', tension: 0.4, fill: true, backgroundColor: 'rgba(67,97,238,0.1)' }] },
-options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-});
+      if(myChart) myChart.destroy();
+      myChart = new Chart(document.getElementById('chartArea'), {
+        type: 'line',
+        data: { labels: data.map(r => lockExamDateTime(r[0])), datasets: [{ label: 'Score', data: values, borderColor: '#4361ee', tension: 0.4, fill: true, backgroundColor: 'rgba(67,97,238,0.1)' }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+      });
+    } else {
+      document.getElementById('summ-count').innerText = 0;
+      document.getElementById('summ-grand').innerText = 0;
+      document.getElementById('p-grade').innerText = '';
+      if(myChart) myChart.destroy();
+    }
+
+    // Render "My Performance and Reviews" with server data, last exam first
+    const reviewBox = document.getElementById("my-performance-reviews-list");
+    if (data.length === 0) {
+      reviewBox.innerHTML = "<p style='color:#666; font-size:0.9rem;'>No exams attempted yet.</p>";
+    } else {
+      let html = "";
+      // Iterate reversed (last exam first)
+      for (let i = data.length -1; i >= 0; i--) {
+        const r = data[i];
+        const examNum = data.length - i;
+        const date = lockExamDateTime(r[0]);
+        const scores = {
+          lang1: r[5], mal2: r[6], maths: r[7], eng: r[8],
+          bs: r[9], ss: r[10], mental: r[11], current: r[12]
+        };
+        const total = r[13];
+        const grade = getGrade((total / 24) * 100);
+        let grid = "";
+        for (const [key, val] of Object.entries(scores)) {
+          grid += `
+            <div style="background:#fff; padding:8px; border-radius:10px; border-bottom:3px solid var(--accent); text-align:center;">
+              <div style="font-size:0.6rem; color:#888;">${key.toUpperCase()}</div>
+              <div style="font-weight:700;">${val}/3</div>
+            </div>`;
+        }
+        html += `
+          <div class="glass-card" style="margin-bottom:15px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <b>Exam ${examNum}</b>
+              <span style="font-size:0.8rem; color:#666;">${date}</span>
+            </div>
+            <div style="margin:8px 0; font-size:0.9rem;">
+              <b>Total:</b> ${total}/24 |
+              <b>Grade:</b> <span style="color:var(--primary); font-weight:800;">${grade}</span>
+            </div>
+            <div class="summary-grid">${grid}</div>
+          </div>`;
+      }
+      reviewBox.innerHTML = html;
+    }
+
+    closeMsg();
+  } catch(e) {
+    showStatus("Error", "Load Failed", "error");
+  }
 }
-  // Load all saved performance reviews
-const reviewBox = document.getElementById("my-review-list");
-const history = JSON.parse(localStorage.getItem("uss_reviews") || "[]");
 
-if (history.length === 0) {
-  reviewBox.innerHTML =
-    "<p style='color:#666; font-size:0.9rem;'>No exams attempted yet.</p>";
-} else {
-  let h = "";
-  for (let i = history.length - 1; i >= 0; i--) {
-  h += renderPerformanceCard(history[i], i);
-}
-  reviewBox.innerHTML = h;
-}
-
-  
-closeMsg();
-} catch(e) { showStatus("Error", "Load Failed", "error"); }
-}
 
 function renderPerformanceCard(review, index = null) {
   let grid = "";
