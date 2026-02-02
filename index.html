@@ -263,6 +263,34 @@ font-weight: 700;
   }
 }
 
+#res-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: 10px;
+  padding: 10px 0;
+}
+
+#res-summary > div {
+  background: white;
+  padding: 8px 5px;
+  border-radius: 10px;
+  border-bottom: 3px solid var(--accent);
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+#res-summary > div > div:first-child {
+  font-size: 0.65rem;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+#res-summary > div > div:last-child {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+
 </style>
 </head>
 </head>
