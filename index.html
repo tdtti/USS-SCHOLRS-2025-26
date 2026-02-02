@@ -227,7 +227,40 @@ font-weight: 700;
   }
 }
 
-  
+.table-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 15px;
+  border: 1px solid #eee;
+  background: white;
+  max-width: 100%;
+}
+
+/* For the Global Performance Table specifically */
+#ins-table {
+  width: auto;         /* adapt to content */
+  min-width: unset;    /* remove fixed min width */
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  table-layout: auto;
+  max-width: 100%;
+}
+
+#ins-table th, #ins-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+  white-space: nowrap;   /* Prevent text wrap */
+}
+
+/* Responsive font and padding for smaller screens */
+@media (max-width: 480px) {
+  #ins-table th, #ins-table td {
+    padding: 6px 8px;
+    font-size: 0.75rem;
+  }
+}
+
 </style>
 </head>
 <body onload="checkPersistentLogin()">
@@ -392,16 +425,17 @@ font-weight: 700;
  <div class="glass-card">  
 <h3 style="margin-top:0;">Global Performance</h3>
 <div class="table-container">
-<table id="ins-table">
-<thead>
-<tr>
-<th onclick="sortTable(0)">Name ↑↓</th><th>Cls</th><th>Div</th><th>L1</th><th>M2</th><th>Mat</th><th>Eng</th><th>BS</th><th>SS</th><th>MA</th><th>CA</th>
-<th onclick="sortTable(11)">Exams ↑↓</th><th onclick="sortTable(12)">Total ↑↓</th><th onclick="sortTable(13)">Grd ↑↓</th>
-</tr>
-</thead>
-<tbody id="ins-body"></tbody>
-</table>
+  <table id="ins-table">
+    <thead>
+      <tr>
+        <th onclick="sortTable(0)">Name ↑↓</th><th>Cls</th><th>Div</th><th>L1</th><th>M2</th><th>Mat</th><th>Eng</th><th>BS</th><th>SS</th><th>MA</th><th>CA</th>
+        <th onclick="sortTable(11)">Exams ↑↓</th><th onclick="sortTable(12)">Total ↑↓</th><th onclick="sortTable(13)">Grd ↑↓</th>
+      </tr>
+    </thead>
+    <tbody id="ins-body"></tbody>
+  </table>
 </div>
+
 </div>
  
 
@@ -543,7 +577,6 @@ const masterBank = [
 {"question":"Which of the following changes is permanent?","options":["Melting ice","Boiling water","Rusting iron","Dissolving sugar in water"],"answer":2,"subject":"bs"},
 {"question":"Which part of the human eye controls the amount of light entering?","options":["Cornea","Retina","Iris","Lens"],"answer":2,"subject":"bs"},
 
-{"question":"1","options":["A","B","C","D"],"answer":0,"subject":"ss"},
 {"question":"Who is known as the Father of the Indian Constitution?","options":["Jawaharlal Nehru","B. R. Ambedkar","Mahatma Gandhi","Sardar Patel"],"answer":1,"subject":"ss"},
 {"question":"Which of the following rivers flows through Kerala?","options":["Ganga","Periyar","Yamuna","Godavari"],"answer":1,"subject":"ss"},
 {"question":"Which type of government is India?","options":["Monarchy","Oligarchy","Dictatorship","Democracy"],"answer":3,"subject":"ss"},
