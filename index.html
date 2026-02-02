@@ -342,15 +342,7 @@ font-weight: 700;
         
 
 </style>
-<head>
-  <div id="schedule-widget">
-    <div class="meta-info">
-        <span id="date-day-display">00.00.00 | DAY</span>
-        <span><span class="label">TR:</span><span id="teacher-display">---</span></span>
-    </div>
-    <div class="subject-display" id="subject-display">LOADING...</div>
-</div>
-</head>
+
 <body onload="checkPersistentLogin()">
 
 <div id="msg-overlay">
@@ -378,6 +370,16 @@ font-weight: 700;
 </div>
 <button onclick="logout()" style="background:transparent; border:1px solid white; color:white; border-radius:8px; padding:5px 12px; cursor:pointer; font-size:0.8rem;">LOGOUT</button>
 </div>
+
+<head>
+  <div id="schedule-widget">
+    <div class="meta-info">
+        <span id="date-day-display">00.00.00 | DAY</span>
+        <span><span class="label">TR:</span><span id="teacher-display">---</span></span>
+    </div>
+    <div class="subject-display" id="subject-display">LOADING...</div>
+</div>
+</head>
 
 <nav id="navbar">
 <button id="nav-tab2" onclick="showTab('tab2')">Daily Exam</button>
