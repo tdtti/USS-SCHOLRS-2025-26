@@ -353,7 +353,13 @@ font-weight: 700;
 
 <body onload="checkPersistentLogin()">
   
-  
+  <div id="schedule-widget">
+    <div class="meta-info">
+        <span id="date-day-display">00.00.00 | DAY</span>
+        <span><span class="label">TR:</span><span id="teacher-display">---</span></span>
+    </div>
+    <div class="subject-display" id="subject-display">LOADING...</div>
+</div>
 
 <div id="msg-overlay">
 <div id="loader-content">
@@ -369,16 +375,6 @@ font-weight: 700;
 </div>
 
 <div class="app-container">
-  
-  <div id="schedule-widget">
-    <div class="meta-info">
-        <span id="date-day-display">00.00.00 | DAY</span>
-        <span><span class="label">TR:</span><span id="teacher-display">---</span></span>
-    </div>
-    <div class="subject-display" id="subject-display">LOADING...</div>
-</div>
-
-
 <div id="sticky-header-container" class="sticky-nav-wrapper" style="display:none;">
 <div id="user-profile">
 <div style="display: flex; align-items: center; gap: 12px;">
