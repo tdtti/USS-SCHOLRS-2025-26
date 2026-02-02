@@ -903,7 +903,7 @@ async function loadProgress() {
       if(myChart) myChart.destroy();
       myChart = new Chart(document.getElementById('chartArea'), {
         type: 'line',
-        data: { labels: data.map(r => lockExamDateTime(r[0])), datasets: [{ label: 'Score', data: values, borderColor: '#4361ee', tension: 0.4, fill: true, backgroundColor: 'rgba(67,97,238,0.1)' }] },
+        data: { labels: data.map((_, i) => `${i + 1}`), datasets: [{ label: 'Score', data: values, borderColor: '#4361ee', tension: 0.4, fill: true, backgroundColor: 'rgba(67,97,238,0.1)' }] },
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
       });
     } else {
@@ -922,7 +922,7 @@ async function loadProgress() {
       // Iterate reversed (last exam first)
       for (let i = data.length -1; i >= 0; i--) {
         const r = data[i];
-        const examNum = data.length - i;
+        const examNum = i + 1; // Assign exam 1 to oldest, exam N to latest
         const date = lockExamDateTime(r[0]);
         const scores = {
           lang1: r[5], mal2: r[6], maths: r[7], eng: r[8],
