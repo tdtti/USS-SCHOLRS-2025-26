@@ -294,10 +294,69 @@ font-weight: 700;
   font-size: 1.1rem;
 }
 
+ /* The Widget Container */
+        #schedule-widget {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            min-width: 220px;
+            padding: 15px 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: none; /* Hidden by default, shown via JS */
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        #schedule-widget:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Top Line: Date, Day, Teacher */
+        .meta-info {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #64748b;
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding-bottom: 4px;
+        }
+
+        /* Bottom Line: Subject */
+        .subject-display {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--primary-accent);
+            margin: 0;
+            line-height: 1.2;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.5);
+        }
+
+        .label {
+            color: #94a3b8;
+            font-weight: 400;
+            margin-right: 3px;
+        }
+        
 
 </style>
-</head>
-</head>
+
+<div id="schedule-widget">
+    <div class="meta-info">
+        <span id="date-day-display">00.00.00 | DAY</span>
+        <span><span class="label">TR:</span><span id="teacher-display">---</span></span>
+    </div>
+    <div class="subject-display" id="subject-display">LOADING...</div>
+</div>
+
 <body onload="checkPersistentLogin()">
 
 <div id="msg-overlay">
@@ -2868,7 +2927,56 @@ function shareQCodeToWhatsApp() {
   window.open(url, "_blank");
 }
 
-  
+// Data extracted from your image
+    const timetable = {
+        "02.02.26": { tr: "BA", sub: "ENG" },
+        "03.02.26": { tr: "ERJ", sub: "BS" },
+        "04.02.26": { tr: "SA", sub: "SS" },
+        "05.02.26": { tr: "JESNA", sub: "GK" },
+        "06.02.26": { tr: "NV|ANM|VRK", sub: "M|A|S" },
+        "09.02.26": { tr: "KSPB", sub: "MM" },
+        "10.02.26": { tr: "SK", sub: "M II" },
+        "11.02.26": { tr: "SJS", sub: "ENG" },
+        "12.02.26": { tr: "SS", sub: "BS" },
+        "13.02.26": { tr: "VA", sub: "SS" },
+        "16.02.26": { tr: "JESNA", sub: "GK" },
+        "17.02.26": { tr: "VA", sub: "MODEL TEST" },
+        "18.02.26": { tr: "NV|SA|SK", sub: "M II" },
+        "19.02.26": { tr: "KSPB", sub: "ENG" },
+        "20.02.26": { tr: "SS", sub: "BS" },
+        "23.02.26": { tr: "VA", sub: "SS" },
+        "24.02.26": { tr: "JESNA", sub: "GK" },
+        "25.02.26": { tr: "VA", sub: "ALL SUB" }
+    };
+
+    function updateWidget() {
+        const now = new Date();
+        
+        // Format date to DD.MM.YY to match your data
+        const dd = String(now.getDate()).padStart(2, '0');
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const yy = String(now.getFullYear()).substring(2);
+        const dateKey = `${dd}.${mm}.${yy}`;
+        
+        const dayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+        const dayName = dayNames[now.getDay()];
+
+        const todayData = timetable[dateKey];
+
+        if (todayData) {
+            document.getElementById('date-day-display').innerText = `${dateKey} | ${dayName}`;
+            document.getElementById('teacher-display').innerText = todayData.tr;
+            document.getElementById('subject-display').innerText = todayData.sub;
+            document.getElementById('schedule-widget').style.display = 'block';
+        } else {
+            // Keep it hidden if no class is scheduled (e.g., Weekends)
+            document.getElementById('schedule-widget').style.display = 'none';
+        }
+    }
+
+    // Run on load
+    updateWidget();
+     
 </script>
 </body>
 </html>
