@@ -340,6 +340,32 @@ font-weight: 700;
             margin-right: 3px;
         }
         
+        
+  #whatsapp-chat-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #25D366;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+#whatsapp-chat-button:hover {
+  background-color: #128C7E;
+}
+#whatsapp-chat-button img {
+  width: 28px;
+  height: 28px;
+}
+
+      
 
 </style>
 
@@ -602,8 +628,14 @@ font-weight: 700;
 </div>
 
 </div>
-  
+
 </div>
+
+<!-- WhatsApp Chat Button -->
+<a href="https://wa.me/919497731772" target="_blank" id="whatsapp-chat-button" aria-label="Chat on WhatsApp">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
+</a>
+
 
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyvR2DNBQzwtDdt6KngGABQq1yC_73tEps4d0JvFIwGG6z8jt8y227Bf7SZg8TILVTI/exec";
@@ -677,6 +709,7 @@ const masterBank = [
 {"question":"Which of the following changes is permanent?","options":["Melting ice","Boiling water","Rusting iron","Dissolving sugar in water"],"answer":2,"subject":"bs"},
 {"question":"Which part of the human eye controls the amount of light entering?","options":["Cornea","Retina","Iris","Lens"],"answer":2,"subject":"bs"},
 
+{"question":"1","options":["A","B","C","D"],"answer":0,"subject":"ss"},
 {"question":"Who is known as the Father of the Indian Constitution?","options":["Jawaharlal Nehru","B. R. Ambedkar","Mahatma Gandhi","Sardar Patel"],"answer":1,"subject":"ss"},
 {"question":"Which of the following rivers flows through Kerala?","options":["Ganga","Periyar","Yamuna","Godavari"],"answer":1,"subject":"ss"},
 {"question":"Which type of government is India?","options":["Monarchy","Oligarchy","Dictatorship","Democracy"],"answer":3,"subject":"ss"},
@@ -912,26 +945,27 @@ examQs.forEach((q, i) => {
   }
 
   reviewHTML += `
-    <div style="padding:12px; margin-bottom:8px; background:#fff; border:1px solid #eee; border-radius:10px;">
-      <p style="margin:0 0 5px 0; font-size:0.9rem;">
-        <b>Q${i+1}.</b> ${q.question}
-      </p>
+  <div style="padding:12px; margin-bottom:8px; background:#fff; border:1px solid #eee; border-radius:10px;">
+    <p style="margin:0 0 5px 0; font-size:0.9rem;">
+      <b>Q${i+1}.</b> ${q.question}
+    </p>
 
-      <p style="margin:2px 0; font-size:0.85rem;">
-        Your Answer:
-        <span style="color:${isCorrect ? 'var(--success)' : 'var(--error)'}; font-weight:700;">
-          ${userAnswerText}
-        </span>
-      </p>
+    <p style="margin:2px 0; font-size:0.85rem;">
+      Your Answer: 
+      <span style="color:${isCorrect ? 'var(--success)' : 'var(--error)'}; font-weight:700;">
+        ${userAnswerText} ${isCorrect ? '✓' : '✗'}
+      </span>
+    </p>
 
-      <p style="margin:2px 0; font-size:0.85rem;">
-        Correct Answer:
-        <span style="color:var(--success); font-weight:700;">
-          ${correctAnswerText}
-        </span>
-      </p>
-    </div>
-  `;
+    <p style="margin:2px 0; font-size:0.85rem;">
+      Correct Answer:
+      <span style="color:var(--success); font-weight:700;">
+        ${correctAnswerText}
+      </span>
+    </p>
+  </div>
+`;
+
 });
 
 
