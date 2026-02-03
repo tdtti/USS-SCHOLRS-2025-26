@@ -682,7 +682,7 @@ const students = [
 {id:"USS017", pass:"SSP17", name:"SUKESH S PAI", class:"7", div:"B", role:"student"},
 {id:"USS018", pass:"VSB18", name:"VARALAKSHMY S BHAT", class:"7", div:"B", role:"student"},
 {id:"USS019", pass:"VA", name:"AJITH V", class:"7", div:"E", role:"student"},
-{id:"ADMIN", pass:"1", name:"Teacher", class:"-", div:"-", role:"teacher"}
+{id:"ADMIN", pass:"123456", name:"Teacher", class:"-", div:"-", role:"teacher"}
 ];
 
 const masterBank = [
@@ -1548,8 +1548,31 @@ let subjectwiseSort = { column: null, asc: true };
 async function loadSubjectwiseData() {
   const subject = document.getElementById("subjectwise-select").value;
   const tbody = document.getElementById("subjectwise-body");
+  const container = tbody.parentElement; // .table-container
+
+  // Create spinner overlay if doesn't exist
+  let loader = container.querySelector(".spinner-overlay");
+  if (!loader) {
+    loader = document.createElement("div");
+    loader.className = "spinner-overlay";
+    loader.style = `
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 15px;
+      z-index: 10;
+    `;
+    loader.innerHTML = `<div class="spinner" style="width:30px; height:30px; border-width: 4px; border-top-color: var(--primary);"></div>`;
+    container.style.position = "relative";
+    container.appendChild(loader);
+  }
+
   if (!subject) {
     tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:10px; color:#666;">Select a subject to view data</td></tr>`;
+    loader.remove();
     return;
   }
 
@@ -1565,9 +1588,7 @@ async function loadSubjectwiseData() {
       const name = row[1];
       if (!performanceMap[name]) performanceMap[name] = { exams: 0, totalScore: 0 };
       performanceMap[name].exams++;
-      // Map subject to correct column index in row:
-      // Columns in row: [0-ID,1-Name,2-Class,3-Div,4-Date,5-L1,6-M2,7-Math,8-Eng,9-BS,10-SS,11-MA,12-CA,13-Total]
-      // Subject keys mapped to columns:
+      
       const subjIndexMap = {
         "lang1_arb": 5, "lang1_skt": 5, "lang1_mal1": 5,
         "mal2": 6, "maths":7, "eng":8, "bs":9, "ss":10,
@@ -1576,9 +1597,7 @@ async function loadSubjectwiseData() {
       let col = subjIndexMap[subject];
       if (col === undefined) col = 5; // fallback to language 1
       let score = 0;
-      // Special case for different lang1 variants - check subject and sum accordingly
       if (subject.startsWith("lang1_")) {
-        // Pick the correct column 5 (lang1) for language subjects since data has L1 combined
         if(subject === "lang1_arb" || subject==="lang1_skt" || subject==="lang1_mal1") {
           score = row[5];
         }
@@ -1588,7 +1607,6 @@ async function loadSubjectwiseData() {
       performanceMap[name].totalScore += score;
     });
 
-    // Build table rows
     let html = "";
     for (const [name, perf] of Object.entries(performanceMap)) {
       const avgScore = perf.totalScore;
@@ -1604,10 +1622,13 @@ async function loadSubjectwiseData() {
         </tr>`;
     }
     tbody.innerHTML = html || `<tr><td colspan="4" style="text-align:center; padding:10px; color:#666;">No data available.</td></tr>`;
+    loader.remove();
   } catch (e) {
     tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:10px; color:red;">Failed to load data</td></tr>`;
+    if(loader) loader.remove();
   }
 }
+
 
 function sortSubjectwiseTable(colIndex) {
   const tbody = document.getElementById("subjectwise-body");
@@ -1650,10 +1671,32 @@ let subjectPointerChart = null;
 
 async function loadSubjectPointer() {
   if(SCRIPT_URL === "YOUR_WEB_APP_URL") return;
+
+  const container = document.getElementById("subjectPointerChart").parentElement;
+  // Show loading spinner
+  let loader = container.querySelector(".spinner-overlay");
+  if (!loader) {
+    loader = document.createElement("div");
+    loader.className = "spinner-overlay";
+    loader.style = `
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 15px;
+      z-index: 10;
+    `;
+    loader.innerHTML = `<div class="spinner" style="width:30px; height:30px; border-width: 4px; border-top-color: var(--primary);"></div>`;
+    container.style.position = "relative";
+    container.appendChild(loader);
+  }
+
   try {
     const res = await fetch(`${SCRIPT_URL}?type=allStudents`);
     const data = await res.json();
-
+  
     const subjects = ["lang1_arb", "lang1_skt", "lang1_mal1", "mal2", "maths", "eng", "bs", "ss", "mental", "current"];
     const shortNames = ["Arb", "Skt", "MI", "MII", "MM", "E", "BS", "SS", "MA", "CA"];
 
@@ -1723,15 +1766,17 @@ async function loadSubjectPointer() {
         }
       }
     });
-
+    if (loader) loader.remove();
   } catch(e) {
     console.error("Error loading Subject Pointer:", e);
   }
 }
 
 async function loadSubjectProgress() {
-  if(SCRIPT_URL === "YOUR_WEB_APP_URL") return;
+  if (SCRIPT_URL === "YOUR_WEB_APP_URL") return;
   if (!user) return;
+  showSubjectProgressLoading(true);  // Show spinner
+
   try {
     const res = await fetch(`${SCRIPT_URL}?name=${user.name}`);
     const data = await res.json();
@@ -1851,6 +1896,8 @@ async function loadSubjectProgress() {
         }
       }
     });
+    
+    showSubjectProgressLoading(false); // Hide 
 
   } catch(e) {
     console.error("Error loading Subject Progress:", e);
@@ -1867,6 +1914,32 @@ showTab = function(tid) {
     loadSubjectProgress();
   }
 };
+
+function showSubjectProgressLoading(show) {
+  const container = document.getElementById("subjectProgressChart").parentElement;
+  let loader = container.querySelector(".spinner-overlay");
+  if (show) {
+    if (!loader) {
+      loader = document.createElement("div");
+      loader.className = "spinner-overlay";
+      loader.style = `
+        position: absolute;
+        inset: 0;
+        background: rgba(255, 255, 255, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 15px;
+        z-index: 10;
+      `;
+      loader.innerHTML = `<div class="spinner" style="width:30px; height:30px; border-width: 4px; border-top-color: var(--primary);"></div>`;
+      container.style.position = "relative";
+      container.appendChild(loader);
+    }
+  } else {
+    if (loader) loader.remove();
+  }
+}
 
 
   
