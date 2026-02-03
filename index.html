@@ -450,6 +450,19 @@ font-weight: 700;
 <p style="margin:0; grid-column: span 2;"><b>Grand Total Score:</b> <span id="summ-grand" style="color:var(--success); font-weight:800; font-size:1.4rem;">0</span></p>
 </div>
 </div>
+
+<div class="glass-card" style="margin-top: 20px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+    <h3 style="margin: 0; color: var(--primary);">Subject Progress</h3>
+    <div id="subject-progress-exams-count" style="font-weight: 700; color: var(--secondary); font-size: 1rem;"></div>
+  </div>
+  <div style="position: relative; height: 300px; width: 100%;">
+    <canvas id="subjectProgressChart"></canvas>
+  </div>
+</div>
+
+
+
  
 <div class="glass-card">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
@@ -473,6 +486,54 @@ font-weight: 700;
 </div>
 
 <div id="tab5" class="tab">
+  
+  <!-- Add inside the tab5 div, before </div> -->
+<div class="glass-card" style="margin-top: 20px;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+    <h3 style="margin:0; color: var(--primary);">Subject Pointer</h3>
+    <div id="total-exams-count" style="font-weight: 700; color: var(--secondary); font-size: 1rem;"></div>
+  </div>
+  <div style="position: relative; height:300px; width: 100%;">
+    <canvas id="subjectPointerChart"></canvas>
+  </div>
+</div>
+
+
+  <div class="glass-card">
+  <h3>Subjectwise Performance</h3>
+  <label style="font-weight:700; font-size:0.9rem;">Select Subject</label>
+  <select id="subjectwise-select" onchange="loadSubjectwiseData()">
+    <option value="">-- Choose Subject --</option>
+    <option value="lang1_arb">Arabic</option>
+    <option value="lang1_skt">Sanskrit</option>
+    <option value="lang1_mal1">Malayalam I</option>
+    <option value="mal2">Malayalam II</option>
+    <option value="maths">Maths</option>
+    <option value="eng">English</option>
+    <option value="bs">Basic Science</option>
+    <option value="ss">Social Science</option>
+    <option value="mental">Mental Ability</option>
+    <option value="current">Current Affairs</option>
+  </select>
+  <div class="table-container" style="margin-top:15px;">
+    <table id="subjectwise-table">
+      <thead>
+        <tr>
+          <th onclick="sortSubjectwiseTable(0)" style="cursor:pointer;">Student Name ↑↓</th>
+          <th onclick="sortSubjectwiseTable(1)" style="cursor:pointer;">No. of Exams ↑↓</th>
+          <th onclick="sortSubjectwiseTable(2)" style="cursor:pointer;">Score ↑↓</th>
+          <th onclick="sortSubjectwiseTable(3)" style="cursor:pointer;">Grade ↑↓</th>
+        </tr>
+      </thead>
+      <tbody id="subjectwise-body">
+        <tr><td colspan="4" style="text-align:center; padding:10px; color:#666;">Select a subject to view data</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
 <div class="glass-card">
   <h3 style="margin-top:0; color: var(--primary);">Student Exams</h3>
   <label style="font-weight:700; font-size:0.9rem;">Select Student</label>
@@ -587,7 +648,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyvR2DNBQzwtDdt6KngG
 const students = [
 {id:"USS001", pass:"AF1", name:"AAISHA FIDHA", class:"7", div:"D", role:"student"},
 {id:"USS002", pass:"ACS2", name:"AALIYA C S", class:"7", div:"D", role:"student"},
-{id:"USS003", pass:"AK3", name:"ANANDHAKRISHNAN ", class:"7", div:"B", role:"student"},
+{id:"USS003", pass:"AMS", name:"ANANDHAKRISHNAN M S", class:"7", div:"B", role:"student"},
 {id:"USS004", pass:"AA4", name:"ANSHITHA ANEESH", class:"7", div:"B", role:"student"},
 {id:"USS005", pass:"ATS5", name:"ANUSREE T S", class:"7", div:"B", role:"student"},
 {id:"USS006", pass:"BSK6", name:"BHAGATH S KUMAR", class:"7", div:"B", role:"student"},
@@ -637,7 +698,7 @@ const masterBank = [
 {"question":"A number when divided by 5 leaves remainder 2, and when divided by 7 leaves remainder 4. Which of the following is the smallest such number?","options":["9","12","37","39"],"answer":2,"subject":"maths"},
 {"question":"A shopkeeper marks an article 25% more than its cost price and then gives a 10% discount. What is the overall gain or loss?","options":["12.5% gain","10% gain","12.5% loss","No gain, no loss"],"answer":0,"subject":"maths"},{"question":"In a sequence: 2, 6, 12, 20, 30, ? The next number is:","options":["40","41","42","44"],"answer":2,"subject":"maths"},
 {"question":"A rectangular field has length twice its breadth. If the perimeter is 72 m, what is the area of the field?","options":["192 sq.m","216 sq.m","288 sq.m","324 sq.m"],"answer":2,"subject":"maths"},
-{"question":"Three numbers are in the ratio 3 : 5 : 7. If their sum is 300, the largest number is:","options":["120","100","140","150"],"answer":2,"subject":"maths"},
+{"question":"Three numbers are in the ratio 3 : 5 : 7. If their sum is 300, the largest number is:","options":["120","100","140","150"],"answer":1,"subject":"maths"},
 {"question":"The HCF of two numbers is 12 and their LCM is 180. If one number is 36, the other number is:","options":["54","72","60","48"],"answer":3,"subject":"maths"},
 
 {"question":"Choose the sentence with the correct spelling.","options":["Enviroment","Environmant","Environment","Envirronment"],"answer":2,"subject":"eng"},
@@ -1095,6 +1156,8 @@ const perc = (s.total / (s.exams * 24)) * 100;
 h += `<tr><td style="font-weight:700;">${s.name}</td><td>${s.class}</td><td>${s.div}</td><td>${s.l1}</td><td>${s.m2}</td><td>${s.math}</td><td>${s.eng}</td><td>${s.bs}</td><td>${s.ss}</td><td>${s.ma}</td><td>${s.ca}</td><td>${s.exams}</td><td style="color:var(--primary); font-weight:700;">${s.total}</td><td>${getGrade(perc)}</td></tr>`;
 });
 body.innerHTML = h; closeMsg();
+loadSubjectPointer();
+
 } catch(e) { showStatus("Error", "Load Error", "error"); }
 
   
@@ -1462,6 +1525,331 @@ function shareQCodeToWhatsApp() {
   window.open(url, "_blank");
 }
 
+
+let subjectwiseSort = { column: null, asc: true };
+
+async function loadSubjectwiseData() {
+  const subject = document.getElementById("subjectwise-select").value;
+  const tbody = document.getElementById("subjectwise-body");
+  if (!subject) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:10px; color:#666;">Select a subject to view data</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:10px;">Loading…</td></tr>`;
+
+  try {
+    const res = await fetch(`${SCRIPT_URL}?type=allStudents`);
+    const data = await res.json();
+
+    // Aggregate performance by student for the selected subject
+    const performanceMap = {};
+    data.forEach(row => {
+      const name = row[1];
+      if (!performanceMap[name]) performanceMap[name] = { exams: 0, totalScore: 0 };
+      performanceMap[name].exams++;
+      // Map subject to correct column index in row:
+      // Columns in row: [0-ID,1-Name,2-Class,3-Div,4-Date,5-L1,6-M2,7-Math,8-Eng,9-BS,10-SS,11-MA,12-CA,13-Total]
+      // Subject keys mapped to columns:
+      const subjIndexMap = {
+        "lang1_arb": 5, "lang1_skt": 5, "lang1_mal1": 5,
+        "mal2": 6, "maths":7, "eng":8, "bs":9, "ss":10,
+        "mental":11, "current":12
+      };
+      let col = subjIndexMap[subject];
+      if (col === undefined) col = 5; // fallback to language 1
+      let score = 0;
+      // Special case for different lang1 variants - check subject and sum accordingly
+      if (subject.startsWith("lang1_")) {
+        // Pick the correct column 5 (lang1) for language subjects since data has L1 combined
+        if(subject === "lang1_arb" || subject==="lang1_skt" || subject==="lang1_mal1") {
+          score = row[5];
+        }
+      } else {
+        score = row[col];
+      }
+      performanceMap[name].totalScore += score;
+    });
+
+    // Build table rows
+    let html = "";
+    for (const [name, perf] of Object.entries(performanceMap)) {
+      const avgScore = perf.totalScore;
+      const exams = perf.exams;
+      const gradePercent = exams > 0 ? (avgScore / (exams * 3)) * 100 : 0;
+      const grade = getGrade(gradePercent);
+      html += `
+        <tr>
+          <td style="text-align:left; padding:8px;">${name}</td>
+          <td style="text-align:center; padding:8px;">${exams}</td>
+          <td style="text-align:center; padding:8px;">${avgScore}</td>
+          <td style="text-align:center; padding:8px;">${grade}</td>
+        </tr>`;
+    }
+    tbody.innerHTML = html || `<tr><td colspan="4" style="text-align:center; padding:10px; color:#666;">No data available.</td></tr>`;
+  } catch (e) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:10px; color:red;">Failed to load data</td></tr>`;
+  }
+}
+
+function sortSubjectwiseTable(colIndex) {
+  const tbody = document.getElementById("subjectwise-body");
+  const rows = Array.from(tbody.querySelectorAll("tr"));
+  if (rows.length === 0) return;
+
+  if (subjectwiseSort.column === colIndex) {
+    subjectwiseSort.asc = !subjectwiseSort.asc;
+  } else {
+    subjectwiseSort.column = colIndex;
+    subjectwiseSort.asc = true;
+  }
+
+  rows.sort((a, b) => {
+    let A = a.children[colIndex].innerText.trim();
+    let B = b.children[colIndex].innerText.trim();
+
+    // Number columns for exams and score
+    if (colIndex === 1 || colIndex === 2) {
+      A = Number(A);
+      B = Number(B);
+    }
+
+    if (colIndex === 3) {
+      // Grade sort by letter, so convert letter grades to comparable ranks
+      const gradeRank = { "A": 1, "B": 2, "C": 3, "D": 4, "E": 5 };
+      A = gradeRank[A] || 999;
+      B = gradeRank[B] || 999;
+    }
+
+    if (A < B) return subjectwiseSort.asc ? -1 : 1;
+    if (A > B) return subjectwiseSort.asc ? 1 : -1;
+    return 0;
+  });
+
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+let subjectPointerChart = null;
+
+async function loadSubjectPointer() {
+  if(SCRIPT_URL === "YOUR_WEB_APP_URL") return;
+  try {
+    const res = await fetch(`${SCRIPT_URL}?type=allStudents`);
+    const data = await res.json();
+
+    const subjects = ["lang1_arb", "lang1_skt", "lang1_mal1", "mal2", "maths", "eng", "bs", "ss", "mental", "current"];
+    const shortNames = ["Arb", "Skt", "MI", "MII", "MM", "E", "BS", "SS", "MA", "CA"];
+
+    const totals = new Array(subjects.length).fill(0);
+    let totalExams = 0;
+
+    const subjectIndexMap = {
+      "lang1_arb": 5, "lang1_skt": 5, "lang1_mal1": 5,
+      "mal2": 6, "maths":7, "eng":8, "bs":9, "ss":10,
+      "mental":11, "current":12
+    };
+
+    // Count total exams (most consistent way)
+    const examsPerName = {};
+    data.forEach(row => {
+      totalExams++; // count all records
+      const subjTotals = {}; // temp per this row
+      subjects.forEach((subj, i) => {
+        if(subj.startsWith("lang1_")) {
+          // Give all lang1 variants same column 5
+          subjTotals[subj] = row[5];
+        } else {
+          const col = subjectIndexMap[subj];
+          subjTotals[subj] = row[col] || 0;
+        }
+      });
+      // Sum totals for each subject cumulatively
+      subjects.forEach((subj, i) => {
+        totals[i] += subjTotals[subj];
+      });
+    });
+
+    document.getElementById("total-exams-count").innerText = `Total Exams: ${totalExams}`;
+
+    if(subjectPointerChart) subjectPointerChart.destroy();
+
+    subjectPointerChart = new Chart(document.getElementById("subjectPointerChart"), {
+      type: "line",
+      data: {
+        labels: shortNames,
+        datasets: [{
+          label: "Total Score",
+          data: totals,
+          borderColor: "var(--primary)",
+          backgroundColor: "rgba(67,97,238,0.1)",
+          tension: 0.4,
+          fill: true,
+          pointRadius: 5,
+          pointHoverRadius: 7
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 10
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+    });
+
+  } catch(e) {
+    console.error("Error loading Subject Pointer:", e);
+  }
+}
+
+async function loadSubjectProgress() {
+  if(SCRIPT_URL === "YOUR_WEB_APP_URL") return;
+  if (!user) return;
+  try {
+    const res = await fetch(`${SCRIPT_URL}?name=${user.name}`);
+    const data = await res.json();
+
+    // Subject keys in fixed order and their short names
+    const subjects = ["lang1_arb", "lang1_skt", "lang1_mal1", "mal2", "maths", "eng", "bs", "ss", "mental", "current"];
+    const shortNames = ["Arb", "Skt", "MI", "MII", "MM", "E", "BS", "SS", "MA", "CA"];
+
+    // Determine student's selected Language I from last exam if possible
+    let selectedLangI = null;
+    if (data.length > 0) {
+      // Typically the subject lang1_* where user took exam 
+      // Find the first non-zero in lang1_arb, lang1_skt, lang1_mal1 scores in last exam
+      const lastExam = data[data.length - 1];
+      const l1scores = {
+        lang1_arb: lastExam[5],
+        lang1_skt: lastExam[5],
+        lang1_mal1: lastExam[5]
+      };
+      if(lastExam[5] > 0) {
+        // We only know total L1 score, but assume all are the same column
+        // We prompt Lang I selection from user for exact data, but we lack here
+        selectedLangI = "lang1_arb"; // default
+      }
+    }
+
+    // Prepare the data object with total scores per subject (sum over all exams)
+    const totalScores = new Array(subjects.length).fill(0);
+    const examCount = data.length;
+
+    // Only include the selected Lang I, omit other lang1 variants
+    // Determine which lang1 subject to consider based on last exam or user select
+    // Here just take lang1_arb as default, you can enhance by integrating with current lang-select
+    // We'll pick first lang1 with non-zero
+    const lang1Subjects = ["lang1_arb", "lang1_skt", "lang1_mal1"];
+    let selectedLangIndex = 0; // arb default
+    for (let i = 0; i < lang1Subjects.length; i++) {
+      const subj = lang1Subjects[i];
+      // If user selected the same language in UI currently, use that
+      const currentLang = document.getElementById("lang-select").value;
+      if (currentLang && currentLang.startsWith(subj)) {
+        selectedLangIndex = i;
+        break;
+      }
+    }
+    selectedLangI = lang1Subjects[selectedLangIndex];
+
+    // Loop through exams, sum scores for all subjects but only add the selected language I score,
+    // excluding the others
+    const subjectColIndex = {
+      lang1_arb: 5, lang1_skt: 5, lang1_mal1: 5,
+      mal2: 6, maths: 7, eng: 8, bs: 9, ss: 10, mental: 11, current: 12
+    };
+
+    data.forEach(exam => {
+      subjects.forEach((subj, i) => {
+        if (lang1Subjects.includes(subj)) {
+          if (subj !== selectedLangI) return; // skip other Lang I except selected
+          totalScores[i] += exam[subjectColIndex[subj]] || 0;
+        } else {
+          totalScores[i] += exam[subjectColIndex[subj]] || 0;
+        }
+      });
+    });
+
+    // Filter the subjects to only include selectedLangI variant, not others
+    // Actually totalScores already has zeros for skipped lang1, so just replace zeros with null for chart
+    const chartLabels = [];
+    const chartValues = [];
+    subjects.forEach((subj, i) => {
+      if(lang1Subjects.includes(subj)) {
+        if(subj === selectedLangI) {
+          chartLabels.push(shortNames[i]);
+          chartValues.push(totalScores[i]);
+        }
+      } else {
+        chartLabels.push(shortNames[i]);
+        chartValues.push(totalScores[i]);
+      }
+    });
+
+    // Show total exams outside chart
+    document.getElementById("subject-progress-exams-count").innerText = `Total Exams: ${examCount}`;
+
+    if(subjectProgressChart) subjectProgressChart.destroy();
+
+    subjectProgressChart = new Chart(document.getElementById("subjectProgressChart"), {
+      type: "line",
+      data: {
+        labels: chartLabels,
+        datasets: [{
+          label: "Total Score",
+          data: chartValues,
+          borderColor: "var(--primary)",
+          backgroundColor: "rgba(67,97,238,0.1)",
+          tension: 0.4,
+          fill: true,
+          pointRadius: 5,
+          pointHoverRadius: 7
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 10
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+    });
+
+  } catch(e) {
+    console.error("Error loading Subject Progress:", e);
+  }
+}
+
+let subjectProgressChart = null;
+
+// Modify showTab to load subject progress when tab5 is shown
+const originalShowTab = showTab;
+showTab = function(tid) {
+  originalShowTab(tid);
+  if(tid === "tab3") {
+    loadSubjectProgress();
+  }
+};
 
 
   
