@@ -204,8 +204,6 @@ font-weight: 700;
 }
 
 
-
-
 #attendance-table th, #attendance-table td {
   padding: 10px;
   border: 1px solid #ddd;
@@ -242,10 +240,29 @@ font-weight: 700;
 #ins-table {
   width: auto;         /* adapt to content */
   min-width: unset;    /* remove fixed min width */
+  border: 1px solid #ddd;
   border-collapse: collapse;
   font-size: 0.9rem;
   table-layout: auto;
   max-width: 100%;
+}
+
+#subjectwise-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#subjectwise-table th, #subjectwise-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+#subjectwise-table th {
+  background-color: #eef2ff;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 #ins-table th, #ins-table td {
@@ -648,7 +665,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyvR2DNBQzwtDdt6KngG
 const students = [
 {id:"USS001", pass:"AF1", name:"AAISHA FIDHA", class:"7", div:"D", role:"student"},
 {id:"USS002", pass:"ACS2", name:"AALIYA C S", class:"7", div:"D", role:"student"},
-{id:"USS003", pass:"AMS", name:"ANANDHAKRISHNAN M S", class:"7", div:"B", role:"student"},
+{id:"USS003", pass:"AK3", name:"ANANDHAKRISHNAN", class:"7", div:"B", role:"student"},
 {id:"USS004", pass:"AA4", name:"ANSHITHA ANEESH", class:"7", div:"B", role:"student"},
 {id:"USS005", pass:"ATS5", name:"ANUSREE T S", class:"7", div:"B", role:"student"},
 {id:"USS006", pass:"BSK6", name:"BHAGATH S KUMAR", class:"7", div:"B", role:"student"},
