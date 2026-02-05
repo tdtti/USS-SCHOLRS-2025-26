@@ -247,20 +247,10 @@ font-weight: 700;
   max-width: 100%;
 }
 
-/* Limit width and allow horizontal scroll for subjectwise table container */
-#tab5 .glass-card > .table-container {
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
-  overflow-x: auto;
-  border-radius: 15px;
-}
 #subjectwise-table {
-  min-width: 600px; /* Ensure table has minimum width for columns */
   width: 100%;
   border-collapse: collapse;
 }
-
 
 #subjectwise-table th, #subjectwise-table td {
   border: 1px solid #ddd;
@@ -1040,12 +1030,13 @@ function finalizeLogin() {
 
   /* 🔐 ROLE-BASED NAV */
   if (user.role === 'teacher') {
-    document.getElementById('admin-nav').style.display = 'block';
-    document.getElementById('ins-nav').style.display = 'block';
-  } else {
-    document.getElementById('admin-nav').style.display = 'none';
-    document.getElementById('ins-nav').style.display = 'none';
-  }
+  document.getElementById('admin-nav').style.display = 'inline-block';
+  document.getElementById('ins-nav').style.display = 'inline-block';
+} else {
+  document.getElementById('admin-nav').style.display = 'none';
+  document.getElementById('ins-nav').style.display = 'none';
+}
+
   loadAttendance();   // ✅ ADD THIS
   showTab('tab2');
   closeMsg();
