@@ -247,12 +247,18 @@ font-weight: 700;
   max-width: 100%;
 }
 
+/* Limit width and allow horizontal scroll for subjectwise table container */
+#tab5 .glass-card > .table-container {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  overflow-x: auto;
+  border-radius: 15px;
+}
 #subjectwise-table {
-  max-width: 900px; /* sets a max width for the table */
-  margin: 0 auto; /* center the table */
-  display: block;
-  overflow-x: auto; /* adds horizontal scroll when needed */
-  white-space: nowrap; /* prevent cell content wrapping */
+  min-width: 600px; /* Ensure table has minimum width for columns */
+  width: 100%;
+  border-collapse: collapse;
 }
 
 
@@ -335,16 +341,6 @@ font-weight: 700;
   height: 28px;
 }
 
-@media (min-width: 1025px) {
-  #subjectwise-table {
-    max-width: 900px;
-  }
-}
-@media (max-width: 1024px) {
-  #subjectwise-table {
-    max-width: 100%;
-  }
-}
 
       
 
