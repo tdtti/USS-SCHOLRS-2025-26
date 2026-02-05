@@ -355,7 +355,27 @@ font-weight: 700;
     box-sizing: border-box;
   }
 }
-    
+     /* Compact table styling for all devices */
+  #top3-subjects-section table.top3-subject-table th,
+  #top3-subjects-section table.top3-subject-table td {
+    white-space: nowrap;
+    font-size: 0.85rem;
+  }
+  @media (max-width: 600px) {
+    #top3-subjects-section table.top3-subject-table {
+      font-size: 0.8rem;
+    }
+    #top3-subjects-section h4 {
+      font-size: 1rem;
+    }
+  }
+  /* Make tables visually separate lines with border and spacing handled above */
+  
+  .spinner-overlay {
+  position: absolute;
+}
+
+
 
 </style>
 
@@ -527,6 +547,15 @@ font-weight: 700;
 </div>
 
 <div id="tab5" class="tab">
+  
+  <div class="glass-card" id="top3-subjects-section" style="margin-top: 20px;">
+  <h3 style="margin-top: 0; color: var(--primary);">Top 3 </h3>
+  <div id="top3-spinner" style="display: flex; justify-content: center; align-items: center; padding: 20px;">
+    <div class="spinner" style="width:30px; height:30px; border-width: 4px; border-top-color: var(--primary);"></div>
+  </div>
+  <div id="top3-tables-container" style="display:none; overflow-x:auto;"></div>
+</div>
+
   
   <!-- Add inside the tab5 div, before </div> -->
 <div class="glass-card" style="margin-top: 20px;">
@@ -705,7 +734,6 @@ const students = [
 {id:"USS016", pass:"SH16", name:"SREEBHADRA H", class:"7", div:"B", role:"student"},
 {id:"USS017", pass:"SSP17", name:"SUKESH S PAI", class:"7", div:"B", role:"student"},
 {id:"USS018", pass:"VSB18", name:"VARALAKSHMY S BHAT", class:"7", div:"B", role:"student"},
-{id:"USS019", pass:"VA", name:"AJITH V", class:"7", div:"E", role:"student"},
 {id:"ADMIN", pass:"123456", name:"Teacher", class:"-", div:"-", role:"teacher"}
 ];
 
@@ -1666,43 +1694,72 @@ reversedData.forEach((r, i) => {
 }
 
   
-  async function loadAttendance() {
+async function loadAttendance() {
   const tbody = document.getElementById("attendance-body");
+  const container = tbody.parentElement; // The .table-container-attendance div
+
+  // If spinner overlay does not exist, add it
+  let loader = container.querySelector(".spinner-overlay");
+  if (!loader) {
+    loader = document.createElement("div");
+    loader.className = "spinner-overlay";
+    loader.style = `
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 15px;
+      z-index: 10;
+    `;
+    loader.innerHTML = `<div class="spinner" style="width:40px; height:40px; border-width: 5px; border-top-color: var(--primary);"></div>`;
+    
+    if (getComputedStyle(container).position === "static") {
+      container.style.position = "relative";
+    }
+    container.appendChild(loader);
+  }
+
   tbody.innerHTML = `
     <tr>
       <td colspan="2" style="padding:12px;text-align:center;">Loading…</td>
     </tr>`;
 
   try {
-    // Fetch all exam records
     const res = await fetch(`${SCRIPT_URL}?type=allStudents`);
     const data = await res.json();
 
-    // Count exams per student name
     const examCount = {};
     data.forEach(row => {
       const name = row[1]; // student name
       examCount[name] = (examCount[name] || 0) + 1;
     });
 
-    // Build table using const students
-    let html = "";
+    let rows = [];
     students
       .filter(s => s.role === "student")
       .forEach(s => {
-        html += `
-          <tr>
-            <td style="padding:10px; border:1px solid #ddd; text-align:left;">
-              ${s.name}
-            </td>
-            <td style="padding:10px; border:1px solid #ddd; text-align:center; font-weight:700;">
-              ${examCount[s.name] || 0}
-            </td>
-          </tr>`;
+        rows.push({ name: s.name, exams: examCount[s.name] || 0 });
       });
 
-    tbody.innerHTML = html;
+    // Sort descending by number of exams attended (highest top)
+    rows.sort((a, b) => b.exams - a.exams);
 
+    let html = "";
+    rows.forEach(r => {
+      html += `
+        <tr>
+          <td style="padding:10px; border:1px solid #ddd; text-align:left;">
+            ${r.name}
+          </td>
+          <td style="padding:10px; border:1px solid #ddd; text-align:center; font-weight:700;">
+            ${r.exams}
+          </td>
+        </tr>`;
+    });
+
+    tbody.innerHTML = html;
   } catch (e) {
     tbody.innerHTML = `
       <tr>
@@ -1710,7 +1767,34 @@ reversedData.forEach((r, i) => {
           Failed to load attendance
         </td>
       </tr>`;
+  } finally {
+    if(loader) loader.remove();
   }
+}
+
+function shareAttendanceToWhatsApp() {
+  const rows = document.querySelectorAll("#attendance-table tr");
+  let lines = [];
+
+  // Add title and current date/time in dd/mm/yyyy and HH:mm format
+  const now = new Date();
+  const pad = num => num.toString().padStart(2, '0');
+  const dateStr = `${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()}`;
+  const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  lines.push("Attendance Upto Date");
+  lines.push(dateStr + " " + timeStr);
+  lines.push("");
+
+  rows.forEach(row => {
+    const cols = row.querySelectorAll("th, td");
+    let line = Array.from(cols).map(c => c.innerText.trim()).join(" | ");
+    lines.push(line);
+  });
+
+  const message = encodeURIComponent(lines.join("\n"));
+
+  // Open WhatsApp share with formatted message
+  window.open("https://api.whatsapp.com/send?text=" + message, "_blank");
 }
   
   
@@ -1786,22 +1870,7 @@ function updateSortIcons() {
   }
 }
 
-function shareAttendanceToWhatsApp() {
-  const rows = document.querySelectorAll("#attendance-table tr");
-  let lines = [];
 
-  rows.forEach(row => {
-    const cols = row.querySelectorAll("th, td");
-    // Join columns with ' | ' for readable table format in WhatsApp
-    let line = Array.from(cols).map(c => c.innerText.trim()).join(" | ");
-    lines.push(line);
-  });
-
-  const message = encodeURIComponent(lines.join("\n"));
-
-  // Open Whatsapp share with formatted message
-  window.open("https://wa.me/?text=" + message, "_blank");
-}
 
 
 
@@ -1819,8 +1888,9 @@ function shareQCodeToWhatsApp() {
   const message = encodeURIComponent("Generated Question Code:\n" + code);
 
   // Open chat to your WhatsApp number
-  const url = `https://wa.me/${waNumber}?text=${message}`;
-  window.open(url, "_blank");
+  const url = `https://api.whatsapp.com/send?phone=${waNumber}&text=${message}`;
+window.open(url, "_blank");
+
 }
 
 
@@ -2252,7 +2322,187 @@ function showSubjectProgressLoading(show) {
   }
 }
 
+async function loadTop3PerSubject() {
+  const container = document.getElementById('top3-tables-container');
+  container.style.display = 'none';
+  document.getElementById('top3-spinner').style.display = 'flex';
 
+  const allowedStudents = {
+    "lang1_arb": ["AAISHA FIDHA", "AALIYA C S", "FATHIMATH SAHRA K S"],
+    "lang1_skt": [
+      "ANANDHAKRISHNAN M S", "ANSHITHA ANEESH", "ANUSREE T S", "BHAGATH S KUMAR",
+      "HARI NARAYANAN K S", "KUNAL KIRAN NAGDA", "MALAVIKA N M", "MEENAKSHY M HEGDE",
+      "PRATHITHA P SHENOY", "SARANGI S", "SREEBALA PRASANTH", "SREEBHADRA H",
+      "SUKESH S PAI", "VARALAKSHMY S BHAT"
+    ],
+    "lang1_mal1": ["DEVANANDA T R"]  // Malayalam I only Dev
+  };
+
+  const subjectList = [
+    { key: "lang1_arb", title: "Arabic" },
+    { key: "lang1_skt", title: "Sanskrit" },
+    { key: "lang1_mal1", title: "Malayalam I" },
+    { key: "mal2", title: "Malayalam II" },
+    { key: "maths", title: "Maths" },
+    { key: "eng", title: "English" },
+    { key: "bs", title: "Basic Science" },
+    { key: "ss", title: "Social Science" },
+    { key: "mental", title: "Mental Ability" },
+    { key: "current", title: "Current Affairs" }
+  ];
+
+  try {
+    const res = await fetch(`${SCRIPT_URL}?type=allStudents`);
+    const data = await res.json();
+
+    container.innerHTML = '';
+
+    const subjIndexMap = {
+      "lang1_arb": 5, "lang1_skt": 5, "lang1_mal1": 5,
+      "mal2": 6, "maths": 7, "eng": 8, "bs": 9, "ss": 10,
+      "mental": 11, "current": 12
+    };
+
+    for (const subjObj of subjectList) {
+      const subj = subjObj.key;
+      const title = subjObj.title;
+
+      // Filter and map student performance per subject with filtering for allowed students if present
+      const perfMap = {};
+
+      data.forEach(row => {
+        const name = row[1];
+        // Apply allowedStudents filter for Arabic, Sanskrit, Malayalam I only
+        if (allowedStudents.hasOwnProperty(subj)) {
+          if (!allowedStudents[subj].includes(name)) return;
+        }
+
+        if (!perfMap[name]) perfMap[name] = { exams: 0, totalScore: 0 };
+
+        perfMap[name].exams++;
+        // For lang1_* always column 5 else map as per subj
+        const col = subjIndexMap[subj] || 5;
+        perfMap[name].totalScore += row[col] || 0;
+      });
+
+      // Convert to array and calculate grade percent and grade
+      const perfArray = Object.entries(perfMap).map(([name, val]) => {
+        const gradePercent = val.exams > 0 ? (val.totalScore / (val.exams * 3)) * 100 : 0;
+        return {
+          name: name,
+          exams: val.exams,
+          score: val.totalScore,
+          gradePercent,
+          grade: getGrade(gradePercent)
+        };
+      });
+
+      // Sort descending by grade (highest grade first), then score, then exams, then name
+      perfArray.sort((a, b) => {
+        const gradeRank = {A:1,B:2,C:3,D:4,E:5};
+        let diff = (gradeRank[a.grade] || 99) - (gradeRank[b.grade] || 99);
+        if (diff !== 0) return diff;
+        diff = b.score - a.score;
+        if (diff !== 0) return diff;
+        diff = b.exams - a.exams;
+        if (diff !== 0) return diff;
+        return a.name.localeCompare(b.name);
+      });
+
+      // Take top 3 only
+      const top3 = perfArray.slice(0, 3);
+
+      // Create table element for this subject
+      const table = document.createElement('table');
+      table.style = "width:100%; border-collapse: collapse; margin-bottom: 25px; border: 1px solid #ddd; min-width: 300px;";
+      table.className = "top3-subject-table";
+
+      // Create caption as subject heading (not inside table head)
+      const hSubject = document.createElement('h4');
+      hSubject.style = "margin-bottom: 8px; color: var(--secondary); font-weight: 700;";
+      hSubject.textContent = title;
+      container.appendChild(hSubject);
+
+      // Create thead and tbody
+      const thead = document.createElement('thead');
+      const tbody = document.createElement('tbody');
+
+      // Headers with pointer cursor for sorting
+      thead.innerHTML = `
+        <tr style="background:#eef2ff; border-bottom: 2px solid var(--primary);">
+          <th style="border:1px solid #ddd; padding:8px; cursor:pointer;">Name</th>
+          <th style="border:1px solid #ddd; padding:8px; cursor:pointer;">No. of Exams</th>
+          <th style="border:1px solid #ddd; padding:8px; cursor:pointer;">Score</th>
+          <th style="border:1px solid #ddd; padding:8px; cursor:pointer;">Grade</th>
+        </tr>
+      `;
+
+      // Rows
+      top3.forEach(stu => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td style="border:1px solid #ddd; padding:8px;">${stu.name}</td>
+          <td style="border:1px solid #ddd; padding:8px; text-align:center;">${stu.exams}</td>
+          <td style="border:1px solid #ddd; padding:8px; text-align:center;">${stu.score}</td>
+          <td style="border:1px solid #ddd; padding:8px; text-align:center; font-weight:700; color: var(--primary);">${stu.grade}</td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      table.appendChild(thead);
+      table.appendChild(tbody);
+      container.appendChild(table);
+
+      // Add sorting on headers
+      Array.from(thead.querySelectorAll('th')).forEach((th, colIndex) => {
+        th.addEventListener('click', () => {
+          // Simple toggle asc/desc sorting
+          let asc = th.asc = !th.asc;
+
+          // Sort rows
+          const rows = Array.from(tbody.querySelectorAll('tr'));
+          rows.sort((a, b) => {
+            let A = a.children[colIndex].innerText.trim();
+            let B = b.children[colIndex].innerText.trim();
+
+            // For numeric columns (exams, score)
+            if (colIndex === 1 || colIndex ===2) {
+              A = Number(A);
+              B = Number(B);
+              return asc ? A - B : B - A;
+            }
+
+            // For grade column, use grade rank sorting
+            if (colIndex === 3) {
+              const rank = { A: 1, B: 2, C: 3, D: 4, E: 5 };
+              A = rank[A] || 999;
+              B = rank[B] || 999;
+              return asc ? A - B : B - A;
+            }
+
+            // Name string sort
+            return asc ? A.localeCompare(B) : B.localeCompare(A);
+          });
+
+          rows.forEach(r => tbody.appendChild(r));
+        });
+      });
+    }
+
+    document.getElementById('top3-spinner').style.display = 'none';
+    container.style.display = 'block';
+  } catch (e) {
+    container.innerHTML = `<p style="color:red; padding:10px;">Failed to load Top 3 data</p>`;
+    document.getElementById('top3-spinner').style.display = 'none';
+  }
+}
+
+// Load top 3 tables when inspiration tab is loaded
+const originalLoadInspirations = loadInspirations;
+loadInspirations = async function () {
+  await originalLoadInspirations();
+  loadTop3PerSubject();
+};
   
 </script>
 </body>
