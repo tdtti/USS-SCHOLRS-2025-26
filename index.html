@@ -248,9 +248,13 @@ font-weight: 700;
 }
 
 #subjectwise-table {
-  width: 100%;
-  border-collapse: collapse;
+  max-width: 900px; /* sets a max width for the table */
+  margin: 0 auto; /* center the table */
+  display: block;
+  overflow-x: auto; /* adds horizontal scroll when needed */
+  white-space: nowrap; /* prevent cell content wrapping */
 }
+
 
 #subjectwise-table th, #subjectwise-table td {
   border: 1px solid #ddd;
@@ -329,6 +333,17 @@ font-weight: 700;
 #whatsapp-chat-button img {
   width: 28px;
   height: 28px;
+}
+
+@media (min-width: 1025px) {
+  #subjectwise-table {
+    max-width: 900px;
+  }
+}
+@media (max-width: 1024px) {
+  #subjectwise-table {
+    max-width: 100%;
+  }
 }
 
       
