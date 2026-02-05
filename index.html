@@ -366,8 +366,7 @@ font-weight: 700;
   }
 }
 
-
-  
+      
 
 </style>
 
@@ -568,26 +567,21 @@ font-weight: 700;
     <option value="mental">Mental Ability</option>
     <option value="current">Current Affairs</option>
   </select>
-  
-  <div class="glass-card">
   <div class="table-container" style="margin-top:15px;">
-  <div class="table-container">
-  <table id="subjectwise-table">
-    <thead>
-      <tr>
-        <th>Student Name</th>
-        <th>No. of Exams</th>
-        <th>Score</th>
-        <th>Grade</th>
-      </tr>
-    </thead>
-    <tbody id="subjectwise-body">
-      <tr><td colspan="4" style="text-align:center; padding:10px; color:#666;">Select a subject to view data</td></tr>
-    </tbody>
-  </table>
-</div>
-</div></div>
-
+    <table id="subjectwise-table">
+      <thead>
+        <tr>
+          <th onclick="sortSubjectwiseTable(0)" style="cursor:pointer;">Student Name ↑↓</th>
+          <th onclick="sortSubjectwiseTable(1)" style="cursor:pointer;">No. of Exams ↑↓</th>
+          <th onclick="sortSubjectwiseTable(2)" style="cursor:pointer;">Score ↑↓</th>
+          <th onclick="sortSubjectwiseTable(3)" style="cursor:pointer;">Grade ↑↓</th>
+        </tr>
+      </thead>
+      <tbody id="subjectwise-body">
+        <tr><td colspan="4" style="text-align:center; padding:10px; color:#666;">Select a subject to view data</td></tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 
