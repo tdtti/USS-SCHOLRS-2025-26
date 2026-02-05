@@ -332,7 +332,30 @@ font-weight: 700;
 }
 
 
-      
+  @media (min-width: 1025px) {
+  /* Container constraint */
+  .glass-card {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    overflow-wrap: break-word;
+  }
+
+  /* Nav buttons shrink to fit */
+  nav {
+    max-width: 100%;
+  }
+
+  /* For inspiration and admin tabs, force horizontal padding and max width */
+  #tab4, #tab5 {
+    padding-left: 20px;
+    padding-right: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+}
+    
 
 </style>
 
@@ -930,14 +953,14 @@ const masterBank = [
 {"question":"If 6 workers can complete a task in 12 days, how many days will 4 workers take to complete the same task?","options":["22 days","28 days","24 days","20 days"],"answer":3,"subject":"mental"},
 {"question":"Which figure completes the pattern? ▲, ▲▲, ▲▲▲, ?","options":["▲▲▲▲▲","▲▲▲▲","▲▲▲▲▲▲▲","▲▲▲▲▲"],"answer":1,"subject":"mental"},
 {"question":"A cube has 6 faces. How many edges does it have?","options":["8","10","12","14"],"answer":2,"subject":"mental"},{"question":"If a clock shows 3:15, what is the angle between the hour and minute hands?","options":["0°","90°","52.5°","7.5°"],"answer":3,"subject":"mental"},
-{"question":"If CAT is coded as 3120, how is DOG coded using the same rule?","options":["4157","4159","4167","4187"],"answer":0,"subject":"mental"}, {"question":"Which figure comes next in the pattern? ▲ ■ ▲ ■ ▲ ?","options":["■","▲","●","◆"],"answer":0,"subject":"mental"},
+{"question":"If CAT is coded as 3120, how is DOG coded using the same rule?","options":["4157","4159","4167","4187"],"answer":1,"subject":"mental"}, {"question":"Which figure comes next in the pattern? ▲ ■ ▲ ■ ▲ ?","options":["■","▲","●","◆"],"answer":0,"subject":"mental"},
 {"question":"Find the odd one out.","options":["Square","Rectangle","Triangle","Circle"],"answer":2,"subject":"mental"},
 {"question":"If today is Wednesday, what day will it be after 100 days?","options":["Friday","Saturday","Sunday","Monday"],"answer":1,"subject":"mental"},
 {"question":"Which number does not belong to the group?","options":["16","25","36","48"],"answer":3,"subject":"mental"},
 {"question":"In a certain code, SCHOOL is written as HXRLL. How is TEACHER written?","options":["QXZEBI","QXZCFI","QXZBFI","QXABFI"],"answer":2,"subject":"mental"},
 {"question":"If all roses are flowers and some flowers fade quickly, which statement is definitely true?","options":["All roses fade quickly","Some roses may fade quickly","No roses fade quickly","All flowers are roses"],"answer":1,"subject":"mental"},
 {"question":"Which figure will complete the series? ● ▲ ● ▲ ● ?","options":["■","▲","●","◆"],"answer":1,"subject":"mental"},
-{"question":"If A = 1, B = 2, … Z = 26, what is the value of KNOW?","options":["63","64","65","66"],"answer":0,"subject":"mental"},
+{"question":"If A = 1, B = 2, … Z = 26, what is the value of KNOW?","options":["63","64","65","66"],"answer":2,"subject":"mental"},
 {"question":"A mirror is placed to the right of an object. Which change will be seen?","options":["Top and bottom interchange","Left and right interchange","Size increases","Colour changes"],"answer":1,"subject":"mental"},
 {"question":"Find the missing number: 2, 6, 12, 20, ?","options":["28","30","32","36"],"answer":1,"subject":"mental"},
 {"question":"Which word does NOT belong with the others?","options":["Hearing","Seeing","Smelling","Speaking"],"answer":3,"subject":"mental"},
