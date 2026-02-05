@@ -331,7 +331,33 @@ font-weight: 700;
   height: 28px;
 }
 
-      
+/* Make tables horizontally scrollable on small devices */
+.table-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 15px;
+  border: 1px solid #eee;
+  max-width: 100%;
+  margin-top: 15px;
+}
+
+/* Keep table layout auto, allow min-width but not fixed width */
+#subjectwise-table {
+  width: 100%;
+  min-width: 600px; /* prevents becoming too narrow on small devices */
+  border-collapse: collapse;
+}
+
+/* Reduce font size and padding on small devices */
+@media (max-width: 600px) {
+  #subjectwise-table th, #subjectwise-table td {
+    padding: 6px 8px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+}
+
+  
 
 </style>
 
@@ -532,21 +558,23 @@ font-weight: 700;
     <option value="mental">Mental Ability</option>
     <option value="current">Current Affairs</option>
   </select>
+  
   <div class="table-container" style="margin-top:15px;">
-    <table id="subjectwise-table">
-      <thead>
-        <tr>
-          <th onclick="sortSubjectwiseTable(0)" style="cursor:pointer;">Student Name ↑↓</th>
-          <th onclick="sortSubjectwiseTable(1)" style="cursor:pointer;">No. of Exams ↑↓</th>
-          <th onclick="sortSubjectwiseTable(2)" style="cursor:pointer;">Score ↑↓</th>
-          <th onclick="sortSubjectwiseTable(3)" style="cursor:pointer;">Grade ↑↓</th>
-        </tr>
-      </thead>
-      <tbody id="subjectwise-body">
-        <tr><td colspan="4" style="text-align:center; padding:10px; color:#666;">Select a subject to view data</td></tr>
-      </tbody>
-    </table>
-  </div>
+  <table id="subjectwise-table">
+    <thead>
+      <tr>
+        <th>Student Name</th>
+        <th>No. of Exams</th>
+        <th>Score</th>
+        <th>Grade</th>
+      </tr>
+    </thead>
+    <tbody id="subjectwise-body">
+      <tr><td colspan="4" style="text-align:center; padding:10px; color:#666;">Select a subject to view data</td></tr>
+    </tbody>
+  </table>
+</div>
+
 </div>
 
 
@@ -1354,7 +1382,7 @@ function renderPerformanceCard(review, index = null) {
     <div class="glass-card" style="margin-bottom:15px;">
       <div style="display:flex; justify-content:space-between; align-items:center;">
         <b>Exam ${index !== null ? index + 1 : ""}</b>
-        <span style="font-size:0.8rem; color:#666;">${review.date}</span>
+        <span style="font-size:0.8rem; color:#666;">${review.datetime}</span>
       </div>
 
       <div style="margin:8px 0; font-size:0.9rem;">
@@ -1478,16 +1506,19 @@ function makeQ() {
 }
 
   
-  function lockExamDateTime(value) {
-
+ function lockExamDateTime(value) {
   // Case 1: Google Sheets serial (number)
   if (typeof value === "number") {
     const date = new Date(Math.floor((value - 25569) * 86400 * 1000));
     const time = (value % 1) * 24 * 60 * 60 * 1000;
-    return new Date(date.getTime() + time).toLocaleString("en-GB", {
+    // Subtract 8 hours in milliseconds
+    const adjustedDate = new Date(date.getTime() + time - (8 * 60 * 60 * 1000));
+    return adjustedDate.toLocaleString("en-GB", {
       day: "2-digit",
       month: "short",
       year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
       hour12: true
     });
   }
@@ -1498,11 +1529,15 @@ function makeQ() {
     const [date, time] = clean.split("T");
     const [y, m, d] = date.split("-");
     const [h, min] = time.split(":");
-
-    return new Date(y, m - 1, d, h, min).toLocaleString("en-GB", {
+    // Create date then subtract 8 hours
+    const dt = new Date(y, m - 1, d, h, min);
+    const adjustedDate = new Date(dt.getTime() - (8 * 60 * 60 * 1000));
+    return adjustedDate.toLocaleString("en-GB", {
       day: "2-digit",
       month: "short",
       year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
       hour12: true
     });
   }
@@ -1510,6 +1545,7 @@ function makeQ() {
   // Case 3: Plain string → display as-is
   return value;
 }
+
   
   
  function populateStudentDropdown(data) {
@@ -1551,7 +1587,7 @@ async function loadStudentExams() {
 const reversedData = [...data].reverse();
 
 reversedData.forEach((r, i) => {
-  const date = lockExamDateTime(r[4]);
+  const dateTime = lockExamDateTime(r[0]);
   const scores = {
     L1: r[5], M2: r[6], Math: r[7], Eng: r[8],
     BS: r[9], SS: r[10], MA: r[11], CA: r[12]
@@ -1561,7 +1597,7 @@ reversedData.forEach((r, i) => {
 
   html += `
     <div class="glass-card">
-      <b>Exam ${reversedData.length - i}</b> – ${date}<br>
+      <b>Exam ${reversedData.length - i}</b> – ${dateTime}<br>
       <b>Total:</b> ${total}/24 |
       <b>Grade:</b>
       <span style="font-weight:800;color:var(--primary)">${grade}</span>
