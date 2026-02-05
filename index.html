@@ -1470,11 +1470,26 @@ s.bs += row[9]; s.ss += row[10]; s.ma += row[11]; s.ca += row[12];
 s.total += row[13]; s.exams++;
 });
 populateStudentDropdown(data);
-let h = "";
-Object.values(studentsMap).forEach(s => {
-const perc = (s.total / (s.exams * 24)) * 100;
-h += `<tr><td style="font-weight:700;">${s.name}</td><td>${s.class}</td><td>${s.div}</td><td>${s.l1}</td><td>${s.m2}</td><td>${s.math}</td><td>${s.eng}</td><td>${s.bs}</td><td>${s.ss}</td><td>${s.ma}</td><td>${s.ca}</td><td>${s.exams}</td><td style="color:var(--primary); font-weight:700;">${s.total}</td><td>${getGrade(perc)}</td></tr>`;
+let arr = Object.values(studentsMap);
+const gradeRank = { A:1, B:2, C:3, D:4, E:5 };
+arr.forEach(s => {
+  s.grade = getGrade((s.total / (s.exams * 24)) * 100);
+  s.gradeRank = gradeRank[s.grade] || 999;
 });
+
+// Sort by grade rank ascending, total descending, exams descending, name ascending
+arr.sort((a,b) => {
+  if (a.gradeRank !== b.gradeRank) return a.gradeRank - b.gradeRank;
+  if (b.total !== a.total) return b.total - a.total;
+  if (b.exams !== a.exams) return b.exams - a.exams;
+  return a.name.localeCompare(b.name);
+});
+
+let h = "";
+arr.forEach(s => {
+  h += `<tr><td style="font-weight:700;">${s.name}</td><td>${s.class}</td><td>${s.div}</td><td>${s.l1}</td><td>${s.m2}</td><td>${s.math}</td><td>${s.eng}</td><td>${s.bs}</td><td>${s.ss}</td><td>${s.ma}</td><td>${s.ca}</td><td>${s.exams}</td><td style="color:var(--primary); font-weight:700;">${s.total}</td><td>${s.grade}</td></tr>`;
+});
+
 body.innerHTML = h; closeMsg();
 loadSubjectPointer();
 
