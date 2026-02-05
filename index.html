@@ -344,12 +344,12 @@ font-weight: 700;
 /* Keep table layout auto, allow min-width but not fixed width */
 #subjectwise-table {
   width: 100%;
-  min-width: 600px; /* prevents becoming too narrow on small devices */
+  min-width: 480px; /* prevents becoming too narrow on small devices */
   border-collapse: collapse;
 }
 
 /* Reduce font size and padding on small devices */
-@media (max-width: 600px) {
+@media (max-width: 480px) {
   #subjectwise-table th, #subjectwise-table td {
     padding: 6px 8px;
     font-size: 0.75rem;
@@ -559,7 +559,9 @@ font-weight: 700;
     <option value="current">Current Affairs</option>
   </select>
   
+  <div class="glass-card">
   <div class="table-container" style="margin-top:15px;">
+  <div class="table-container">
   <table id="subjectwise-table">
     <thead>
       <tr>
@@ -574,6 +576,7 @@ font-weight: 700;
     </tbody>
   </table>
 </div>
+</div></div>
 
 </div>
 
