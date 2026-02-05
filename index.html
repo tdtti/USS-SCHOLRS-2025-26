@@ -1811,32 +1811,55 @@ async function loadSubjectwiseData() {
 
   tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:10px;">Loading…</td></tr>`;
 
+  // Allowed students per subject for filtering
+  const allowedStudents = {
+    "lang1_arb": ["AAISHA FIDHA", "AALIYA C S", "FATHIMATH SAHRA K S"],
+    "lang1_skt": [
+      "ANANDHAKRISHNAN M S", "ANSHITHA ANEESH", "ANUSREE T S", "BHAGATH S KUMAR",
+      "HARI NARAYANAN K S", "KUNAL KIRAN NAGDA", "MALAVIKA N M", "MEENAKSHY M HEGDE",
+      "PRATHITHA P SHENOY", "SARANGI S", "SREEBALA PRASANTH", "SREEBHADRA H",
+      "SUKESH S PAI",  "VARALAKSHMY S BHAT"
+    ],
+    "lang1_mal1": ["DEVANANDA T R"]
+  };
+
   try {
     const res = await fetch(`${SCRIPT_URL}?type=allStudents`);
     const data = await res.json();
 
-    // Aggregate performance by student for the selected subject
     const performanceMap = {};
+
     data.forEach(row => {
       const name = row[1];
+
+      // For Arabic, Sanskrit, Malayalam I, filter students as per allowedStudents
+      if (allowedStudents.hasOwnProperty(subject)) {
+        if (!allowedStudents[subject].includes(name)) {
+          return; // skip this record (student)
+        }
+      }
+
       if (!performanceMap[name]) performanceMap[name] = { exams: 0, totalScore: 0 };
       performanceMap[name].exams++;
-      
+
+      // Map subject to column index
       const subjIndexMap = {
         "lang1_arb": 5, "lang1_skt": 5, "lang1_mal1": 5,
-        "mal2": 6, "maths":7, "eng":8, "bs":9, "ss":10,
-        "mental":11, "current":12
+        "mal2": 6, "maths": 7, "eng": 8, "bs": 9, "ss": 10,
+        "mental": 11, "current": 12
       };
+
       let col = subjIndexMap[subject];
       if (col === undefined) col = 5; // fallback to language 1
+
       let score = 0;
+      // For lang1_* ensure score from col 5
       if (subject.startsWith("lang1_")) {
-        if(subject === "lang1_arb" || subject==="lang1_skt" || subject==="lang1_mal1") {
-          score = row[5];
-        }
+        score = row[5];
       } else {
         score = row[col];
       }
+
       performanceMap[name].totalScore += score;
     });
 
@@ -1854,6 +1877,7 @@ async function loadSubjectwiseData() {
           <td style="text-align:center; padding:8px;">${grade}</td>
         </tr>`;
     }
+
     tbody.innerHTML = html || `<tr><td colspan="4" style="text-align:center; padding:10px; color:#666;">No data available.</td></tr>`;
     loader.remove();
   } catch (e) {
@@ -1861,6 +1885,7 @@ async function loadSubjectwiseData() {
     if(loader) loader.remove();
   }
 }
+
 
 
 function sortSubjectwiseTable(colIndex) {
