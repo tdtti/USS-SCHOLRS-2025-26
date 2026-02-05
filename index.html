@@ -1787,22 +1787,23 @@ function updateSortIcons() {
 }
 
 function shareAttendanceToWhatsApp() {
-  // Extract attendance data from table
   const rows = document.querySelectorAll("#attendance-table tr");
   let lines = [];
+
   rows.forEach(row => {
     const cols = row.querySelectorAll("th, td");
-    let line = Array.from(cols).map(c => c.innerText.trim()).join("\t");
+    // Join columns with ' | ' for readable table format in WhatsApp
+    let line = Array.from(cols).map(c => c.innerText.trim()).join(" | ");
     lines.push(line);
   });
-  const text = lines.join("\n");
 
-  // Encode for URL sharing (replace tabs with spaces for WhatsApp readability)
-  const message = encodeURIComponent(text.replace(/\t/g,"    "));
+  const message = encodeURIComponent(lines.join("\n"));
 
-  // Open Whatsapp share
+  // Open Whatsapp share with formatted message
   window.open("https://wa.me/?text=" + message, "_blank");
 }
+
+
 
 function shareQCodeToWhatsApp() {
   const code = document.getElementById('q-code').value.trim();
