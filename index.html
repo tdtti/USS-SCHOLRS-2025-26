@@ -451,6 +451,15 @@ font-weight: 700;
 
 <div id="tab2" class="tab">
 <div id="exam-form" class="glass-card">
+<div id="total-questions-info" style="
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--primary);
+  margin-bottom: 15px;
+  text-align: center;
+  animation: blinker 1.5s linear infinite;
+"></div>  
+  
 <div style="background: #eef2ff; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
 <label style="font-weight: 700; color: var(--primary); font-size:0.9rem;">Select Language 1 to Start:</label>
 <select id="lang-select" onchange="startExamWithTimer()">
@@ -657,56 +666,38 @@ font-weight: 700;
   Share to WhatsApp
 </button>
 </div>
-  <div class="glass-card" style="300px: auto; margin: 10px auto;">
-  <div style="display:flex; justify-content:space-between; align-items:center;">
-    <h3 style="margin:0; color: var(--primary);">Attendance</h3>
-    <button onclick="copyAttendanceTable()"
-      style="padding:6px 14px; border-radius:8px; border:none;
-             background:var(--secondary); color:white; font-weight:600; cursor:pointer;">
-      Copy
-    </button>
-    <button onclick="shareAttendanceToWhatsApp()"
-  style="padding:6px 14px; border-radius:8px; border:none; margin-left:10px;
-         background:#25d366; color:white; font-weight:600; cursor:pointer;">
-  Share to WhatsApp
-</button>
+  
+  
 
-    
+<div class="glass-card" style="margin-top: 30px;">
+  <h3>Attendance Tracker</h3>
+  <div style="display:flex; gap: 10px; margin-bottom:10px;">
+    <button onclick="copyAttendanceTrackerTable()" style="padding:6px 14px; border-radius:8px; border:none; background:var(--secondary); color:white; font-weight:600; cursor:pointer;">Copy</button>
+    <button onclick="shareAttendanceTrackerToWhatsApp()" style="padding:6px 14px; border-radius:8px; border:none; background:#25d366; color:white; font-weight:600; cursor:pointer;">Share to WhatsApp</button>
   </div>
-
-  <div class="table-container-attendance"><br>
-    <table id="attendance-table"
-      style="width:100%; border-collapse:collapse;">
+  <div class="table-container-attendance" style="max-height: 300px; overflow-y: auto;">
+    <table id="attendance-tracker-table" style="width:100%; border-collapse:collapse;">
       <thead>
-        <tr style="background:#eef2ff;">
-          <th onclick="sortAttendance(0)"
-      style="cursor:pointer;">
-      Student Name <span id="sort-name"></span>
-    </th>
-
-  <th onclick="sortAttendance(1)"
-      style="cursor:pointer;">
-    No. of Exams Attended <span id="sort-exams"></span>
-  </th>
-
+        <tr style="background:#eef2ff; cursor: pointer;">
+          <th onclick="sortAttendanceTracker(0)">Student Name</th>
+          <th onclick="sortAttendanceTracker(1)">Total Exams Attended</th>
+          <th onclick="sortAttendanceTracker(2)">Exams Attended Today</th>
         </tr>
       </thead>
-      <tbody id="attendance-body">
-        <tr>
-          <td colspan="2" style="padding:12px; text-align:center; color:#666;">
-            Loading attendance…
-          </td>
-        </tr>
+      <tbody id="attendance-tracker-body">
+        <tr><td colspan="3" style="text-align:center; color:#666; padding:12px;">Loading...</td></tr>
       </tbody>
     </table>
   </div>
 </div>
 
-</div>
+
+
+
 
 </div>
 
-
+</div>
     
 <!-- WhatsApp Chat Button -->
 <a href="https://wa.me/919497731772" target="_blank" id="whatsapp-chat-button" aria-label="Chat on WhatsApp">
@@ -2731,6 +2722,162 @@ loadInspirations = async function () {
   loadTop3PerSubject();
 };
   
+  function updateTotalQuestionsInfo() {
+  const totalQ = masterBank.length;
+  const today = new Date();
+  const options = { day: '2-digit', month: 'short', year: 'numeric' };
+  const dateStr = today.toLocaleDateString('en-GB', options);
+  document.getElementById('total-questions-info').innerText = `Updated with ${totalQ} Questions on ${dateStr}`;
+}
+// Call once after login to update display
+const originalFinalizeLogin = finalizeLogin;
+finalizeLogin = function() {
+  originalFinalizeLogin();
+  updateTotalQuestionsInfo();
+};
+
+async function loadAttendanceTracker() {
+  const tbody = document.getElementById("attendance-tracker-body");
+
+  tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:12px; color:#666;">Loading...</td></tr>`;
+  try {
+    const res = await fetch(`${SCRIPT_URL}?type=allStudents`);
+    const data = await res.json();
+
+    // Count total exams attended per student
+    let totalExamsCount = {};
+    // Count exams attended today per student
+    let todayExamsCount = {};
+
+    const today = new Date();
+    const todayStr = today.toISOString().split('T')[0]; // yyyy-mm-dd
+
+    data.forEach(row => {
+      const name = row[1];
+      totalExamsCount[name] = (totalExamsCount[name] || 0) + 1;
+
+      // Check exam date column 0
+      let d = null;
+      if (typeof row[0] === 'string') {
+        // ISO to yyyy-mm-dd
+        d = row[0].split('T')[0];
+      } else if (typeof row[0] === 'number') {
+        // Google Sheets date serial to ISO
+        const jsDate = new Date(Math.floor((row[0] - 25569) * 86400 * 1000));
+        d = jsDate.toISOString().split('T')[0];
+      }
+
+      if (d === todayStr) {
+        todayExamsCount[name] = (todayExamsCount[name] || 0) + 1;
+      }
+    });
+
+    let rows = [];
+    students.filter(s => s.role === "student").forEach(s => {
+      rows.push({
+        name: s.name,
+        total: totalExamsCount[s.name] || 0,
+        today: todayExamsCount[s.name] || 0
+      });
+    });
+
+    // Sort descending by total exams attended initially
+    rows.sort((a, b) => b.total - a.total || b.today - a.today || a.name.localeCompare(b.name));
+
+    let html = "";
+    rows.forEach(r => {
+      html += `<tr>
+        <td style="padding:8px; border:1px solid #ddd;">${r.name}</td>
+        <td style="padding:8px; border:1px solid #ddd; text-align:center; font-weight:700;">${r.total}</td>
+        <td style="padding:8px; border:1px solid #ddd; text-align:center; font-weight:700;">${r.today}</td>
+      </tr>`;
+    });
+
+    tbody.innerHTML = html;
+
+  } catch (e) {
+    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:red; padding:12px;">Failed to load attendance tracker data</td></tr>`;
+  }
+}
+
+function copyAttendanceTrackerTable() {
+  const rows = document.querySelectorAll("#attendance-tracker-table tr");
+  let text = "";
+
+  rows.forEach(row => {
+    const cols = row.querySelectorAll("th, td");
+    const line = Array.from(cols).map(c => c.innerText).join("\t");
+    text += line + "\n";
+  });
+
+  navigator.clipboard.writeText(text).then(() => {
+    alert("Attendance Tracker table copied!");
+  });
+}
+
+function shareAttendanceTrackerToWhatsApp() {
+  const rows = document.querySelectorAll("#attendance-tracker-table tr");
+  let lines = [];
+
+  const now = new Date();
+  const pad = num => num.toString().padStart(2, '0');
+  const dateStr = `${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()}`;
+  lines.push("Attendance Tracker as of " + dateStr);
+  lines.push("");
+
+  rows.forEach(row => {
+    const cols = row.querySelectorAll("th, td");
+    let line = Array.from(cols).map(c => c.innerText.trim()).join(" | ");
+    lines.push(line);
+  });
+
+  const message = encodeURIComponent(lines.join("\n"));
+  window.open("https://api.whatsapp.com/send?text=" + message, "_blank");
+}
+
+let attendanceTrackerSort = { column: null, asc: true };
+
+function sortAttendanceTracker(colIndex) {
+  const tbody = document.getElementById("attendance-tracker-body");
+  const rows = Array.from(tbody.querySelectorAll("tr"));
+
+  if (attendanceTrackerSort.column === colIndex) {
+    attendanceTrackerSort.asc = !attendanceTrackerSort.asc;
+  } else {
+    attendanceTrackerSort.column = colIndex;
+    attendanceTrackerSort.asc = true;
+  }
+
+  rows.sort((a, b) => {
+    let A = a.children[colIndex].innerText.trim();
+    let B = b.children[colIndex].innerText.trim();
+
+    if (colIndex === 1 || colIndex === 2) {
+      A = Number(A);
+      B = Number(B);
+    } else {
+      A = A.toLowerCase();
+      B = B.toLowerCase();
+    }
+
+    if (A < B) return attendanceTrackerSort.asc ? -1 : 1;
+    if (A > B) return attendanceTrackerSort.asc ? 1 : -1;
+    return 0;
+  });
+
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+// Load Attendance Tracker data after login and when admin tab shown
+const originalShowTabFn = showTab;
+showTab = function(tid) {
+  originalShowTabFn(tid);
+  if (tid === "tab4") { // admin tab
+    loadAttendanceTracker();
+  }
+};
+
+
 </script>
 </body>
 </html>
