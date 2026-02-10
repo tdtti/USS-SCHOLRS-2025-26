@@ -609,18 +609,18 @@ font-weight: 700;
   <div class="table-container" style="margin-top: 15px; max-height: 400px; overflow-y: auto;">
     <table id="model-exam-table" style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
       <thead style="background: #eef2ff;">
-        <tr>
-          <th style="border: 1px solid #ddd; padding: 8px; cursor: pointer;" onclick="sortModelExamTable(0)">Name ↑↓</th>
-          <th style="border: 1px solid #ddd; padding: 8px;">Status</th>
-          <th style="border: 1px solid #ddd; padding: 8px;">Lan1</th>
-          <th style="border: 1px solid #ddd; padding: 8px;">M II</th>
-          <th style="border: 1px solid #ddd; padding: 8px;">MM</th>
-          <th style="border: 1px solid #ddd; padding: 8px;">ENG</th>
-          <th style="border: 1px solid #ddd; padding: 8px;">BS</th>
-          <th style="border: 1px solid #ddd; padding: 8px;">SS</th>
-          <th style="border: 1px solid #ddd; padding: 8px;">TOTAL</th>
-          <th style="border: 1px solid #ddd; padding: 8px;">ELIGIBILITY</th>
-        </tr>
+         <tr>
+    <th style="border:1px solid #ddd; padding:6px; cursor:pointer;" onclick="sortModelExamTable(0)">Name ↑↓</th>
+    <th style="border:1px solid #ddd; padding:6px; cursor:pointer;" onclick="sortModelExamTable(1)">Status ↑↓</th>
+    <th style="border:1px solid #ddd; padding:6px;">Lan1</th>
+    <th style="border:1px solid #ddd; padding:6px;">M II</th>
+    <th style="border:1px solid #ddd; padding:6px;">Maths</th>
+    <th style="border:1px solid #ddd; padding:6px;">Eng</th>
+    <th style="border:1px solid #ddd; padding:6px;">BS</th>
+    <th style="border:1px solid #ddd; padding:6px;">SS</th>
+    <th style="border:1px solid #ddd; padding:6px; cursor:pointer;" onclick="sortModelExamTable(8)">Total ↑↓</th>
+    <th style="border:1px solid #ddd; padding:6px; cursor:pointer;" onclick="sortModelExamTable(9)">Eligibility ↑↓</th>
+  </tr>
       </thead>
       <tbody id="model-exam-body">
         <tr><td colspan="10" style="text-align: center; padding: 12px; color: #666;">Select a model exam from dropdown</td></tr>
@@ -2898,7 +2898,7 @@ async function loadAttendanceTracker() {
     });
 
     tbody.innerHTML = html || `<tr><td colspan="3" style="text-align:center; padding:10px; color:#666;">No data available.</td></tr>`;
-    totalExamsDisplay.innerText = `Exams : ${totalExamsAll}`;
+    totalExamsDisplay.innerText = `Total Exams : ${totalExamsAll}`;
   } catch(e) {
     tbody.innerHTML = `<tr><td colspan="3" style="color: red; padding: 10px; text-align: center;">Failed to load data</td></tr>`;
     totalExamsDisplay.innerText = "";
@@ -2977,8 +2977,23 @@ function shareAttendanceTrackerToWhatsApp() {
   const pad = (num) => num.toString().padStart(2,'0');
   const dateStr = `${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()}`;
   const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+
   lines.push("Attendance Tracker");
   lines.push(dateStr + " " + timeStr);
+  lines.push("");
+
+  // Calculate total exams by all students in the current table
+  let totalExamsAll = 0;
+  rows.forEach(row => {
+    const cols = row.querySelectorAll("td");
+    if(cols.length >= 2){
+      const examsStr = cols[1].innerText.trim();
+      const examsNum = Number(examsStr);
+      if(!isNaN(examsNum)) totalExamsAll += examsNum;
+    }
+  });
+
+  lines.push(`Exams : ${totalExamsAll}`);  // Add total exams count line
   lines.push("");
 
   rows.forEach(row => {
@@ -3009,24 +3024,24 @@ let modelExamData = [
   {
     datetime: '2026-01-30T14:00:00', // 30.01.2026 2:00:00 PM
     scores: {
-      "USS001": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
-      "USS002": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
-      "USS003": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
-      "USS004": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
-      "USS005": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
-      "USS006": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
-      "USS007": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
-      "USS008": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
-      "USS009": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
-      "USS010": { status: "A", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "NE" },
-      "USS011": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
-      "USS012": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
-      "USS013": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
-      "USS014": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
-      "USS015": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
-      "USS016": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
-      "USS017": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
-      "USS018": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" }
+      "USS001": { name:"AAISHA FIDHA", status: "P", lan1: 11, mal2: 8, maths: 11, eng: 6, bs: 9, ss: 10, total: 55, eligibility: "N" },
+      "USS002": { name:"AALIYA C S", status: "P", lan1: 13, mal2: 8, maths: 10, eng: 7, bs: 9, ss: 12, total: 59, eligibility: "N" },
+      "USS003": { name:"ANANDHAKRISHNAN M S", status: "P", lan1: 13, mal2: 7, maths: 15, eng: 6, bs: 13, ss: 19, total: 73, eligibility: "N" },
+      "USS004": { name:"ANSHITHA ANEESH", status: "P", lan1: 15, mal2: 11, maths: 11, eng: 8, bs: 11, ss: 17, total: 73, eligibility: "N" },
+      "USS005": { name:"ANUSREE T S", status: "P", lan1: 14, mal2: 9, maths: 11, eng: 5, bs: 11, ss: 16, total: 66, eligibility: "N" },
+      "USS006": { name:"BHAGATH S KUMAR", status: "P", lan1: 14, mal2: 7, maths: 15, eng: 6, bs: 13, ss: 19, total: 74, eligibility: "N" },
+      "USS007": { name:"DEVANANDA T R", status: "P", lan1: 10, mal2: 6, maths: 9, eng: 10, bs: 7, ss: 13, total: 55, eligibility: "N" },
+      "USS008": { name:"FATHIMATH SAHRA K S", status: "P", lan1: 12, mal2: 6, maths: 11, eng: 7, bs: 8, ss: 11, total: 55, eligibility: "N" },
+      "USS009": { name:"HARI NARAYANAN K S", status: "P", lan1: 12, mal2: 7, maths: 14, eng: 5, bs: 8, ss: 13, total: 59, eligibility: "N" },
+      "USS010": { name:"KUNAL KIRAN NAGDA", status: "A", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "N" },
+      "USS011": { name:"MALAVIKA N M", status: "P", lan1: 15, mal2: 8, maths: 15, eng: 10, bs: 13, ss: 14, total: 80, eligibility: "E" },
+      "USS012": { name:"MEENAKSHY M HEGDE", status: "P", lan1: 15, mal2: 10, maths: 15, eng: 11, bs: 11, ss: 5, total: 67, eligibility: "N" },
+      "USS013": { name:"PRATHITHA P SHENOY", status: "P", lan1: 14, mal2: 8, maths: 10, eng: 9, bs: 14, ss: 14, total: 72, eligibility: "N" },
+      "USS014": { name:"SARANGI S", status: "P", lan1: 13, mal2: 7, maths: 7, eng: 8, bs: 9, ss: 13, total: 57, eligibility: "N" },
+      "USS015": { name:"SREEBALA PRASANTH", status: "P", lan1: 13, mal2: 8, maths: 8, eng: 10, bs: 10, ss: 3, total: 52, eligibility: "N" },
+      "USS016": { name:"SREEBHADRA H", status: "P", lan1: 14, mal2: 7, maths: 14, eng: 8, bs: 8, ss: 15, total: 66, eligibility: "N" },
+      "USS017": { name:"SUKESH S PAI", status: "P", lan1: 15, mal2: 10, maths: 15, eng: 7, bs: 11, ss: 16, total: 74, eligibility: "N" },
+      "USS018": { name:"VARALAKSHMY S BHAT", status: "P", lan1: 14, mal2: 6, maths: 9, eng: 8, bs: 11, ss: 15, total: 63, eligibility: "N" }
     }
   }
 ];
@@ -3187,22 +3202,22 @@ async function loadStudentModelExams() {
     html += `
       <div class="glass-card" style="margin-bottom: 18px;">
         <b>MODEL EXAM : ${revExams.length - examIdxReverse} Dated ${examDateStr} ${examTimeStr}</b><br>
-        <b>Total: ${grandTotal}/${totalScoreMax} | Grade: ${grade}</b><br>
-        <b>ELIGIBILITY:</b> ${eligibility}
+        <b>Total : ${grandTotal}/${totalScoreMax} | Grade : ${grade}</b><br>
+        <b>ELIGIBILITY :</b> ${eligibility}
         ${sc.status === 'A' ? `<p style="color: var(--error); font-weight: 600; margin-top: 5px;">YOU ARE ABSENT IN THIS EXAM</p>` : ''}
         <div style="display: flex; gap: 15px; margin-top: 10px;">
           <div style="flex: 1;">
             <b>PAPER I</b><br>
-            LANG1 ${sc.lan1}/15<br>
-            MAL2 ${sc.mal2}/15<br>
-            MATHS ${sc.maths}/20<br>
+            LANG1 : ${sc.lan1}/15<br>
+            MAL2  : ${sc.mal2}/15<br>
+            MATHS : ${sc.maths}/20<br>
             <b>PAPER I TOTAL : ${paperIoTotal}/50</b>
           </div>
           <div style="flex: 1;">
             <b>PAPER II</b><br>
-            ENG ${sc.eng}/15<br>
-            BS ${sc.bs}/15<br>
-            SS ${sc.ss}/20<br>
+            ENG : ${sc.eng}/15<br>
+            BS  : ${sc.bs}/15<br>
+            SS  : ${sc.ss}/20<br>
             <b>PAPER II TOTAL : ${paperIiTotal}/50</b>
           </div>
         </div>
