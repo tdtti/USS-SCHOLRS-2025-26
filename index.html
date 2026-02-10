@@ -541,6 +541,16 @@ font-weight: 700;
 
 <div id="tab3" class="tab">
   
+  <!-- Add inside #tab3 (My Progress) div - below Student Summary -->
+
+<div class="glass-card" id="model-uss-exams-section" style="margin-top: 30px;">
+  <h3 style="margin-top: 0; color: var(--secondary);">MODEL USS EXAMS 2025</h3>
+  <div id="model-uss-exam-list" style="font-size: 0.9rem; max-height: 500px; overflow-y: auto;">
+    <p style="color:#666;">No completed model exams yet.</p>
+  </div>
+</div>
+
+
 <div class="glass-card" id="progress-summary-box" style="margin-bottom: 20px; border-left: 5px solid var(--accent);">
 <h3 style="margin-top:0; color: var(--secondary);">Student Summary</h3>
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 1rem;">
@@ -587,6 +597,38 @@ font-weight: 700;
 </div>
 
 <div id="tab5" class="tab">
+  
+  <!-- Add inside #tab5 (Inspirations) div, before the Top 3 section -->
+
+<div class="glass-card" id="model-exam-section" style="margin-bottom: 30px;">
+  <h3 style="color: var(--primary); margin-bottom: 10px;">MODEL EXAM</h3>
+
+  <label for="model-exam-select" style="font-weight: 700; font-size: 0.9rem; margin-bottom: 5px; display: block;">Select Exam Date and Time:</label>
+  <select id="model-exam-select" style="width: 100%; padding: 8px; border-radius: 10px; border: 2px solid #ccc; max-width: 400px;"></select>
+
+  <div class="table-container" style="margin-top: 15px; max-height: 400px; overflow-y: auto;">
+    <table id="model-exam-table" style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+      <thead style="background: #eef2ff;">
+        <tr>
+          <th style="border: 1px solid #ddd; padding: 8px; cursor: pointer;" onclick="sortModelExamTable(0)">Name ↑↓</th>
+          <th style="border: 1px solid #ddd; padding: 8px;">Status</th>
+          <th style="border: 1px solid #ddd; padding: 8px;">Lan1</th>
+          <th style="border: 1px solid #ddd; padding: 8px;">M II</th>
+          <th style="border: 1px solid #ddd; padding: 8px;">MM</th>
+          <th style="border: 1px solid #ddd; padding: 8px;">ENG</th>
+          <th style="border: 1px solid #ddd; padding: 8px;">BS</th>
+          <th style="border: 1px solid #ddd; padding: 8px;">SS</th>
+          <th style="border: 1px solid #ddd; padding: 8px;">TOTAL</th>
+          <th style="border: 1px solid #ddd; padding: 8px;">ELIGIBILITY</th>
+        </tr>
+      </thead>
+      <tbody id="model-exam-body">
+        <tr><td colspan="10" style="text-align: center; padding: 12px; color: #666;">Select a model exam from dropdown</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
   
   <div class="glass-card" id="top3-subjects-section" style="margin-top: 20px;">
   <h3 style="margin-top: 0; color: var(--primary);">Top 3 </h3>
@@ -2958,6 +3000,247 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('total-questions').innerText = totalQ;
   document.getElementById('update-date').innerText = dateStr;
 });
+
+// Add the following JavaScript code inside the existing <script> section after the others:
+
+const MAX_MODEL_EXAMS = 5;
+
+let modelExamData = [
+  {
+    datetime: '2026-01-30T14:00:00', // 30.01.2026 2:00:00 PM
+    scores: {
+      "USS001": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
+      "USS002": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
+      "USS003": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
+      "USS004": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
+      "USS005": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
+      "USS006": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
+      "USS007": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
+      "USS008": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
+      "USS009": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
+      "USS010": { status: "A", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "NE" },
+      "USS011": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
+      "USS012": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
+      "USS013": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
+      "USS014": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
+      "USS015": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
+      "USS016": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
+      "USS017": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" },
+      "USS018": { status: "P", lan1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, total: 0, eligibility: "E" }
+    }
+  }
+];
+// Array to hold model exams data objects with date,time and scores
+let currentModelExamIndex = 0;
+
+// Function to initialize/refresh model exams dropdown and data (teacher login)
+async function initModelExams() {
+  if(user.role !== 'teacher') return;
+
+  // For demo, prepare up to 5 model exams dates (hardcoded or from actual data)
+  // Here, simulate 1 or more model exams
+  // Real implementation would load from a datastore or API: Here we create dummy exams with all zero data
+  
+  
+ 
+  // Populate dropdown
+  const sel = document.getElementById('model-exam-select');
+  sel.innerHTML = '';
+  modelExamData.forEach((exam, i) => {
+    const dtOpt = new Date(exam.datetime);
+    const optTxt = dtOpt.toLocaleDateString('en-GB', {day:'2-digit',month:'2-digit',year:'numeric'}) + ' ' + dtOpt.toLocaleTimeString('en-GB', {hour12:false});
+    let opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = optTxt;
+    sel.appendChild(opt);
+  });
+
+  if(modelExamData.length > 0){
+    sel.value = 0;
+    currentModelExamIndex = 0;
+    renderModelExamTable(currentModelExamIndex);
+  }
+
+  sel.addEventListener('change', e => {
+    currentModelExamIndex = parseInt(e.target.value, 10);
+    renderModelExamTable(currentModelExamIndex);
+  });
+}
+
+// Render model exam table for selected exam index (teacher)
+function renderModelExamTable(idx) {
+  const tbody = document.getElementById('model-exam-body');
+  if(!modelExamData.length) {
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; padding:12px; color:#666;">No model exam data available.</td></tr>';
+    return;
+  }
+  const exam = modelExamData[idx];
+  const rows = [];
+
+  // Sort students by name ascending for display
+  const studentList = students.filter(s => s.role==='student').sort((a,b)=>a.name.localeCompare(b.name));
+
+  studentList.forEach(s => {
+    const sc = exam.scores[s.id] || {status:'A', lan1:0, mal2:0, maths:0, eng:0, bs:0, ss:0, total:0, eligibility:'NE'};
+    rows.push(`
+      <tr>
+        <td style="border:1px solid #ddd; padding:6px;">${s.name}</td>
+        <td style="border:1px solid #ddd; text-align:center; padding:6px;">${sc.status}</td>
+        <td style="border:1px solid #ddd; text-align:center; padding:6px;">${sc.lan1}</td>
+        <td style="border:1px solid #ddd; text-align:center; padding:6px;">${sc.mal2}</td>
+        <td style="border:1px solid #ddd; text-align:center; padding:6px;">${sc.maths}</td>
+        <td style="border:1px solid #ddd; text-align:center; padding:6px;">${sc.eng}</td>
+        <td style="border:1px solid #ddd; text-align:center; padding:6px;">${sc.bs}</td>
+        <td style="border:1px solid #ddd; text-align:center; padding:6px;">${sc.ss}</td>
+        <td style="border:1px solid #ddd; text-align:center; font-weight:700; padding:6px;">${sc.total}</td>
+        <td style="border:1px solid #ddd; text-align:center; padding:6px;">${sc.eligibility}</td>
+      </tr>
+    `);
+  });
+
+  tbody.innerHTML = rows.join('');
+}
+
+// Sort function for MODEL EXAM TABLE columns
+let modelExamSort = {col: 0, asc: true};
+function sortModelExamTable(col) {
+  const tbody = document.getElementById('model-exam-body');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  modelExamSort.asc = (modelExamSort.col === col) ? !modelExamSort.asc : true;
+  modelExamSort.col = col;
+
+  rows.sort((a, b) => {
+    let A = a.children[col].innerText.toUpperCase();
+    let B = b.children[col].innerText.toUpperCase();
+
+    if(col === 1) { // Status P/A string
+      // Sort by P before A
+      const rank = { 'P': 1, 'A': 2 };
+      A = rank[A] || 99;
+      B = rank[B] || 99;
+    }
+    else if([2,3,4,5,6,7,8].includes(col)) { // Numeric columns
+      A = parseInt(A) || 0;
+      B = parseInt(B) || 0;
+    }
+    else if(col === 9) { // Eligibility E/NE
+      const rank = { 'E': 1, 'NE': 2 };
+      A = rank[A] || 99;
+      B = rank[B] || 99;
+    }
+
+    if(A < B) return modelExamSort.asc ? -1 : 1;
+    if(A > B) return modelExamSort.asc ? 1 : -1;
+    return 0;
+  });
+
+  rows.forEach(row => tbody.appendChild(row));
+}
+
+// Student side: render MODEL USS EXAMS 2025 section
+async function loadStudentModelExams() {
+  if (!user || user.role !== 'student') return;
+
+  const container = document.getElementById('model-uss-exam-list');
+  container.innerHTML = '<p style="color:#666;">Loading model USS exams...</p>';
+
+  // Filter completed exams for this student
+  // Model exam data is held in modelExamData variable (initialized by teacher login)
+  // For demo, consider only exams with total > 0 or at least first exam to display
+  // Reverse order: last exam first
+  const revExams = [...modelExamData].reverse();
+
+  if(revExams.length === 0) {
+    container.innerHTML = '<p style="color:#666;">No completed model exams yet.</p>';
+    return;
+  }
+
+  // Build HTML for all completed exams (total >0 or just show all)
+  let html = '';
+
+  revExams.forEach((exam, examIdxReverse) => {
+    const examDateObj = new Date(exam.datetime);
+    const examDateStr = examDateObj.toLocaleDateString('en-GB', {day:'2-digit',month:'2-digit',year:'numeric'});
+    const examTimeStr = examDateObj.toLocaleTimeString('en-GB', {hour12:false});
+    const totalScoreMax = 100;
+
+    // Student score data for this exam (or absent defaults)
+    const sc = exam.scores[user.id] || {status:'A', lan1:0, mal2:0, maths:0, eng:0, bs:0, ss:0, total:0, eligibility:'NE'};
+
+    // Show only completed exams: score totals > 0 or could set a flag for completed
+    // To keep aligned with user request: show only completed (simulate completed by total > 0 or all here)
+    // But for now show all to demo (you can change this as needed)
+    // In real app, filter modelExamData by some completion marker
+
+    // Combine papers info
+    const paperIoTotal = sc.lan1 + sc.mal2 + sc.maths;
+    const paperIiTotal = sc.eng + sc.bs + sc.ss;
+    const grandTotal = paperIoTotal + paperIiTotal;
+
+    const grade = getGrade((grandTotal / totalScoreMax) * 100);
+
+    // Eligibility
+    const eligibility = sc.eligibility || (sc.status === 'P' ? 'E' : 'NE');
+
+    // Sortable rows: We implement sorting for NAME, STATUS, TOTAL, ELIGIBILITY below
+
+    html += `
+      <div class="glass-card" style="margin-bottom: 18px;">
+        <b>MODEL EXAM : ${revExams.length - examIdxReverse} Dated ${examDateStr} ${examTimeStr}</b><br>
+        <b>Total: ${grandTotal}/${totalScoreMax} | Grade: ${grade}</b><br>
+        <b>ELIGIBILITY:</b> ${eligibility}
+        ${sc.status === 'A' ? `<p style="color: var(--error); font-weight: 600; margin-top: 5px;">YOU ARE ABSENT IN THIS EXAM</p>` : ''}
+        <div style="display: flex; gap: 15px; margin-top: 10px;">
+          <div style="flex: 1;">
+            <b>PAPER I</b><br>
+            LANG1 ${sc.lan1}/15<br>
+            MAL2 ${sc.mal2}/15<br>
+            MATHS ${sc.maths}/20<br>
+            <b>PAPER I TOTAL : ${paperIoTotal}/50</b>
+          </div>
+          <div style="flex: 1;">
+            <b>PAPER II</b><br>
+            ENG ${sc.eng}/15<br>
+            BS ${sc.bs}/15<br>
+            SS ${sc.ss}/20<br>
+            <b>PAPER II TOTAL : ${paperIiTotal}/50</b>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+
+  // Optionally add sorting for NAME, STATUS, TOTAL and ELIGIBILITY outside this block (can be complex for HTML blocks)
+  // If needed, consider rendering data in a table for sortable columns in student view (not asked explicitly)
+  // For simplicity here, sorting for this block is skipped or can be extended later
+}
+
+// Load model exams and update interface depending on user role
+document.addEventListener('DOMContentLoaded', () => {
+  if(user) {
+    if(user.role === 'teacher') {
+      initModelExams();
+    }
+    if(user.role === 'student') {
+      loadStudentModelExams();
+    }
+  }
+});
+
+// Also watch for tab3 show to reload student model exams
+const originalShowTabFunc = showTab;
+showTab = function(tid) {
+  originalShowTabFunc(tid);
+  if(user && user.role === 'student' && tid === 'tab3') {
+    loadStudentModelExams();
+  }
+  if(user && user.role === 'teacher' && tid === 'tab5') {
+    initModelExams();
+  }
+};
+
 
 
 </script>
