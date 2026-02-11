@@ -797,6 +797,30 @@ font-weight: 700;
   </div>
 </div>
 
+<!-- Add below the Attendance Tracker section inside #tab4 (Admin tab) -->
+<div class="glass-card" style="margin-top: 30px; position: relative;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+    <h3 style="margin: 0; color: var(--primary);">My Timer</h3>
+    <div id="my-timer-total" style="font-weight: 700; color: var(--secondary); font-size: 1rem;"></div>
+  </div>
+  <div class="table-container" style="max-height: 400px; overflow-y: auto; position: relative;">
+    <div id="my-timer-spinner" class="spinner-overlay" style="display: flex;">
+      <div class="spinner" style="width:30px; height:30px; border-width: 4px; border-top-color: var(--primary);"></div>
+    </div>
+    <table id="my-timer-table" style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr style="background: #eef2ff;">
+          <th id="my-timer-name" style="padding: 8px; cursor: pointer;" onclick="sortMyTimerTable(0)">Name ↑↓</th>
+          <th id="my-timer-avgtime" style="padding: 8px; cursor: pointer;" onclick="sortMyTimerTable(1)">Avg Time (sec) ↑↓</th>
+        </tr>
+      </thead>
+      <tbody id="my-timer-body">
+        <tr><td colspan="2" style="text-align:center; padding:10px; color:#666;">Loading...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
 </div>
 
 </div>
@@ -3283,7 +3307,117 @@ showTab = function(tid) {
   }
 };
 
+// Sort state for the My Timer table
+let myTimerSort = {column: null, asc: true};
 
+/**
+ * Load average times for each student (simulated data here).
+ * Replace with actual data loading logic if available.
+ */
+async function loadMyTimerData() {
+  const tbody = document.getElementById("my-timer-body");
+  const spinner = document.getElementById("my-timer-spinner");
+  const totalDisplay = document.getElementById("my-timer-total");
+
+  // Show spinner and clear table body
+  spinner.style.display = "flex";
+  tbody.innerHTML = `<tr><td colspan="2" style="text-align:center; padding:10px; color:#666;">Loading...</td></tr>`;
+  totalDisplay.innerText = "";
+
+  try {
+    // Simulate fetch delay, in real case replace with API call or data computation
+    await new Promise(r => setTimeout(r, 800));
+
+    // Simulated average times in seconds for all student names from students array
+    // Generate random avg times for demonstration
+    const data = students.filter(s => s.role === "student").map(s => ({
+      name: s.name,
+      avgTime: (Math.random() * (900 - 300) + 300).toFixed(0) // 300s to 900s range (5 to 15 min)
+    }));
+
+    // Sort by name ascending initially
+    data.sort((a, b) => a.name.localeCompare(b.name));
+
+    // Populate tbody with rows
+    tbody.innerHTML = data.map(d =>
+      `<tr>
+        <td style="padding: 8px;">${d.name}</td>
+        <td style="padding: 8px; text-align: center;">${d.avgTime}</td>
+      </tr>`
+    ).join("");
+
+    totalDisplay.innerText = `Total Students: ${data.length}`;
+
+  } catch (e) {
+    tbody.innerHTML = `<tr><td colspan="2" style="text-align:center; padding:10px; color: red;">Failed to load data</td></tr>`;
+    totalDisplay.innerText = "";
+  } finally {
+    spinner.style.display = "none";
+  }
+}
+
+/**
+ * Sort My Timer table by columns (0: Name, 1: Avg Time)
+ */
+function sortMyTimerTable(colIndex) {
+  const tbody = document.getElementById("my-timer-body");
+  const rows = Array.from(tbody.querySelectorAll("tr"));
+  if(rows.length === 0) return;
+
+  if (myTimerSort.column === colIndex) {
+    myTimerSort.asc = !myTimerSort.asc;
+  } else {
+    myTimerSort.column = colIndex;
+    myTimerSort.asc = true;
+  }
+
+  rows.sort((a, b) => {
+    let A = a.children[colIndex].innerText.trim();
+    let B = b.children[colIndex].innerText.trim();
+
+    if (colIndex === 1) { // numeric sort for Avg Time
+      A = Number(A);
+      B = Number(B);
+    } else {
+      A = A.toLowerCase();
+      B = B.toLowerCase();
+    }
+
+    if (A < B) return myTimerSort.asc ? -1 : 1;
+    if (A > B) return myTimerSort.asc ? 1 : -1;
+    return 0;
+  });
+
+  tbody.innerHTML = "";
+  rows.forEach(r => tbody.appendChild(r));
+
+  updateMyTimerSortIcons();
+}
+
+function updateMyTimerSortIcons() {
+  document.getElementById("my-timer-name").innerText = "Name";
+  document.getElementById("my-timer-avgtime").innerText = "Avg Time (sec)";
+
+  const icon = myTimerSort.asc ? " ↑" : " ↓";
+  if (myTimerSort.column === 0) document.getElementById("my-timer-name").innerText += icon;
+  if (myTimerSort.column === 1) document.getElementById("my-timer-avgtime").innerText += icon;
+}
+
+// Load My Timer data on admin tab load
+function loadMyTimerOnTab() {
+  if (document.getElementById("tab4").classList.contains("active")) {
+    loadMyTimerData();
+  }
+}
+
+// Modify showTab to load My Timer section on admin tab
+const originalShowTabFn = showTab;
+showTab = function(tid) {
+  originalShowTabFn(tid);
+  if (tid === "tab4") {
+    loadMyTimerData();
+  }
+};
 
 </script>
 </body>
