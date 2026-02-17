@@ -93,7 +93,7 @@ nav.timer-active button:not(#nav-timer) {
 }
 
 nav.timer-active #nav-timer {
-  display: inline-block;
+  display: inline-block;justify-content: center;align-items: center;
 }
 .timer-warn { background: var(--error) !important; animation: blinker 1s linear infinite; }
 @keyframes blinker { 50% { opacity: 0.5; } }
@@ -101,95 +101,7 @@ nav.timer-active #nav-timer {
 #user-profile { display: none; align-items: center; justify-content: space-between; background: var(--primary); color: white; padding: 10px 20px; border-radius: 15px; margin-bottom: 10px; }
 
 .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin: 20px 0; }
-@media (max-width: 480px) { .summary-grid { grid-template-columns: repeat(2, 1fr); } }
-  /* Mobile First (phones) */
-@media (max-width: 600px) {
 
-  .app-container {
-    padding: 10px;
-  }
-
-  .school-logo {
-    width: 140px;
-    height: 140px;
-  }
-
-  h1 {
-    font-size: 1.3rem !important;
-  }
-
-  h3 {
-    font-size: 1rem !important;
-  }
-
-  nav {
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-  }
-
-  nav button {
-    padding: 8px 14px;
-    font-size: 0.75rem;
-  }
-
-  #nav-timer {
-    font-size: 0.9rem;
-    padding: 6px 10px;
-  }
-
-  .glass-card {
-    border-radius: 16px;
-    padding: 14px;
-  }
-
-  .summary-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  table {
-  width: auto;        /* or keep width: 100% */
-  border-collapse: collapse;
-  min-width: unset;   /* remove min-width */
-  max-width: 100%;    /* prevent overflow */
-}
-
-
-  canvas {
-    width: 100% !important;
-  }
-}
-
-/* Tablets */
-@media (min-width: 601px) and (max-width: 1024px) {
-
-  .app-container {
-    max-width: 95%;
-  }
-
-  nav button {
-    font-size: 0.85rem;
-  }
-
-  .school-logo {
-    width: 170px;
-    height: 170px;
-  }
-}
-
-/* Large Screens / Desktop */
-@media (min-width: 1025px) {
-
-  .app-container {
-    max-width: 1200px;
-  }
-
-  nav {
-    justify-content: center;
-  }
-
-}
-
-canvas { width: 100% !important; height: auto !important; }
 
 #msg-overlay { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.8); backdrop-filter: blur(8px); z-index: 100000; justify-content: center; align-items: center; flex-direction: column; padding: 20px; }
 .spinner { width: 60px; height: 60px; border: 6px solid #f3f3f3; border-top: 6px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
