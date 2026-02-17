@@ -370,13 +370,7 @@ font-weight: 700;
 </style>
 
 
-
-</style>
-
-
-
 <body onload="checkPersistentLogin()">
-
 <div id="msg-overlay">
 <div id="loader-content">
 <div class="spinner"></div>
@@ -596,16 +590,16 @@ font-weight: 700;
     <table id="model-exam-table" style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
       <thead style="background: #eef2ff;">
          <tr>
-    <th style="border:1px solid #ddd; padding:6px; cursor:pointer;" onclick="sortModelExamTable(0)">Name ↑↓</th>
-    <th style="border:1px solid #ddd; padding:6px; cursor:pointer;" onclick="sortModelExamTable(1)">Status ↑↓</th>
-    <th style="border:1px solid #ddd; padding:6px;">Lan1</th>
-    <th style="border:1px solid #ddd; padding:6px;">M II</th>
-    <th style="border:1px solid #ddd; padding:6px;">Maths</th>
-    <th style="border:1px solid #ddd; padding:6px;">Eng</th>
+    <th style="border:1px solid #ddd; padding:6px; cursor:pointer;" onclick="sortModelExamTable(0)">Name</th>
+    <th style="border:1px solid #ddd; padding:6px; cursor:pointer;" onclick="sortModelExamTable(1)">Status</th>
+    <th style="border:1px solid #ddd; padding:6px;">L1</th>
+    <th style="border:1px solid #ddd; padding:6px;">M2</th>
+    <th style="border:1px solid #ddd; padding:6px;">MM</th>
+    <th style="border:1px solid #ddd; padding:6px;">E</th>
     <th style="border:1px solid #ddd; padding:6px;">BS</th>
     <th style="border:1px solid #ddd; padding:6px;">SS</th>
-    <th style="border:1px solid #ddd; padding:6px; cursor:pointer;" onclick="sortModelExamTable(8)">Total ↑↓</th>
-    <th style="border:1px solid #ddd; padding:6px; cursor:pointer;" onclick="sortModelExamTable(9)">Eligibility ↑↓</th>
+    <th style="border:1px solid #ddd; padding:6px; cursor:pointer;" onclick="sortModelExamTable(8)">Total</th>
+    <th style="border:1px solid #ddd; padding:6px; cursor:pointer;" onclick="sortModelExamTable(9)">Eligibility</th>
   </tr>
       </thead>
       <tbody id="model-exam-body">
@@ -657,8 +651,8 @@ font-weight: 700;
     <table id="subjectwise-table">
       <thead>
         <tr>
-          <th onclick="sortSubjectwiseTable(0)" style="cursor:pointer;">Student Name ↑↓</th>
-          <th onclick="sortSubjectwiseTable(1)" style="cursor:pointer;">No. of Exams ↑↓</th>
+          <th onclick="sortSubjectwiseTable(0)" style="cursor:pointer;">Name ↑↓</th>
+          <th onclick="sortSubjectwiseTable(1)" style="cursor:pointer;">Exams ↑↓</th>
           <th onclick="sortSubjectwiseTable(2)" style="cursor:pointer;">Score ↑↓</th>
           <th onclick="sortSubjectwiseTable(3)" style="cursor:pointer;">Grade ↑↓</th>
         </tr>
@@ -3889,7 +3883,7 @@ async function loadTop3PerSubject() {
       thead.innerHTML = `
         <tr style="background:#eef2ff; border-bottom: 2px solid var(--primary);">
           <th style="border:1px solid #ddd; padding:8px; cursor:pointer;">Name</th>
-          <th style="border:1px solid #ddd; padding:8px; cursor:pointer;">No. of Exams</th>
+          <th style="border:1px solid #ddd; padding:8px; cursor:pointer;">Exams</th>
           <th style="border:1px solid #ddd; padding:8px; cursor:pointer;">Score</th>
           <th style="border:1px solid #ddd; padding:8px; cursor:pointer;">Grade</th>
         </tr>
