@@ -402,7 +402,7 @@ font-weight: 700;
 
 <nav id="navbar">
 <button id="nav-tab2" onclick="showTab('tab2')">Daily Exam</button>
-<div id="nav-timer">15:00</div>
+<div id="nav-timer"> 15 Minutes 00 Seconds Remaining </div>
 <button id="nav-tab3" onclick="showTab('tab3')">My Progress</button>
 <button id="ins-nav" style="display:none;" onclick="showTab('tab5')">Inspirations</button>
 <button id="admin-nav" style="display:none;" onclick="showTab('tab4')">Admin</button>
@@ -2572,7 +2572,7 @@ function startExamWithTimer() {
     let min = Math.floor(timeLeft / 60);
     let sec = timeLeft % 60;
     document.getElementById('nav-timer').innerText =
-      `${min}:${sec < 10 ? '0' : ''}${sec}`;
+      `${min} Minutes ${sec} Seconds Remaining ` ;
 
     if (timeLeft === 180) {
       document.getElementById('nav-timer').classList.add('timer-warn');
