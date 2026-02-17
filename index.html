@@ -37,17 +37,63 @@ border-bottom: 1px solid rgba(0,0,0,0.05);
 .school-logo { width: 200px; height: 200px; margin: 0 auto 15px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); overflow: hidden; }
 .school-logo img { width: 90%; height: 90%; object-fit: contain; }
 
-nav { display: none; gap: 10px; margin-bottom: 15px; justify-content: center; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; align-items: center;}
-nav::-webkit-scrollbar { display: none; }
+nav {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  overflow-x: auto;
+  padding-bottom: 5px;
+  scrollbar-width: none;
+  position: relative;
+}
 
-nav button { padding: 10px 20px; border: none; border-radius: 12px; cursor: pointer; background: white; color: var(--primary); font-weight: 600; transition: 0.3s; white-space: nowrap; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: clamp(0.8rem, 2.5vw, 1rem); }
+nav::-webkit-scrollbar {
+  display: none;
+}
+
 nav button:hover, nav button.active-nav { background: var(--primary); color: white; }
 
 /* Requirement 4: Timer in Nav */
+nav button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  background: white;
+  color: var(--primary);
+  font-weight: 600;
+  transition: 0.3s;
+  white-space: nowrap;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  font-size: clamp(0.8rem, 2.5vw, 1rem);
+}
+
+/* Timer style */
 #nav-timer {
-display: none; background: green; color: #fff; padding: 8px 15px;
-border-radius: 10px; font-weight: 800; font-family: monospace; font-size: 1.1rem;
-border: 2px solid var(--accent);
+  display: none;
+  background: var(--primary);
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 12px;
+  font-weight: 800;
+  font-family: monospace;
+  font-size: 1.2rem;
+  border: 2px solid var(--accent);
+  user-select: none;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(67, 97, 238, 0.5);
+  min-width: 100px;
+}
+
+/* When timer visible, hide nav buttons */
+nav.timer-active button:not(#nav-timer) {
+  display: none;
+}
+
+nav.timer-active #nav-timer {
+  display: inline-block;
 }
 .timer-warn { background: var(--error) !important; animation: blinker 1s linear infinite; }
 @keyframes blinker { 50% { opacity: 0.5; } }
@@ -2565,6 +2611,8 @@ function finalizeLogin() {
   closeMsg();
 }
   function hideNavForExam() {
+  const nav = document.getElementById('navbar');
+  nav.classList.add('timer-active');
   document.querySelectorAll('#navbar button').forEach(b => {
     b.style.display = 'none';
   });
@@ -2572,6 +2620,8 @@ function finalizeLogin() {
 }
 
 function restoreNavAfterExam() {
+  const nav = document.getElementById('navbar');
+  nav.classList.remove('timer-active');
   document.getElementById('nav-tab2').style.display = 'inline-block';
   document.getElementById('nav-tab3').style.display = 'inline-block';
 
@@ -2601,6 +2651,10 @@ window.scrollTo({top: 0, behavior: 'smooth'});
 function startExamWithTimer() {
   generateExam();
   document.getElementById('s-btn').style.display = 'block';
+
+  // Hide Latest Release and Language Select after language chosen
+  document.getElementById('update-info').style.display = 'none';
+  document.getElementById('lang-select').parentElement.style.display = 'none';
 
   timeLeft = 900;
   hideNavForExam();
@@ -2632,9 +2686,14 @@ function tryQuizAgain() {
   document.getElementById('quiz-load').innerHTML = "";
   document.getElementById('s-btn').style.display = 'none';
 
+  // Show Latest Release and Language Select again
+  document.getElementById('update-info').style.display = 'block';
+  document.getElementById('lang-select').parentElement.style.display = 'block';
+
   restoreNavAfterExam();
   document.getElementById('nav-timer').classList.remove('timer-warn');
 }
+
 
 function generateExam() {
 const lang = document.getElementById('lang-select').value;
