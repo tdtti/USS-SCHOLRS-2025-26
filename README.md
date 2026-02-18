@@ -1,7 +1,3 @@
-Here is your **ready-to-use `README.md` (Markdown format)** for the repository:
-
----
-
 # 📘 TDTTI THURAVOOR
 
 ## USS / CM Kids Scholarship Training Portal (2025-26)
