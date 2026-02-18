@@ -6,6 +6,7 @@
 <title>TDTTI THURAVOOR - CM KIDS SCHOLARSHIP PORTAL 2025-26 (UP)</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
 :root {
 --primary: #4361ee; --secondary: #3f37c9; --accent: #4cc9f0;
@@ -473,7 +474,7 @@ font-weight: 700;
     </div><br>
     <label style="font-size:1.2rem;justify-content: center;
   align-items: center;"><span id="loading-questions" class="loader-inline" title="Loading Questions" style="display: none;"></span> Loading New Questions  </label><br>  
-  
+  <br>
 </div>
 
 
@@ -594,7 +595,7 @@ font-weight: 700;
   <!-- Add inside #tab5 (Inspirations) div, before the Top 3 section -->
 
 <div class="glass-card" id="model-exam-section" style="margin-bottom: 30px;">
-  <h3 style="color: var(--primary); margin-bottom: 10px;">MODEL EXAM</h3>
+  <h3 style="color: var(--primary); margin-bottom: 10px;">MODEL EXAM 2025-26 </h3>
 
   <label for="model-exam-select" style="font-weight: 700; font-size: 0.9rem; margin-bottom: 5px; display: block;">Select Exam Date and Time:</label>
   <select id="model-exam-select" style="width: 100%; padding: 8px; border-radius: 10px; border: 2px solid #ccc; max-width: 400px;"></select>
@@ -616,7 +617,7 @@ font-weight: 700;
   </tr>
       </thead>
       <tbody id="model-exam-body">
-        <tr><td colspan="10" style="text-align: center; padding: 12px; color: #666;">Select a model exam from dropdown</td></tr>
+        <tr><td colspan="10" style="text-align: center; padding: 12px; color: #666;">Select a Model Exam from dropdown</td></tr>
       </tbody>
     </table>
   </div>
@@ -664,10 +665,10 @@ font-weight: 700;
     <table id="subjectwise-table">
       <thead>
         <tr>
-          <th onclick="sortSubjectwiseTable(0)" style="cursor:pointer;">Name ↑↓</th>
-          <th onclick="sortSubjectwiseTable(1)" style="cursor:pointer;">Exams ↑↓</th>
-          <th onclick="sortSubjectwiseTable(2)" style="cursor:pointer;">Score ↑↓</th>
-          <th onclick="sortSubjectwiseTable(3)" style="cursor:pointer;">Grade ↑↓</th>
+          <th onclick="sortSubjectwiseTable(0)" style="cursor:pointer;">Name</th>
+          <th onclick="sortSubjectwiseTable(1)" style="cursor:pointer;">Exams</th>
+          <th onclick="sortSubjectwiseTable(2)" style="cursor:pointer;">Score</th>
+          <th onclick="sortSubjectwiseTable(3)" style="cursor:pointer;">Grade</th>
         </tr>
       </thead>
       <tbody id="subjectwise-body">
@@ -692,8 +693,8 @@ font-weight: 700;
   <table id="ins-table">
     <thead>
       <tr>
-        <th onclick="sortTable(0)">Name ↑↓</th><th>Cls</th><th>Div</th><th>L1</th><th>M2</th><th>Mat</th><th>Eng</th><th>BS</th><th>SS</th><th>MA</th><th>CA</th>
-        <th onclick="sortTable(11)">Exams ↑↓</th><th onclick="sortTable(12)">Total ↑↓</th><th onclick="sortTable(13)">Grd ↑↓</th>
+        <th onclick="sortTable(0)">Name</th><th>Class</th><th>Div</th><th>L1</th><th>M2</th><th>Mat</th><th>Eng</th><th>BS</th><th>SS</th><th>MA</th><th>CA</th>
+        <th onclick="sortTable(11)">Exams</th><th onclick="sortTable(12)">Total </th><th onclick="sortTable(13)">Grade</th>
       </tr>
     </thead>
     <tbody id="ins-body"></tbody>
@@ -726,7 +727,7 @@ font-weight: 700;
 </div>
 <button class="btn-main" onclick="makeQ()">Generate Code</button>
 <textarea id="q-code" readonly style="margin-top:10px; height:80px;"></textarea>
-<button class="btn-main" style="background:#25d366; margin-top: 8px;" onclick="shareQCodeToWhatsApp()">
+<button class="btn-main" style="background:#25d366; margin-top: 8px;" onclick="shareQCodeToWhatsApp()"><i class="fab fa-whatsapp"></i>
   Share to WhatsApp
 </button>
 </div>
@@ -740,9 +741,10 @@ font-weight: 700;
   <label style="font-weight: 700; font-size: 0.9rem;">Select Date (DD/MM/YYYY):</label>
   <input type="text" id="attendance-tracker-date" placeholder="DD/MM/YYYY" pattern="\\d{2}/\\d{2}/\\d{4}" />
   <div style="margin-top: 10px; display: flex; gap: 10px;">
-    <button onclick="loadAttendanceTracker()" class="btn-main" style="flex: 1;">Load </button>
-    <button onclick="copyAttendanceTrackerTable()" class="btn-main" style="background: var(--secondary); flex: 1;">Copy</button>
-    <button onclick="shareAttendanceTrackerToWhatsApp()" class="btn-main" style="background: #25d366; flex: 1;">Share WhatsApp</button>
+    <button onclick="loadAttendanceTracker()" class="btn-main" style="flex: 1;"><i class="fa-solid fa-rotate"></i></button>
+    <button onclick="copyAttendanceTrackerTable()" class="btn-main" style="background: var(--secondary); flex: 1;"><i class="fa-regular fa-copy"></i></button>
+    <button onclick="shareAttendanceTrackerToWhatsApp()" class="btn-main" style="background: #25d366; flex: 1;"><i class="fab fa-whatsapp"></i></button>
+  
   </div>
 
   <div class="table-container-attendance" style="margin-top: 15px;">
@@ -776,8 +778,8 @@ font-weight: 700;
     <table id="my-timer-table" style="width: 100%; border-collapse: collapse;">
       <thead>
         <tr style="background: #eef2ff;">
-          <th id="my-timer-name" style="padding: 8px; cursor: pointer;" onclick="sortMyTimerTable(0)">Name ↑↓</th>
-          <th id="my-timer-avgtime" style="padding: 8px; cursor: pointer;" onclick="sortMyTimerTable(1)">Avg Time (sec) ↑↓</th>
+          <th id="my-timer-name" style="padding: 8px; cursor: pointer;" onclick="sortMyTimerTable(0)">Name</th>
+          <th id="my-timer-avgtime" style="padding: 8px; cursor: pointer;" onclick="sortMyTimerTable(1)">Avg Time</th>
         </tr>
       </thead>
       <tbody id="my-timer-body">
