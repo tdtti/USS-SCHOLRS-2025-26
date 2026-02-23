@@ -423,9 +423,7 @@ font-weight: 700;
       <div id="display-name" style="font-weight: 700; font-size: 1rem;">User</div>
       
     </div>
-<div id="countdown-timer" style="color: white; font-weight: 600; margin-left: 15px; font-size: 0.85rem; white-space: nowrap;">
-  Loading timer...
-</div>
+
     <!-- Message icon -->
     <div id="msg-icon" title="Messages" style="margin-left: 20px; cursor: pointer; position: relative; color: white; font-size: 1.3rem;">
       <i class="fa-solid fa-bell"></i>
@@ -439,11 +437,16 @@ font-weight: 700;
   <div id="msg-popup" style="display:none; position: absolute; top: 55px; right: 0; background: #fff; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 0; width: 320px; max-height: 350px; font-size: 0.9rem; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: text; z-index: 999; display: flex; flex-direction: column;">
   <div id="msg-popup-header" style="position: sticky; top: 0; background: #fff; padding: 15px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; color: var(--primary); font-weight: 700; font-size: 1.1rem; z-index: 10;">
     <span>Messages</span>
-    
     <button onclick="closeMsgPopup()" aria-label="Close messages" style="background:none; border:none; font-size: 1.5rem; line-height: 1; cursor: pointer; color: #666;">&times;</button>
-  </div>
+    </div>
+    
+    
   <div id="msg-popup-content" style="padding: 15px; overflow-y: auto; flex: 1;">
     <!-- Message bubbles go here -->
+    <div class="message-bubble" style="width: 280px; background:#f0f0f0; color:#333; border-radius: 15px 15px 15px 5px; padding:10px 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+    <center><div id="countdown-timer" style="color: red; font-weight: 600; margin-left: 15px; font-size: 0.85rem; white-space: nowrap;">
+    Loading timer...
+    </div></center></div>
     <div class="message-bubble" style="width: 280px; background:#f0f0f0; color:#333; border-radius: 15px 15px 15px 5px; padding:10px 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
       <div style="font-weight: 600;">Special Parents Meeting</div>
       <p style="margin: 5px 0;">
@@ -4704,7 +4707,7 @@ function updateCountdown() {
   diff -= hours * (1000 * 60 * 60);
   const minutes = Math.floor(diff / (1000 * 60));
 
-  countdownElem.innerText = `${days}d ${hours}h ${minutes}m left`;
+  countdownElem.innerText = `Only ${days}d ${hours}h ${minutes}m left`;
 }
 
 const countdownInterval = setInterval(updateCountdown, 60 * 1000);
