@@ -421,6 +421,7 @@ font-weight: 700;
     <div>
       <div style="font-size: 0.65rem; opacity: 0.8; font-weight:700;">TDTTI THURAVOOR</div>
       <div id="display-name" style="font-weight: 700; font-size: 1rem;">User</div>
+      
     </div>
 
     <!-- Message icon -->
@@ -429,12 +430,16 @@ font-weight: 700;
       <span id="msg-badge" style="position: absolute; top: -5px; right: -8px; background: var(--error); color: white; font-size: 0.7rem; border-radius: 50%; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center;">1</span>
     </div>
   </div>
+  <div id="countdown-timer" style="color: white; font-weight: 600; margin-left: 15px; font-size: 0.85rem; white-space: nowrap;">
+  Loading timer...
+</div>
   <button onclick="logout()" style="background:transparent; border:1px solid white; color:white; border-radius:8px; padding:5px 12px; cursor:pointer; font-size:0.8rem;">LOGOUT</button>
 
   <!-- Message popup -->
   <div id="msg-popup" style="display:none; position: absolute; top: 55px; right: 0; background: #fff; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 0; width: 320px; max-height: 350px; font-size: 0.9rem; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: text; z-index: 999; display: flex; flex-direction: column;">
   <div id="msg-popup-header" style="position: sticky; top: 0; background: #fff; padding: 15px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; color: var(--primary); font-weight: 700; font-size: 1.1rem; z-index: 10;">
     <span>Messages</span>
+    
     <button onclick="closeMsgPopup()" aria-label="Close messages" style="background:none; border:none; font-size: 1.5rem; line-height: 1; cursor: pointer; color: #666;">&times;</button>
   </div>
   <div id="msg-popup-content" style="padding: 15px; overflow-y: auto; flex: 1;">
@@ -443,10 +448,10 @@ font-weight: 700;
       <div style="font-weight: 600;">Special Parents Meeting</div>
       <p style="margin: 5px 0;">
         Dear Parents,<br>
-        We invite you to a brief meeting regarding the USS Exam 2026.<br>
+        We invite you to a brief meeting regarding the CM KIDS SCOLARSHIP (UP) EXAM 2026.<br>
         <b>Date:</b> 24.02.26 (Tuesday)<br>
         <b>Time:</b> 3:00 PM<br>
-        Agenda: USS Exam briefing and Hall Ticket Distribution.<br>
+        <b>Agenda:</b> CM KIDS SCOLARSHIP EXAM (UP) briefing and Hall Ticket Distribution.<br>
         <b>NB:</b> Your presence is essential. Please ensure you attend to collect your ward's hall ticket.
       </p>
       <div style="font-size: 0.7rem; color: #666; text-align: right;">23 Feb 2026, 16:00</div>
@@ -4677,6 +4682,32 @@ function closeMsgPopup() {
   const msgPopup = document.getElementById('msg-popup');
   if(msgPopup) msgPopup.style.display = 'none';
 }
+
+function updateCountdown() {
+  const countdownElem = document.getElementById('countdown-timer');
+  const targetDate = new Date('2026-02-26T10:00:00'); // 26 Feb 2026, 10 AM
+  
+  const now = new Date();
+  let diff = targetDate - now;
+
+  if (diff <= 0) {
+    countdownElem.innerText = "Deadline reached";
+    clearInterval(countdownInterval);
+    return;
+  }
+  
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  diff -= days * (1000 * 60 * 60 * 24);
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  diff -= hours * (1000 * 60 * 60);
+  const minutes = Math.floor(diff / (1000 * 60));
+
+  countdownElem.innerText = `Only ${days}d ${hours}h ${minutes}m left`;
+}
+
+const countdownInterval = setInterval(updateCountdown, 60 * 1000);
+updateCountdown(); // initial call
+
 
 </script>
 </body>
