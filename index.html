@@ -399,15 +399,48 @@ font-weight: 700;
 <div class="app-container">
 <div id="sticky-header-container" class="sticky-nav-wrapper" style="display:none;">
 <div id="user-profile">
-<div style="display: flex; align-items: center; gap: 12px;">
-<div style="width:40px; height:40px; background:white; color:var(--primary); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold;" id="user-initial">?</div>
-<div>
-<div style="font-size: 0.65rem; opacity: 0.8; font-weight:700;">TDTTI THURAVOOR</div>
-<div id="display-name" style="font-weight: 700; font-size: 1rem;">User</div>
-</div>
-</div>
 
-<button onclick="logout()" style="background:transparent; border:1px solid white; color:white; border-radius:8px; padding:5px 12px; cursor:pointer; font-size:0.8rem;">LOGOUT</button>
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <div style="width:40px; height:40px; background:white; color:var(--primary); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold;" id="user-initial">?</div>
+    <div>
+      <div style="font-size: 0.65rem; opacity: 0.8; font-weight:700;">TDTTI THURAVOOR</div>
+      <div id="display-name" style="font-weight: 700; font-size: 1rem;">User</div>
+    </div>
+
+    <!-- Message icon -->
+    <div id="msg-icon" title="Messages" style="margin-left: 20px; cursor: pointer; position: relative; color: white; font-size: 1.3rem;">
+      <i class="fa-solid fa-bell"></i>
+      <span id="msg-badge" style="position: absolute; top: -5px; right: -8px; background: var(--error); color: white; font-size: 0.7rem; border-radius: 50%; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center;">1</span>
+    </div>
+  </div>
+  <button onclick="logout()" style="background:transparent; border:1px solid white; color:white; border-radius:8px; padding:5px 12px; cursor:pointer; font-size:0.8rem;">LOGOUT</button>
+
+  <!-- Message popup -->
+  <div id="msg-popup" style="display:none; position: absolute; top: 55px; right: 0; background: white; color: #333; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 15px 20px; width: 280px; max-height: 200px; overflow-y: auto; z-index: 999; font-size: 0.9rem;">
+  <div style="font-weight: 700; margin-bottom: 8px; color: var(--primary); display: flex; justify-content: space-between; align-items: center;">
+    <span>Message</span>
+    <span onclick="closeMsgPopup()" title="Close" style="cursor: pointer; font-weight: 700; font-size: 1.2rem; color: #666;">&times;</span>
+  </div>
+        <center><sup></p> - - - 23.02.26 04.00 PM - - - </sup><br></center>
+        <div><center><b>Special Parents Meeting</b></center> <br>
+        Dear Parents,<br>
+        We invite you to a brief meeting regarding the USS Exam 2026.<br>
+        <b>Date: 24.02.26 (Tuesday)</b><br>
+        <b>Time: 3:00 PM</b><br>
+        Agenda: USS Exam briefing and Hall Ticket Distribution.<br>
+        <b>NB : Your presence is essential. Please ensure you attend to collect your ward's hall ticket. </b><hr>
+        </div>
+    <center><sup></p> - - - 23.02.26 03.30 PM - - - </sup><br></center>
+    <div>Hai, <br>Model Exam 2 dated 23.02.2026 11.00 AM, Result Published. <br>Check in My Progress. <br> <hr></div>
+    
+    <center><sup></p> - - - 23.02.26 03.00 PM - - - </sup><br></center>
+    <div>Hai, <br>CM KIDS SCHOLARSIP 2025-26 <br><b>Exam Date : 26.02.2026</b> <br> Time :<br> Paper I - 10.00 AM TO 12.00 PM <br> Paper II - 01.30 PM TO 03.30 PM <br>
+    Examination Centre : <br><b>34028 - TD HSS Thuravoor</b><hr></div>
+   
+    <center><sup></p> - - - 10.02.26 09.00 PM - - - </sup><br></center>
+    <div>Hai, <br>Updated Question Bank !!!  <br>Check Daily Exam <hr></div>
+    
+</div>
 </div>
 
 
@@ -4195,6 +4228,29 @@ document.addEventListener('DOMContentLoaded', () => {
 const MAX_MODEL_EXAMS = 5;
 
 let modelExamData = [
+   {
+    datetime: '2026-02-23T11:00:00', // 23.02.2026 11:00:00 AM
+    scores: {
+      "USS001": { name:"AAISHA FIDHA", status: "P", lan1: 13, mal2: 8, maths: 13, eng: 7, bs: 13, ss: 11, total: 65, eligibility: "N" },
+      "USS002": { name:"AALIYA C S", status: "P", lan1: 14, mal2: 11, maths: 20, eng: 12, bs: 11, ss: 18, total: 86, eligibility: "E" },
+      "USS003": { name:"ANANDHAKRISHNAN M S", status: "P", lan1: 14, mal2: 10, maths: 15, eng: 7, bs: 6, ss: 14, total: 66, eligibility: "N" },
+      "USS004": { name:"ANSHITHA ANEESH", status: "P", lan1: 12, mal2: 13, maths: 20, eng: 13, bs: 12, ss: 15, total: 85, eligibility: "E" },
+      "USS005": { name:"ANUSREE T S", status: "P", lan1: 3, mal2: 12, maths: 16, eng: 8, bs: 11, ss: 18, total: 68, eligibility: "N" },
+      "USS006": { name:"BHAGATH S KUMAR", status: "P", lan1: 14, mal2: 13, maths: 16, eng: 13, bs: 14, ss: 15, total: 85, eligibility: "E" },
+      "USS007": { name:"DEVANANDA T R", status: "P", lan1: 13, mal2: 12, maths: 20, eng: 13, bs: 12, ss: 16, total: 83, eligibility: "E" },
+      "USS008": { name:"FATHIMATH SAHRA K S", status: "P", lan1: 13, mal2: 13, maths: 17, eng: 12, bs: 11, ss: 15, total: 81, eligibility: "E" },
+      "USS009": { name:"HARI NARAYANAN K S", status: "P", lan1: 10, mal2: 12, maths: 19, eng: 11, bs: 13, ss: 16, total: 81, eligibility: "E" },
+      "USS010": { name:"KUNAL KIRAN NAGDA", status: "P", lan1: 15, mal2: 9, maths: 16, eng: 12, bs: 7, ss: 15, total: 74, eligibility: "N" },
+      "USS011": { name:"MALAVIKA N M", status: "P", lan1: 15, mal2: 13, maths: 19, eng: 13, bs: 15, ss: 18, total: 93, eligibility: "E" },
+      "USS012": { name:"MEENAKSHY M HEGDE", status: "P", lan1: 15, mal2: 12, maths: 19, eng: 12, bs: 14, ss: 18, total: 90, eligibility: "E" },
+      "USS013": { name:"PRATHITHA P SHENOY", status: "P", lan1: 14, mal2: 11, maths: 17, eng: 8, bs: 12, ss: 15, total: 77, eligibility: "N" },
+      "USS014": { name:"SARANGI S", status: "P", lan1: 15, mal2: 11, maths: 19, eng: 13, bs: 14, ss: 16, total: 88, eligibility: "E" },
+      "USS015": { name:"SREEBALA PRASANTH", status: "P", lan1: 13, mal2: 12, maths: 17, eng: 9, bs: 13, ss: 15, total: 79, eligibility: "N" },
+      "USS016": { name:"SREEBHADRA H", status: "P", lan1: 9, mal2: 10, maths: 15, eng: 13, bs: 13, ss: 17, total: 77, eligibility: "N" },
+      "USS017": { name:"SUKESH S PAI", status: "P", lan1: 15, mal2: 13, maths: 20, eng: 15, bs: 13, ss: 18, total: 94, eligibility: "E" },
+      "USS018": { name:"VARALAKSHMY S BHAT", status: "P", lan1: 14, mal2: 13, maths: 17, eng: 11, bs: 10, ss: 17, total: 82, eligibility: "E" }
+    }
+  },
   {
     datetime: '2026-01-30T14:00:00', // 30.01.2026 2:00:00 PM
     scores: {
@@ -4215,10 +4271,15 @@ let modelExamData = [
       "USS015": { name:"SREEBALA PRASANTH", status: "P", lan1: 13, mal2: 8, maths: 8, eng: 10, bs: 10, ss: 3, total: 52, eligibility: "N" },
       "USS016": { name:"SREEBHADRA H", status: "P", lan1: 14, mal2: 7, maths: 14, eng: 8, bs: 8, ss: 15, total: 66, eligibility: "N" },
       "USS017": { name:"SUKESH S PAI", status: "P", lan1: 15, mal2: 10, maths: 15, eng: 7, bs: 11, ss: 16, total: 74, eligibility: "N" },
-      "USS018": { name:"VARALAKSHMY S BHAT", status: "P", lan1: 14, mal2: 6, maths: 9, eng: 8, bs: 11, ss: 15, total: 63, eligibility: "N" }
+      "USS018": { name:"VARALAKSHMY S BHAT", status: "P", lan1: 14, mal2: 6, maths: 9, eng: 8, bs: 11, ss: 15, total: 63, eligibility: "N" },
     }
   }
-];
+  
+ 
+  
+ ];
+
+
 // Array to hold model exams data objects with date,time and scores
 let currentModelExamIndex = 0;
 
@@ -4541,6 +4602,37 @@ showTab = function(tid) {
     loadMyTimerData();
   }
 };
+
+// Show message popup when bell clicked
+document.addEventListener('DOMContentLoaded', () => {
+  const msgIcon = document.getElementById('msg-icon');
+  const msgPopup = document.getElementById('msg-popup');
+
+  if(msgIcon) {
+    msgIcon.addEventListener('click', () => {
+      if(msgPopup.style.display === 'none' || msgPopup.style.display === '') {
+        msgPopup.style.display = 'block';
+        // Remove badge count on open
+        const badge = document.getElementById('msg-badge');
+        if(badge) badge.style.display = 'none';
+      } else {
+        msgPopup.style.display = 'none';
+      }
+    });
+
+    // Close popup when clicking outside
+    document.addEventListener('click', (e) => {
+      if (msgPopup.style.display === 'block' && !msgPopup.contains(e.target) && !msgIcon.contains(e.target)) {
+        msgPopup.style.display = 'none';
+      }
+    });
+  }
+});
+
+function closeMsgPopup() {
+  const msgPopup = document.getElementById('msg-popup');
+  if(msgPopup) msgPopup.style.display = 'none';
+}
 
 </script>
 </body>
