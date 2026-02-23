@@ -379,6 +379,22 @@ font-weight: 700;
     50% { transform: scale(1.02); }
     100% { transform: scale(1); }
 }
+
+#msg-popup {
+  display: flex;
+  flex-direction: column;
+}
+
+.message-bubble {
+  display: inline-block;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+#msg-popup .message-bubble {
+  width: 280px;
+}
+
 </style>
 
 
@@ -416,31 +432,59 @@ font-weight: 700;
   <button onclick="logout()" style="background:transparent; border:1px solid white; color:white; border-radius:8px; padding:5px 12px; cursor:pointer; font-size:0.8rem;">LOGOUT</button>
 
   <!-- Message popup -->
-  <div id="msg-popup" style="display:none; position: absolute; top: 55px; right: 0; background: white; color: #333; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 15px 20px; width: 280px; max-height: 200px; overflow-y: auto; z-index: 999; font-size: 0.9rem;">
-  <div style="font-weight: 700; margin-bottom: 8px; color: var(--primary); display: flex; justify-content: space-between; align-items: center;">
-    <span>Message</span>
-    <span onclick="closeMsgPopup()" title="Close" style="cursor: pointer; font-weight: 700; font-size: 1.2rem; color: #666;">&times;</span>
+  <div id="msg-popup" style="display:none; position: absolute; top: 55px; right: 0; background: #fff; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 0; width: 320px; max-height: 350px; font-size: 0.9rem; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: text; z-index: 999; display: flex; flex-direction: column;">
+  <div id="msg-popup-header" style="position: sticky; top: 0; background: #fff; padding: 15px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; color: var(--primary); font-weight: 700; font-size: 1.1rem; z-index: 10;">
+    <span>Messages</span>
+    <button onclick="closeMsgPopup()" aria-label="Close messages" style="background:none; border:none; font-size: 1.5rem; line-height: 1; cursor: pointer; color: #666;">&times;</button>
   </div>
-        <center><sup></p> - - - 23.02.26 04.00 PM - - - </sup><br></center>
-        <div><center><b>Special Parents Meeting</b></center> <br>
+  <div id="msg-popup-content" style="padding: 15px; overflow-y: auto; flex: 1;">
+    <!-- Message bubbles go here -->
+    <div class="message-bubble" style="width: 280px; background:#f0f0f0; color:#333; border-radius: 15px 15px 15px 5px; padding:10px 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+      <div style="font-weight: 600;">Special Parents Meeting</div>
+      <p style="margin: 5px 0;">
         Dear Parents,<br>
         We invite you to a brief meeting regarding the USS Exam 2026.<br>
-        <b>Date: 24.02.26 (Tuesday)</b><br>
-        <b>Time: 3:00 PM</b><br>
+        <b>Date:</b> 24.02.26 (Tuesday)<br>
+        <b>Time:</b> 3:00 PM<br>
         Agenda: USS Exam briefing and Hall Ticket Distribution.<br>
-        <b>NB : Your presence is essential. Please ensure you attend to collect your ward's hall ticket. </b><hr>
-        </div>
-    <center><sup></p> - - - 23.02.26 03.30 PM - - - </sup><br></center>
-    <div>Hai, <br>Model Exam 2 dated 23.02.2026 11.00 AM, Result Published. <br>Check in My Progress. <br> <hr></div>
-    
-    <center><sup></p> - - - 23.02.26 03.00 PM - - - </sup><br></center>
-    <div>Hai, <br>CM KIDS SCHOLARSIP 2025-26 <br><b>Exam Date : 26.02.2026</b> <br> Time :<br> Paper I - 10.00 AM TO 12.00 PM <br> Paper II - 01.30 PM TO 03.30 PM <br>
-    Examination Centre : <br><b>34028 - TD HSS Thuravoor</b><hr></div>
-   
-    <center><sup></p> - - - 10.02.26 09.00 PM - - - </sup><br></center>
-    <div>Hai, <br>Updated Question Bank !!!  <br>Check Daily Exam <hr></div>
-    
+        <b>NB:</b> Your presence is essential. Please ensure you attend to collect your ward's hall ticket.
+      </p>
+      <div style="font-size: 0.7rem; color: #666; text-align: right;">23 Feb 2026, 16:00</div>
+    </div>
+
+    <div class="message-bubble" style="width: 280px; background:#d1e7dd; color:#0f5132; border-radius: 15px 15px 5px 15px; padding:10px 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); align-self: flex-end;">
+      <p style="margin:5px 0;">
+        Hai,<br>
+        Model Exam 2 dated 23.02.2026 11.00 AM, Result Published.<br>
+        Check in My Progress.
+      </p>
+      <div style="font-size: 0.7rem; text-align: right; color: #2f7a20;">23 Feb 2026, 15:30</div>
+    </div>
+
+    <div class="message-bubble" style="width: 280px; background:#f8d7da; color:#842029; border-radius: 15px 15px 15px 5px; padding:10px 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+      <p style="margin:5px 0;">
+        Hai,<br>
+        CM KIDS SCHOLARSIP 2025-26<br>
+        <b>Exam Date :</b> 26.02.2026<br>
+        Paper I - 10.00 AM TO 12.00 PM<br>
+        Paper II - 01.30 PM TO 03.30 PM<br>
+        Examination Centre :<br>
+        <b>34028 - TD HSS Thuravoor</b>
+      </p>
+      <div style="font-size: 0.7rem; color: #842029; text-align: right;">23 Feb 2026, 15:00</div>
+    </div>
+
+    <div class="message-bubble" style="width: 280px; background:#e7f1ff; color:#084298; border-radius: 15px 15px 5px 15px; padding:10px 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); align-self: flex-end;">
+      <p style="margin:5px 0;">
+        Hai,<br>
+        Updated Question Bank !!!<br>
+        Check Daily Exam
+      </p>
+      <div style="font-size: 0.7rem; text-align: right; color: #084298;">10 Feb 2026, 21:00</div>
+    </div>
+  </div>
 </div>
+
 </div>
 
 
