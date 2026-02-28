@@ -395,10 +395,29 @@ font-weight: 700;
   width: 280px;
 }
 
+.spinner-inline {
+  
+  width: 22px;
+  height: 22px;
+  border: 3px solid rgba(67, 97, 238, 0.2);
+  border-top: 3px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  vertical-align: middle;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 </style>
 
 
 <body onload="checkPersistentLogin()">
+  
+
 <div id="msg-overlay">
 <div id="loader-content">
 <div class="spinner"></div>
@@ -447,6 +466,14 @@ font-weight: 700;
     <center><div id="countdown-timer" style="color: red; font-weight: 600; margin-left: 15px; font-size: 0.85rem; white-space: nowrap;">
     Loading timer...
     </div></center></div>
+    <div class="message-bubble" style="width: 280px; background:#d1e7dd; color:#0f5132; border-radius: 15px 15px 5px 15px; padding:10px 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); align-self: flex-end;">
+      <p style="margin:5px 0;">
+        Hi,<br>
+        Daily Exam temporarily disabled.<br>
+        Check in My Progress For Your Expected Score in CMK UP 2025-26.
+      </p>
+      <div style="font-size: 0.7rem; text-align: right; color: #2f7a20;">26 Feb 2026, 03:30</div>
+    </div>
     <div class="message-bubble" style="width: 280px; background:#f0f0f0; color:#333; border-radius: 15px 15px 15px 5px; padding:10px 12px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
       <div style="font-weight: 600;">Special Parents Meeting</div>
       <p style="margin: 5px 0;">
@@ -498,6 +525,8 @@ font-weight: 700;
 
 
 <nav id="navbar">
+  
+
 <button id="nav-tab2" onclick="showTab('tab2')">Daily Exam</button>
 <div id="nav-timer"> 15 Minutes 00 Seconds Remaining </div>
 <button id="nav-tab3" onclick="showTab('tab3')">My Progress</button>
@@ -505,7 +534,6 @@ font-weight: 700;
 <button id="admin-nav" style="display:none;" onclick="showTab('tab4')">Admin</button>
 </nav>
 </div>
-
 
 
 <div id="tab1" class="tab active">
@@ -534,6 +562,9 @@ font-weight: 700;
 </div>
 
 <div id="tab2" class="tab">
+  
+  
+  
   
   <div id="update-info" style="
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -622,6 +653,65 @@ font-weight: 700;
 
 <div id="tab3" class="tab">
   
+  <!-- Below the above, add a small info text about daily exam disabled -->
+
+
+
+
+  <div class="glass-card" id="expected-score-section" style="margin: 20px 0;">
+  <h3 style="margin-top:0; color: var(--secondary);">Your Expected Score <span id="expected-score-spinner" class="spinner-inline" style="display:none;"></span>
+  </h3>
+  <div id="expected-score-table-container">
+    <table id="expected-score-table" style="width: 100%; border-collapse: collapse; font-size: 0.9rem; box-shadow: 0 2px 8px rgba(0,0,0,0.09); border-radius: 12px; overflow: hidden;">
+      <thead style="background: var(--primary); color: white; text-align: center;">
+        <tr style="border-bottom: 2px solid rgba(255,255,255,0.6);">
+          <th style="padding: 12px 10px; border-right: 1px solid rgba(255,255,255,0.4);">Subject</th>
+          <th style="padding: 12px 10px;">Expected Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom: 1px solid #eee;">
+          <td style="padding: 10px; font-weight: 600; color: var(--primary);">LANGUAGE I</td>
+          <td style="padding: 10px; text-align: center;" id="expected-lang1">-</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #eee;">
+          <td style="padding: 10px; font-weight: 600; color: var(--primary);">MALAYALAM II</td>
+          <td style="padding: 10px; text-align: center;" id="expected-mal2">-</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #eee;">
+          <td style="padding: 10px; font-weight: 600; color: var(--primary);">MATHEMATICS & MENTAL ABILITY</td>
+          <td style="padding: 10px; text-align: center;" id="expected-maths">-</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #eee;">
+          <td style="padding: 10px; font-weight: 600; color: var(--primary);">ENGLISH</td>
+          <td style="padding: 10px; text-align: center;" id="expected-eng">-</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #eee;">
+          <td style="padding: 10px; font-weight: 600; color: var(--primary);">BASIC SCIENCE</td>
+          <td style="padding: 10px; text-align: center;" id="expected-bs">-</td>
+        </tr>
+         <tr style="border-bottom: 1px solid #eee;">
+          <td style="padding: 10px; font-weight: 600; color: var(--primary);">SOCIAL SCIENCE & CURRENT AFFAIRS</td>
+          <td style="padding: 10px; text-align: center;" id="expected-ss">-</td>
+        </tr>
+        <tr style="font-weight: 800; font-size: 1.2rem; background: var(--accent); color: white;">
+          <td style="padding: 12px; border-top: 3px solid var(--primary);">TOTAL</td>
+          <td style="padding: 12px; text-align: center; border-top: 3px solid var(--primary);" id="expected-grandtotal">-</td>
+        </tr>
+      </tbody>
+    </table>
+    <hr>
+    <p><strong>NB : </strong><ui style="margin-left:10px;">
+<li>This score has been automatically generated based on the data currently available in our system records.</li>
+<li>Please note that the score is subject to change and may vary depending on updates, revisions, or additional information received</li>
+<li>While every effort is made to ensure accuracy, the displayed score may not always reflect the most recent corrections or modifications.</li>
+<li>The score shown here is for reference purposes only and should not be considered as the final or officially confirmed result.</li>
+</p></ui>
+  </div>
+</div>
+
+
+  
   <!-- Add inside #tab3 (My Progress) div - below Student Summary -->
 
 <div class="glass-card" id="model-uss-exams-section" style="margin-top: 30px;">
@@ -678,7 +768,28 @@ font-weight: 700;
 </div>
 
 <div id="tab5" class="tab">
-  
+  <div class="glass-card" id="expected-scores-section" style="margin-bottom: 30px;">
+  <h3 style="color: var(--primary); margin-bottom: 15px;">Expected Scores - CM KIDS SCHOLARSHIP (UP) 2026 Feb 26</h3>
+      <div style="overflow-x:auto;">
+      <table id="teacher-expected-scores-table" style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+        <thead style="background: var(--primary); color: white;">
+          <tr>
+            <th style="border:1px solid #ddd; padding:8px;">Name</th>
+            <th style="border:1px solid #ddd; padding:8px;">Lang1 Score</th>
+            <th style="border:1px solid #ddd; padding:8px;">Mal2 Score</th>
+            <th style="border:1px solid #ddd; padding:8px;">Maths Score</th>
+            <th style="border:1px solid #ddd; padding:8px;">Eng Score</th>
+            <th style="border:1px solid #ddd; padding:8px;">BS Score</th>
+            <th style="border:1px solid #ddd; padding:8px;">SS Score</th>
+            <th style="border:1px solid #ddd; padding:8px;">Grand Total</th>
+          </tr>
+        </thead>
+        <tbody id="teacher-expected-scores-body">
+          <tr><td colspan="8" style="padding: 12px; text-align:center;">Loading...</td></tr>
+        </tbody>
+      </table>
+      </div> </div>
+      
   <!-- Add inside #tab5 (Inspirations) div, before the Top 3 section -->
 
 <div class="glass-card" id="model-exam-section" style="margin-bottom: 30px;">
@@ -2598,6 +2709,8 @@ finalizeLogin();
 }
 
 function finalizeLogin() {
+  document.getElementById('nav-tab2').disabled = true;
+document.getElementById('nav-tab2').title = "Daily Exam temporarily disabled";
   document.getElementById('sticky-header-container').style.display = 'block';
   document.getElementById('user-profile').style.display = 'flex';
   document.getElementById('display-name').innerText = user.name;
@@ -4696,7 +4809,7 @@ function updateCountdown() {
   let diff = targetDate - now;
 
   if (diff <= 0) {
-    countdownElem.innerText = "Deadline reached";
+    countdownElem.innerText = "CMK UP 2025-26 EXPIRED !!!";
     clearInterval(countdownInterval);
     return;
   }
@@ -4713,6 +4826,263 @@ function updateCountdown() {
 const countdownInterval = setInterval(updateCountdown, 60 * 1000);
 updateCountdown(); // initial call
 
+async function showExpectedScore() {
+  if (!user) return;
+  if (user.role !== 'student') {
+    document.getElementById('expected-score-section').style.display = 'none';
+    return;
+  }
+
+  const spinner = document.getElementById('expected-score-spinner');
+  spinner.style.display = 'inline-block';
+  document.getElementById('expected-score-table-container').style.visibility = 'hidden';
+
+  try {
+    const res = await fetch(`${SCRIPT_URL}?name=${user.name}`);
+    const data = await res.json();
+
+    if (!data || data.length === 0) {
+      document.getElementById('expected-score-section').style.display = 'none';
+      return;
+    }
+
+    let totalExams = data.length;
+    let sumLang1 = 0, sumMal2 = 0, sumMaths = 0, sumEng = 0, sumBS = 0, sumSS = 0;
+
+    data.forEach(exam => {
+      sumLang1 += exam[5] || 0;
+      sumMal2 += exam[6] || 0;
+      sumMaths += exam[7] || 0;
+      sumEng += exam[8] || 0;
+      sumBS += exam[9] || 0;
+      sumSS += exam[10] || 0;
+    });
+
+    const lang1Score = sumLang1 / totalExams * 5;
+    const mal2Score = sumMal2 / totalExams * 5;
+    const mathsScore = ((sumMaths / totalExams)  /* mental ignored here */) * 5;
+    const engScore = (sumEng / totalExams) * 5;
+    const bsScore = (sumBS / totalExams) * 5;
+    const ssScore = (sumSS / totalExams) * 5;
+
+    const grandTotal = lang1Score + mal2Score + mathsScore + engScore + bsScore + ssScore;
+
+    document.getElementById('expected-lang1').innerText = lang1Score.toFixed(2);
+    document.getElementById('expected-mal2').innerText = mal2Score.toFixed(2);
+    document.getElementById('expected-maths').innerText = mathsScore.toFixed(2);
+    document.getElementById('expected-eng').innerText = engScore.toFixed(2);
+    document.getElementById('expected-bs').innerText = bsScore.toFixed(2);
+    document.getElementById('expected-ss').innerText = ssScore.toFixed(2);
+    document.getElementById('expected-grandtotal').innerText = grandTotal.toFixed(2);
+
+    document.getElementById('expected-score-table-container').style.visibility = 'visible';
+
+  } catch(e) {
+    console.error("Error calculating expected score:", e);
+    document.getElementById('expected-score-section').style.display = 'none';
+  } finally {
+    spinner.style.display = 'none';
+  }
+}
+
+
+// Call showExpectedScore() when user logged in and on tab3 shown (My Progress)
+const oldShowTab = showTab;
+showTab = function(tid) {
+  oldShowTab(tid);
+  if (tid === 'tab3' && user && user.role === 'student') {
+    showExpectedScore();
+    document.getElementById('nav-tab2').disabled = true;
+    document.getElementById('nav-tab2').title = "Daily Exam temporarily disabled";
+  }
+  if (tid === 'tab2' && user && user.role === 'student' && document.getElementById('nav-tab2').disabled) {
+    // Show full screen message overlay with your message
+    showFullScreenMessage("Daily Exam is temporarily disabled as your exams are over.");
+    // Redirect back to My Progress tab
+    showTab('tab3');
+  }
+};
+// For Teacher Role: Add this function inside the script to show collective expected score in #tab5 Inspirations
+
+function showFullScreenMessage(msg) {
+  const overlay = document.getElementById('msg-overlay');
+  // Set the overlay content for full screen message
+  overlay.style.display = 'flex';
+  document.getElementById('loader-content').style.display = 'none';
+  const statusContent = document.getElementById('status-content');
+  statusContent.style.display = 'block';
+  statusContent.querySelector('#status-title').innerText = "Notice";
+  statusContent.querySelector('#status-msg').innerText = msg;
+  statusContent.querySelector('button').style.display = 'inline-block';
+  statusContent.querySelector('button').onclick = () => {
+    overlay.style.display = 'none';
+  };
+}
+
+
+async function showExpectedScoresForAll() {
+  if (!user || user.role !== 'teacher') return;
+
+  const container = document.getElementById('expected-scores-all-container');
+  if (!container) {
+    // Create container to append inside Inspirations tab (#tab5) after existing tables or at top
+    const tab5 = document.getElementById('tab5');
+    if (!tab5) return;
+
+    const section = document.createElement('div');
+    section.className = 'glass-card';
+    section.id = 'expected-scores-all-container';
+    section.style.marginTop = '30px';
+
+    section.innerHTML = `
+      <h3 style="color: var(--primary); margin-bottom: 15px;">Expected Scores of All Students for CM KIDS SCHOLARSHIP (UP) 2026 Feb 26</h3>
+      <div style="overflow-x:auto;">
+      <table id="teacher-expected-scores-table" style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+        <thead style="background: var(--primary); color: white;">
+          <tr>
+            <th style="border:1px solid #ddd; padding:8px;">Name</th>
+            <th style="border:1px solid #ddd; padding:8px;">Lang1</th>
+            <th style="border:1px solid #ddd; padding:8px;">Mal2</th>
+            <th style="border:1px solid #ddd; padding:8px;">Maths</th>
+            <th style="border:1px solid #ddd; padding:8px;">Eng</th>
+            <th style="border:1px solid #ddd; padding:8px;">BS</th>
+            <th style="border:1px solid #ddd; padding:8px;">SS</th>
+            <th style="border:1px solid #ddd; padding:8px;">Total</th>
+          </tr>
+        </thead>
+        <tbody id="teacher-expected-scores-body">
+          <tr><td colspan="8" style="padding: 12px; text-align:center;">Loading...</td></tr>
+        </tbody>
+      </table>
+      </div>
+    `;
+
+    tab5.appendChild(section);
+  }
+
+  const tbody = document.getElementById('teacher-expected-scores-body');
+
+  try {
+    const res = await fetch(`${SCRIPT_URL}?type=allStudents`);
+    const data = await res.json();
+
+    // Prepare data map per student: sum scores & count exams
+    const scoresMap = {};
+    data.forEach(row => {
+      const name = row[1];
+      if (!scoresMap[name]) {
+        scoresMap[name] = {
+          exams: 0,
+          lang1: 0, mal2: 0, maths: 0, eng: 0, bs: 0, ss: 0, mental: 0, current: 0
+        };
+      }
+      scoresMap[name].exams++;
+      scoresMap[name].lang1 += row[5] || 0;
+      scoresMap[name].mal2 += row[6] || 0;
+      scoresMap[name].maths += row[7] || 0;
+      scoresMap[name].eng += row[8] || 0;
+      scoresMap[name].bs += row[9] || 0;
+      scoresMap[name].ss += row[10] || 0;
+      scoresMap[name].mental += row[11] || 0;
+      scoresMap[name].current += row[12] || 0;
+    });
+
+    let html = '';
+    for (let [name, vals] of Object.entries(scoresMap)) {
+      const exams = vals.exams || 1; // prevent divide by zero
+
+      const lang1Score = (vals.lang1 / exams ) * 5;
+      const mal2Score = (vals.mal2 / exams ) * 5;
+      const mathsScore = (((vals.maths / exams) + (vals.mental / exams)) / 2) * 5;
+      const engScore = (vals.eng / exams ) * 5;
+      const bsScore = (vals.bs / exams ) * 5;
+      const ssScore = (((vals.ss / exams) + (vals.current / exams)) / 2 ) * 5;
+
+      const grandTotal = lang1Score + mal2Score + mathsScore + engScore + bsScore + ssScore;
+
+      html += `
+        <tr>
+          <td style="border:1px solid #ddd; padding:6px; font-weight:700;">${name}</td>
+          <td style="border:1px solid #ddd; padding:6px; text-align:center;">${lang1Score.toFixed(2)}</td>
+          <td style="border:1px solid #ddd; padding:6px; text-align:center;">${mal2Score.toFixed(2)}</td>
+          <td style="border:1px solid #ddd; padding:6px; text-align:center;">${mathsScore.toFixed(2)}</td>
+          <td style="border:1px solid #ddd; padding:6px; text-align:center;">${engScore.toFixed(2)}</td>
+          <td style="border:1px solid #ddd; padding:6px; text-align:center;">${bsScore.toFixed(2)}</td>
+          <td style="border:1px solid #ddd; padding:6px; text-align:center;">${ssScore.toFixed(2)}</td>
+          <td style="border:1px solid #ddd; padding:6px; text-align:center; font-weight:700; color: var(--primary);">${grandTotal.toFixed(2)}</td>
+        </tr>`;
+    }
+
+    tbody.innerHTML = html || `<tr><td colspan="8" style="text-align:center; padding: 12px; color: #666;">No data available.</td></tr>`;
+
+  } catch (e) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 12px; color: red;">Failed to load data</td></tr>`;
+  }
+}
+
+// Call this after login for teacher role and on Inspirations tab show
+
+const oldShowTabForTeacher = showTab;
+showTab = function(tid) {
+  oldShowTabForTeacher(tid);
+  if (user && user.role === 'teacher' && tid === 'tab5') {
+    showExpectedScoresForAll();
+  }
+};
+
+// Sort state for teacher expected scores table
+let teacherExpectedScoresSort = {
+  column: null,
+  asc: true
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  const table = document.getElementById('teacher-expected-scores-table');
+  const tbody = document.getElementById('teacher-expected-scores-body');
+  
+  // Attach click event to all header cells
+  Array.from(table.querySelectorAll('thead th')).forEach((th, idx) => {
+    th.style.cursor = 'pointer'; // indicate clickable
+    th.addEventListener('click', () => {
+      sortTeacherExpectedScores(idx);
+    });
+  });
+});
+
+function sortTeacherExpectedScores(colIndex) {
+  const tbody = document.getElementById('teacher-expected-scores-body');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+
+  // Toggle asc/desc or new column
+  if (teacherExpectedScoresSort.column === colIndex) {
+    teacherExpectedScoresSort.asc = !teacherExpectedScoresSort.asc;
+  } else {
+    teacherExpectedScoresSort.column = colIndex;
+    teacherExpectedScoresSort.asc = true;
+  }
+
+  rows.sort((a, b) => {
+    let A = a.children[colIndex].innerText.trim();
+    let B = b.children[colIndex].innerText.trim();
+
+    // For name column, sort alphabetically
+    if (colIndex === 0) {
+      A = A.toLowerCase();
+      B = B.toLowerCase();
+      if (A < B) return teacherExpectedScoresSort.asc ? -1 : 1;
+      if (A > B) return teacherExpectedScoresSort.asc ? 1 : -1;
+      return 0;
+    } else {
+      // For score columns, parse as float for numeric sort
+      A = parseFloat(A) || 0;
+      B = parseFloat(B) || 0;
+      return teacherExpectedScoresSort.asc ? A - B : B - A;
+    }
+  });
+
+  // Append sorted rows back
+  rows.forEach(row => tbody.appendChild(row));
+}
 
 </script>
 </body>
